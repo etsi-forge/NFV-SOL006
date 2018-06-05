@@ -1,0 +1,253 @@
+submodule etsi-nfv-common {
+  belongs-to etsi-nfv {
+    prefix nfv;
+  }
+
+  description
+    "Common types.";
+
+  revision 2017-01-20 {
+    description
+      "Initial revision
+
+       Common data structures to support VNFD and NSD
+       according to:
+       ETSI GS NFV-IFA 014 V2.1.1 (2016-10)
+       ETSI GS NFV-IFA 011 V2.1.1 (2016-10)";
+  }
+
+  /*
+   * Identities.
+   */
+  identity layer-protocol {
+  }
+  identity Ethernet {
+    base layer-protocol;
+  }
+  identity MPLS {
+    base layer-protocol;
+  }
+  identity ODU2 {
+    base layer-protocol;
+  }
+  identity IPv4 {
+    base layer-protocol;
+  }
+  identity IPv6 {
+    base layer-protocol;
+  }
+  identity Psuedo-Wire {
+    base layer-protocol;
+  }
+
+  identity address-type {
+    description
+      "Describes the type of the address to be assigned to the CP 
+       instantiated from the parent CPD.
+       Value:
+       • MAC address.
+       • IP address.
+       • …
+       The content type shall be aligned with the address type 
+       supported by the layerProtocol attribute of the parent CPD.";
+    reference
+      "GS NFV IFA011: Section 7.1.3.3, AddressData information
+       element.";
+  }
+  identity mac-address {
+    base address-type;
+  }
+  identity ip-address {
+    base address-type;
+  }
+
+  identity supported-operation {
+    description
+      "Indicates which operations are available for this DF via the
+       VNF LCM interface. Instantiate VNF, Query VNF and Terminate
+       VNF are supported in all DF and therefore need not be
+       included in this list.";
+    reference
+      "GS NFV IFA011: Section 7.1.8.2 VnfDf information element";
+  }
+  identity instantiate-vnf {
+    base supported-operation;
+  }
+  identity terminate-vnf {
+    base supported-operation;
+  }
+  identity query-vnf {
+    base supported-operation;
+  }
+
+  /*
+   * Typedefs
+   */
+      
+  typedef flow-pattern {
+    type enumeration {
+      enum line;
+      enum tree;
+      enum mesh;
+    }
+  }
+
+  typedef cp-role {
+    type enumeration {
+      enum "root";
+      enum "leaf";
+    }
+  }
+
+  typedef affinity-type {
+    type enumeration {
+      enum "affinity";
+      enum "anti-affinity";
+    }
+  }
+
+  typedef affinity-scope {
+    type enumeration {
+      enum "nfvi-node";
+      enum "zone-group";
+      enum "zone";
+      enum "nfvi-pop";
+    }
+  }
+
+  typedef lifecycle-management-script-event {
+    type enumeration {
+      enum "start-instantiation";
+      enum "end-instantiation";
+      enum "start-scaling";
+      enum "end-scaling";
+      enum "start-healing";
+      enum "end-healing";
+      enum "start-termination";
+      enum "end-termination";
+      enum "start-vnf-flavor-change";
+      enum "end-vnf-flavor-change";
+      enum "start-vnf-operation-change";
+      enum "end-vnf-operation-change";
+      enum "start-vnf-ext-conn-change";
+      enum "end-vnf-ext-conn-change";
+      enum "start-vnfinfo-modification";
+      enum "end-vnfinfo-modification";
+    }
+  }
+
+  grouping local-affinity-or-anti-affinity-rule {
+    list local-affinity-or-anti-affinity-rule {
+      key "affinity-type affinity-scope";
+      leaf affinity-type {
+        type affinity-type;
+        description
+          "Specifies whether the rule is an affinity rule or an
+           anti-affinity rule.";
+        reference
+          "GS NFV IFA011: Section 7.1.8.11,
+           LocalAffinityOrAntiAffinityRule information element.";
+      }
+
+      leaf affinity-scope {
+        type affinity-scope;
+        description
+          "Specifies the scope of the rule, possible values are
+           'NFVI-PoP', 'Zone', 'ZoneGroup', 'NFVI-node'.";
+        reference
+          "GS NFV IFA011: Section 7.1.8.11,
+           LocalAffinityOrAntiAffinityRule information element.";
+      }
+    }
+  }
+
+  grouping connectivity-type {
+    container connectivity-type {
+      leaf layer-protocol {
+        mandatory true;
+        type identityref {
+          base layer-protocol;
+        }
+        description
+          "Identifies the protocol this VL gives access to (Ethernet,
+           MPLS, ODU2, IPV4, IPV6, Pseudo-Wire).";
+        reference
+          "GS NFV IFA011: Section 7.1.7.3, ConnectivityType
+           information element.";
+      }
+
+      leaf flow-pattern {
+        type flow-pattern;
+        description
+          "Identifies the flow pattern of the connectivity (Line,
+           Tree, Mesh).";
+        reference
+          "GS NFV IFA011: Section 7.1.7.3, ConnectivityType
+           information element.";
+      }
+    }
+  }
+
+  grouping link-bitrate-requirements {
+    leaf root {
+      type uint64;
+      units "Mbps";
+      mandatory true;
+      description
+        "Specifies the throughput requirement of
+         the link (e.g. bitrate of E-Line, root bitrate
+         of E-Tree, aggregate capacity of E-LAN).";
+      reference
+        "GS NFV IFA011: Section 7.1.8.6, LinkBitrateRequirements
+         information element.";
+    }
+
+    leaf leaf {
+      type uint64;
+      units "Mbps";
+      description
+        "Specifies the throughput requirement of
+        leaf connections to the link when
+        applicable to the connectivity type (e.g. for
+        E-Tree and E-LAN branches).";
+      reference
+        "GS NFV IFA011: Section 7.1.8.6, LinkBitrateRequirements
+         information element.";
+    }
+  }
+
+  grouping monitoring-parameter {
+    leaf name {
+      type string;
+      description
+        "Human readable name of the monitoring parameter.";
+      reference
+        "GS NFV IFA011: Section 7.1.11.3, MonitoringParameter
+         information element.";
+    }
+    leaf performance-metric {
+      type string;
+      description
+        "Defines the virtualised resource performance metric. The
+         VNFM collects the performance metrics defined in this
+         attribute from the VIM using one or more PM Jobs.";
+      reference
+        "GS NFV IFA011: Section 7.1.11.3, MonitoringParameter
+         information element.";
+    }
+    leaf collection-period {
+      type uint64;
+      units "ms";
+      description
+        "An attribute that describes the recommended periodicity at
+         which to collect the performance information. VNFM determines
+         if this parameter is considered.
+
+         The vendor may provide this information as a guidance for
+         creating PmJobs if needed.";
+      reference
+        "GS NFV IFA011: Section 7.1.11.3, MonitoringParameter
+         information element.";
+    }
+  }
+}

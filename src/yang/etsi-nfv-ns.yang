@@ -1,0 +1,589 @@
+submodule etsi-nfv-ns {
+  belongs-to etsi-nfv {
+    prefix nfv;
+  }
+
+  include etsi-nfv-common;
+
+  description
+    "Models for NS according to ETSI GS NFV-IFA 014.";
+
+  revision 2017-01-20 {
+    description
+      "Initial revision
+       Common data structure to support NSD
+       according to:
+       ETSI GS NFV-IFA 014 V2.1.1 (2016-10)";
+
+    reference "ETSI GS NFV-IFA 014 V2.1.1 (2016-10)";
+  }
+
+  grouping security-parameters {
+    container security {
+      leaf signature {
+        type string;
+      }
+      leaf algorithm {
+        type string;
+      }
+      leaf certificate {
+        type string;
+      }
+    }
+  }
+
+  grouping resource-handle {
+    leaf vim-id {
+      type string;
+    }
+    leaf resrouce-provider-id {
+      type string;
+    }
+    leaf resource-id {
+      type string;
+    }
+  }
+
+  grouping nsd {
+    list nsd {
+      key "id";
+      leaf id {
+        type string;
+        description
+          "Uniquely identifies an network service descriptor";
+      }
+      leaf designer {
+        type string;
+        description
+          "Identifies the designer of the network service descriptor";
+      }
+      leaf version {
+        type string;
+        description
+          "Identifies the version of the network service descriptor";
+      }
+      leaf name {
+        type string;
+        description
+          "Provides the human readable name of the network service. descriptor";
+      }
+      leaf invariant-id {
+        description
+          "Identifies an network service descriptor in a version
+          independent manner. This attribute is invariant across
+          versions of the network service descriptor.";
+        type string;
+      }
+
+      leaf-list nested-nsd {
+        type leafref {
+          path "../../nfv:nsd/nfv:id";
+        }
+        must ". != ../nfv:id";
+      }
+
+      list vnfd {
+        key "vnfd";
+        min-elements 1;
+        description
+          "This lists the VNFDs this network service
+           descriptor consists of.";
+        leaf vnfd {
+          type leafref {
+            path "/nfv/nfv:vnfd/nfv:id";
+          }
+        }
+      }
+      leaf-list pnfd {
+        type string;
+      }
+      list service-access-point-descriptor {
+        key "id";
+        min-elements 1;
+        description
+          "A service access point serves as the network
+           service's external connection point";
+        leaf id {
+          type string;
+        }
+
+        leaf address-assignment {
+          description
+            "Specify whether the SAP address
+             assignment is under the responsibility of
+             management and orchestration functions
+             or not. If it is set to True, management and
+             orchestration functions are responsible for
+             assigning addresses to the access points
+             instantiated from this SAPD";
+          type empty;
+        }
+        leaf description {
+          type string;
+        }
+        leaf layer-protocol {
+          type identityref {
+            base layer-protocol;
+          }
+        }
+        leaf role {
+          type cp-role;
+        }
+        leaf virtual-link-desc {
+          type leafref {
+            path "../../nfv:virtual-link-desc/nfv:id";
+          }
+          description
+            "Can optionally connect this service-access-point to an virtual-link. If not set,
+             it's assumed a VNFD's connection-points references this
+             service-access-point.";
+        }
+        /*
+          associatedCpdId:
+          Deliberatly not according to standard, see
+          vnf-profile -> sapd-connectivity
+        */
+      }
+      list virtual-link-desc {
+        key "id";
+        description
+          "The virtual-link-desc information element provides general information
+           enabling the instantiation of virtual links.";
+        leaf id {
+          type string;
+        }
+        leaf provider {
+          description
+            "Defines the organization generating the VLD.  ";
+          type string;
+        }
+        leaf version {
+          mandatory true;
+          type string;
+        }
+        uses connectivity-type;
+
+        list deployment-flavor {
+          key "id";
+          leaf id {
+            type string;
+          }
+
+          container qos {
+            leaf latency {
+              mandatory true;
+              description
+                "Specifies the maximum latency in ms.";
+              type uint32;
+              units "ms";
+            }
+
+            leaf packet-delay-variation {
+              mandatory true;
+              description
+                "Specifies the maximum jitter in ms.";
+              type uint32;
+              units "ms";
+            }
+
+            leaf packet-loss-ratio {
+              description
+                "Specifies the maximum packet loss ratio.";
+              type decimal64 {
+                fraction-digits "2";
+                range "0..1.00";
+              }
+            }
+            leaf priority {
+              description
+                "Specifies the priority level in case of
+                 congestion on the underlying physical links.";
+              type uint32;
+            }
+          }
+          leaf service-availability-level {
+            reference "ETSI GS NFV-REL 001 [i.5]";
+            type enumeration {
+              enum "level-1";
+              enum "level-2";
+              enum "level-3";
+            }
+          }
+        }
+
+        leaf test-access {
+          type enumeration {
+            enum none;
+            enum passive-monitoring;
+            enum active;
+          }
+        }
+
+        leaf description {
+          type string;
+        }
+        uses security-parameters;
+      }
+      // vnffgd skipped since not fully specified by the spec
+      list monitored-info {
+        key "id";
+        leaf id {
+          type string;
+        }
+
+        choice source {
+          // We have no way of refererencing a VNF MP today
+          container ns-monitoring-parameter {
+            uses monitoring-parameter;
+          }
+          container vnf-indicator {
+            leaf vnfd {
+              type leafref {
+                path "/nfv:nfv/nfv:vnfd/nfv:id";
+              }
+            }
+            leaf indicator {
+              type leafref {
+                path "deref(../nfv:vnfd)/../nfv:indicator/nfv:id";
+              }
+            }
+          }
+        }
+      }
+      leaf-list autoscale-rule {
+        type string;
+      }
+      list lifecycle-management-script {
+        key "event";
+        leaf event {
+          type string;
+        }
+        leaf script {
+          type string;
+        }
+      }
+      list deployment-flavor {
+        min-elements 1;
+        must "nfv:default-instantiation-level or count(nfv:instantiation-level) = 1";
+        key "id";
+        description
+          "The NsDf information element specifies the properties of a variant of an NS.";
+
+        leaf id {
+          type string;
+        }
+
+        leaf flavor-key {
+          type leafref {
+            path "../../nfv:monitored-info/nfv:id";
+          }
+        }
+
+        list vnf-profile {
+          must "nfv:min-number-of-instances<=nfv:max-number-of-instances";
+          must "count(../../nfv:vnfd[vnfd=current()/nfv:vnfd])=1" {
+            error-message "VNFDs in the profile has to be listed as a dependency of the network service descriptor.";
+          }
+          key "id";
+
+          leaf id {
+            type string;
+          }
+
+          leaf vnfd {
+            mandatory true;
+            type leafref {
+              path "/nfv:nfv/nfv:vnfd/nfv:id";
+            }
+          }
+
+          leaf flavor {
+            mandatory true;
+            type leafref {
+              path "deref(../nfv:vnfd)/../nfv:deployment-flavor/nfv:id";
+            }
+          }
+
+          leaf instantiation-level {
+            mandatory true;
+            type leafref {
+              path "deref(../nfv:flavor)/../nfv:instantiation-level/nfv:id";
+            }
+          }
+
+          leaf min-number-of-instances {
+            type uint16;
+            mandatory true;
+          }
+          leaf max-number-of-instances {
+            type uint16;
+            mandatory true;
+          }
+
+          uses local-affinity-or-anti-affinity-rule;
+          list affinity-or-anti-affinity-group {
+            key "id";
+
+            leaf id {
+              type leafref {
+                path "../../../nfv:affinity-or-anti-affinity-group/nfv:id";
+              }
+            }
+          }
+
+          list virtual-link-connectivity {
+            key "virtual-link-profile cp";
+
+            leaf virtual-link-profile {
+              type leafref {
+                path "../../../nfv:virtual-link-profile/nfv:virtual-link-desc";
+              }
+            }
+
+            leaf cp {
+              type leafref {
+                path "deref(../../nfv:vnfd)/../nfv:ext-cpd/nfv:id";
+              }
+            }
+          }
+
+          // Not according to standard
+          list sapd-connectivity {
+            key "sapd cp";
+
+            leaf sapd {
+              type leafref {
+                path "../../../../nfv:service-access-point-descriptor/nfv:id";
+              }
+            }
+
+            leaf cp {
+              type leafref {
+                path "deref(../../nfv:vnfd)/../nfv:ext-cpd/nfv:id";
+              }
+            }
+          }
+        }
+
+        list pnf-profile {
+          key "pnfd";
+          leaf pnfd {
+            type leafref {
+              path "../../../nfv:pnfd";
+            }
+          }
+          // no virtual-link-connectivity as we don't have PNFD modelled.
+        }
+
+        list virtual-link-profile {
+          key "virtual-link-desc";
+          leaf virtual-link-desc {
+            mandatory true;
+            type leafref {
+              path "../../../nfv:virtual-link-desc/nfv:id";
+            }
+          }
+
+          leaf flavor {
+            mandatory true;
+            type leafref {
+              path "deref(../nfv:virtual-link-desc)/../nfv:deployment-flavor/nfv:id";
+            }
+          }
+
+          uses local-affinity-or-anti-affinity-rule;
+          list affinity-or-anti-affinity-group {
+            key "id";
+
+            leaf id {
+              type leafref {
+                path "../../../nfv:affinity-or-anti-affinity-group/nfv:id";
+              }
+            }
+          }
+
+          container max-bitrate-requirements {
+            uses link-bitrate-requirements;
+          }
+          container min-bitrate-requirements {
+            uses link-bitrate-requirements;
+          }
+        }
+
+        list scaling-aspect {
+          key "aspect";
+          leaf aspect {
+            type string;
+          }
+          leaf name {
+            type string;
+          }
+          leaf description {
+            type string;
+          }
+          leaf scaling-level {
+            type leafref {
+              path "../../nfv:instantiation-level/nfv:id";
+            }
+          }
+        }
+
+        list affinity-or-anti-affinity-group {
+          key "id";
+
+          leaf id {
+            type string;
+          }
+
+          leaf affinity-type {
+            mandatory true;
+            type affinity-type;
+          }
+
+          leaf affinity-scope {
+            mandatory true;
+            type affinity-scope;
+          }
+        }
+
+        list instantiation-level {
+          min-elements 1;
+          key "id";
+          leaf id {
+            type string;
+          }
+
+          leaf description {
+            mandatory true;
+            type string;
+          }
+
+          list vnf-to-level-mapping {
+            key "vnf-profile";
+
+            leaf vnf-profile {
+              type leafref {
+                path "../../../nfv:vnf-profile/nfv:id";
+              }
+            }
+
+            leaf number-of-instances {
+              mandatory true;
+              type uint32;
+            }
+          }
+
+          list vl-to-level-mapping {
+            key "virtual-link-profile";
+
+            leaf virtual-link-profile {
+              type leafref {
+                path "../../../nfv:virtual-link-profile/nfv:virtual-link-desc";
+              }
+            }
+
+            uses link-bitrate-requirements;
+          }
+
+          must "(count(nfv:vnf-to-level-mapping) + count(nfv:vl-to-level-mapping)) > 0";
+
+          list ns-to-level-mapping {
+            key "ns-profile";
+            leaf ns-profile {
+              type leafref {
+                path "../../../nfv:ns-profile/nfv:nsd";
+              }
+            }
+
+            leaf number-of-instances {
+              mandatory true;
+              type uint32;
+            }
+          }
+        }
+
+        leaf default-instantiation-level {
+          type leafref {
+            path "../nfv:instantiation-level/nfv:id";
+          }
+        }
+
+        list ns-profile {
+          must "nfv:min-number-of-instances<=nfv:max-number-of-instances";
+          key "nsd";
+          leaf nsd {
+            type leafref {
+              path "../../../nfv:nested-nsd";
+            }
+          }
+          leaf deployment-flavor {
+            type leafref {
+              path "/nfv:nfv/nfv:nsd[id=current()/../nfv:nsd]/nfv:deployment-flavor/nfv:id";
+            }
+          }
+          leaf instantiation-level {
+            type leafref {
+              path "deref(../nfv:deployment-flavor)/../nfv:instantiation-level/nfv:id";
+            }
+          }
+          leaf min-number-of-instances {
+            type uint16;
+            mandatory true;
+          }
+          leaf max-number-of-instances {
+            type uint16;
+            mandatory true;
+          }
+          uses local-affinity-or-anti-affinity-rule;
+          list affinity-or-anti-affinity-group {
+            key "id";
+
+            leaf id {
+              type leafref {
+                path "../../../nfv:affinity-or-anti-affinity-group/nfv:id";
+              }
+            }
+          }
+        }
+
+        list dependency {
+          description
+            "NFV Management and Orchestration functions shall instantiate
+             VNFs from the VnfProfile and/or nested NSs from the NsProfile
+             referenced in the primary attribute before instantiating VNFs
+             from the VnfProfile and/or nested NSs from the NsProfile
+             referenced in the secondary attribute.";
+          key "id";
+          leaf id {
+            type string;
+          }
+          choice primary {
+            leaf primary-vnf-profile {
+              type leafref {
+                path "../../nfv:vnf-profile/nfv:vnfd";
+              }
+            }
+            leaf primary-ns-profile {
+              type leafref {
+                path "../../nfv:ns-profile/nfv:nsd";
+              }
+            }
+          }
+          choice secondary {
+            leaf secondary-vnf-profile {
+              type leafref {
+                path "../../nfv:vnf-profile/nfv:vnfd";
+              }
+            }
+            leaf secondary-ns-profile {
+              type leafref {
+                path "../../nfv:ns-profile/nfv:nsd";
+              }
+            }
+          }
+        }
+      }
+      uses security-parameters;
+    }
+  }
+}
