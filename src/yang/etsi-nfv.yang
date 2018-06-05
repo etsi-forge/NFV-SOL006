@@ -2,7 +2,9 @@ module etsi-nfv {
   namespace "urn:etsi:params:xml:ns:yang:etsi-nfv";
   prefix nfv;
 
-  include etsi-nfv-common;
+  import etsi-nfv-common {
+    prefix common;
+  }
   include etsi-nfv-vnf;
   include etsi-nfv-ns;
 
@@ -22,6 +24,6 @@ module etsi-nfv {
   container nfv {
     uses vnfd;
     uses nsd;
-    uses pnfd{};
+    container pnfd {}
   } // nfv
 }

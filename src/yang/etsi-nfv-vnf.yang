@@ -9,21 +9,23 @@ submodule etsi-nfv-vnf {
   import ietf-yang-types {
     prefix yang;
   }
-  include etsi-nfv-common;
+  import etsi-nfv-common {
+    prefix common;
+  }
   include etsi-nfv-ns;
 
   description
     "Models for VNFD according to GS NFV-IFA 011.";
 
-  revision 2018-04-24 {
+  revision 2018-06-19 {
     description
       "Initial revision.
 
        Common data structure to support VNFD according to:
-       ETSI GS NFV-IFA 011 V2.1.1 (2016-10)";
+       VNFD according to ETSI GS NFV-IFA 011 Ed251v243";
 
     reference
-      "ETSI GS NFV-IFA 011 V2.1.1 (2016-10)";
+      "ETSI GS NFV-IFA 011 Ed251v243";
   }
 
   grouping cpd {
@@ -42,7 +44,7 @@ submodule etsi-nfv-vnf {
     leaf layer-protocol {
       mandatory true;
       type identityref {
-        base layer-protocol;
+        base common:layer-protocol;
       }
       description
         "Identifies which protocol the CP uses for connectivity
@@ -52,7 +54,9 @@ submodule etsi-nfv-vnf {
         "GS NFV IFA011: Section 7.1.6.3, Cpd information element.";
     }
     leaf role {
-      type cp-role;
+      type identityref {
+        base common:cp-role;
+      }
       description
         "Identifies the role of the port in the context of the
          traffic flow patterns in the VNF or parent NS. For example a
@@ -78,7 +82,7 @@ submodule etsi-nfv-vnf {
         "GS NFV IFA011: Section 7.1.6.3, Cpd information element.";
       leaf associated-layer-protocol {
         type identityref {
-          base layer-protocol;
+          base common:layer-protocol;
         }
         description
           "One of the values of the attribute layerProtocol of the Cpd
@@ -92,7 +96,7 @@ submodule etsi-nfv-vnf {
         key "address-type";
         leaf address-type {
           type identityref {
-            base address-type;
+            base common:address-type;
           }
           description
             "Describes the type of the address to be assigned to the CP
@@ -394,7 +398,7 @@ submodule etsi-nfv-vnf {
                virtual link or to an external connection points.";
             leaf int-virtual-link-desc {
               type leafref {
-                path "../../../nfv:virtual-link-desc/nfv:id";
+                path "../../../nfv:int-virtual-link-desc/nfv:id";
               }
               description
                 "Reference of the internal VLD which this internal CPD
@@ -479,216 +483,16 @@ submodule etsi-nfv-vnf {
             }
           }
         }
-        container sw-image-desc {
-          presence
-            "Can be used to specify image data if the VNF should be
-             onboarded to the VIM by the NFV";
+        leaf sw-image-desc {
+          type leafref {
+            path "../../sw-image-desc/id";
+          }
           description
             "Describes the software image which is directly loaded on
              the virtualisation container realising this Vdu.";
           reference
-            "GS NFV IFA011: Section 7.1.6.2, Vdu information element";
-          list sw-image-desc {
-            key "id";
-            leaf id {
-              type string;
-              description
-                "The identifier of this software image.";
-              reference
-                "GS NFV IFA011: Section 7.1.6.5, SwImageDesc
-                 information element";
-            }
-            leaf name {
-              type string;
-              description
-                "The name of this software image.";
-              reference
-                "GS NFV IFA011: Section 7.1.6.5 SwImageDesc
-                 information element.";
-            }
-            leaf version {
-              type string;
-              description
-                "The version of this software image.";
-              reference
-                "GS NFV IFA011: Section 7.1.6.5 SwImageDesc
-                 information element.";
-            }
-            leaf checksum {
-              type string;
-              description
-                "The checksum of the software image file.";
-              reference
-                "GS NFV IFA011: Section 7.1.6.5 SwImageDesc
-                 information element.";
-            }
-            leaf container-format {
-              mandatory true;
-              type enumeration {
-                enum "aki" {
-                  description
-                    "An Amazon kernel image.";
-                }
-                enum "ami" {
-                  description
-                    "An Amazon machine image.";
-                }
-                enum "ari" {
-                  description
-                    "An Amazon ramdisk image.";
-                }
-                enum "bare" {
-                  description
-                    "The image does not have a container or metadata
-                     envelope.";
-                }
-                enum "docker" {
-                  description
-                    "A docker container format.";
-                }
-                enum "ova" {
-                  description
-                    "An OVF package in a tarfile.";
-                }
-                enum "ovf" {
-                  description
-                    "The OVF container format.";
-                }
-              }
-              description
-                "The container format describes the container file
-                 format in which software image is provided.";
-              reference
-                "GS NFV IFA011: Section 7.1.6.5 SwImageDesc
-                 information element.";
-            }
-            leaf disk-format {
-              mandatory true;
-              type enumeration {
-                enum "aki" {
-                  description
-                    "An Amazon kernel image.";
-                }
-                enum "ami" {
-                  description
-                    "An Amazon machine image.";
-                }
-                enum "ari" {
-                  description
-                    "An Amazon ramdisk image.";
-                }
-                enum "iso" {
-                  description
-                    "An archive format for the data contents of an
-                     disk, such as CD-ROM.";
-                }
-                enum "qcow2" {
-                  description
-                    "Supported by the QEMU emulator that can expand
-                     dynamically and supports Copy on Write.";
-                }
-                enum "raw" {
-                  description
-                    "An unstructured disk image format; if you have a
-                     file without an extension it is possibly a raw
-                     format.";
-                }
-                enum "vdi" {
-                  description
-                    "Supported by VirtualBox virtual machine monitor
-                     and the QEMU emulator.";
-                }
-                enum "vhd" {
-                  description
-                    "The VHD disk format, a common disk format used by
-                     virtual machine monitors from VMware, Xen,
-                     Microsoft, VirtualBox, and others.";
-                }
-                enum "vhdx" {
-                  description
-                    "The VHDX disk format, an enhanced version of the
-                     VHD format, which supports larger disk sizes among
-                     other features.";
-                }
-                enum "vmdk" {
-                  description
-                    "Common disk format supported by many common virtual
-                     machine monitors.";
-                }
-              }
-              description
-                "The disk format of a software image is the format of
-                 the underlying disk image.";
-            }
-            leaf min-disk {
-              type uint64;
-              units "Gb";
-              description
-                "The minimal disk size requirement for this software
-                 image. The value of the 'size of storage' attribute
-                 of the VirtualStorageDesc referencing this
-                 SwImageDesc shall not be smaller than the value of
-                 minDisk.";
-              reference
-                "GS NFV IFA011: Section 7.1.6.5, SwImageDesc
-                 information element.";
-            }
-            leaf min-ram {
-              type decimal64 {
-                fraction-digits 1;
-                range "0..max";
-              }
-              units "Gb";
-              description
-                "The minimal RAM requirement for this software image.
-                 The value of the 'size' attribute of
-                 VirtualMemoryData of the Vdu referencing this
-                 SwImageDesc shall not be smaller than the value of
-                 minRam.";
-              reference
-                "GS NFV IFA011: Section 7.1.6.5, SwImageDesc
-                 information element.";
-            }
-            leaf size {
-              type uint64;
-              description
-                "The size of this software image.";
-              reference
-                "GS NFV IFA011: Section 7.1.6.5, SwImageDesc
-                 information element.";
-            }
-            leaf image {
-              mandatory true;
-              type inet:uri;
-              description
-                "This is a reference to the actual software image.
-                 The reference can be relative to the root of the VNF
-                 Package or can be a URL";
-              reference
-                "GS NFV IFA011: Section 7.1.6.5, SwImageDesc
-                 information element.";
-            }
-            leaf operating-system {
-              type string;
-              description
-                "Identifies the operating system used in the software
-                 image. This attribute may also identify if a 32 bit
-                 or 64 bit software image is used.";
-              reference
-                "GS NFV IFA011: Section 7.1.6.5, SwImageDesc
-                 information element.";
-            }
-            leaf-list supported-virtualization-environment {
-              type string;
-              description
-                "Identifies the virtualisation environments
-                 (e.g. hypervisor) compatible with this software
-                 image.";
-              reference
-                "GS NFV IFA011: Section 7.1.6.5, SwImageDesc
-                 information element.";
-            }
-          }
+            "GS NFV IFA011: Section 7.1.6.2, Vdu information
+             element.";
         }
         leaf-list nfvi-constraint {
           type string;
@@ -711,7 +515,7 @@ submodule etsi-nfv-vnf {
               "GS NFV IFA011: Section 7.1.11.3, MonitoringParameter
                information element.";
           }
-          uses monitoring-parameter;
+          uses common:monitoring-parameter;
         }
         container configurable-properties {
           description
@@ -720,7 +524,7 @@ submodule etsi-nfv-vnf {
           reference
             "GS NFV IFA011: Section 7.1.6.2, VDU Information
              element.";
-          leaf  auto-scalable {
+          leaf auto-scalable {
             type boolean;
           }
           leaf auto-healable {
@@ -847,7 +651,8 @@ submodule etsi-nfv-vnf {
               fraction-digits 1;
               range "0..max";
             }
-            units "MB";
+            must ". >= ../../../sw-image-desc[id=current()]/min-ram";
+            units "Gb";
             mandatory true;
             description
               "Amount of virtual memory in MB.";
@@ -1022,12 +827,14 @@ submodule etsi-nfv-vnf {
              related to Virtual Storage.";
         }
         leaf size-of-storage {
+          must ". >= ../../sw-image-desc[id=current()]/min-disk";
+
           type uint64;
-          units "GB";
+          units "Gb";
           mandatory true;
           description
             "Size of virtualised storage resource (e.g. size of
-             volume, in GB)";
+             volume, in Gb)";
           reference
             "GS NFV IFA011: Section 7.1.9.4, Information elements 
              related to Virtual Storage.";
@@ -1052,13 +859,12 @@ submodule etsi-nfv-vnf {
           description
             "Indicate if the storage support RDMA.";
           reference
-            "GS NFV IFA011: Section 7.1.9.4, Information elements 
+            "GS NFV IFA011: Section 7.1.9.4, Information elements
              related to Virtual Storage.";
         }
         leaf sw-image-desc {
           type leafref {
-            path "../nfv:vdu/nfv:sw-image-desc/nfv:sw-image-desc/" +
-                 "nfv:id";
+            path "../../sw-image-desc/id";
           }
           description
             "Software image to be loaded on the VirtualStorage
@@ -1067,14 +873,216 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.9.4, Information elements
              related to Virtual Storage.";
         }
-        /*
-          swImageDesc
-          The specification prescribes a reference to a VDU's
-          software image the VDU already has information of which 
-          image it uses, so this would unnecessarily complicate things.
-        */
       }
-      
+
+      list sw-image-desc {
+        key "id";
+        description
+          "Defines descriptors of software images to be used by the
+           VNF.";
+        reference
+          "GS NFV IFA011: Section 7.1.2, VNFD Information element.";
+        leaf id {
+          type string;
+          description
+            "The identifier of this software image.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.5, SwImageDesc
+             information element";
+        }
+        leaf name {
+          type string;
+          description
+            "The name of this software image.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.5 SwImageDesc
+             information element.";
+        }
+        leaf version {
+          type string;
+          description
+            "The version of this software image.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.5 SwImageDesc
+             information element.";
+        }
+        leaf checksum {
+          type string;
+          description
+            "The checksum of the software image file.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.5 SwImageDesc
+             information element.";
+        }
+        leaf container-format {
+          mandatory true;
+          type enumeration {
+            enum "aki" {
+              description
+                "An Amazon kernel image.";
+            }
+            enum "ami" {
+              description
+                "An Amazon machine image.";
+            }
+            enum "ari" {
+              description
+                "An Amazon ramdisk image.";
+            }
+            enum "bare" {
+              description
+                "The image does not have a container or metadata
+                 envelope.";
+            }
+            enum "docker" {
+              description
+                "A docker container format.";
+            }
+            enum "ova" {
+              description
+                "An OVF package in a tarfile.";
+            }
+            enum "ovf" {
+              description
+                "The OVF container format.";
+            }
+          }
+          description
+            "The container format describes the container file
+             format in which software image is provided.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.5 SwImageDesc
+             information element.";
+        }
+        leaf disk-format {
+          mandatory true;
+          type enumeration {
+            enum "aki" {
+              description
+                "An Amazon kernel image.";
+            }
+            enum "ami" {
+              description
+                "An Amazon machine image.";
+            }
+            enum "ari" {
+              description
+                "An Amazon ramdisk image.";
+            }
+            enum "iso" {
+              description
+                "An archive format for the data contents of an
+                 disk, such as CD-ROM.";
+            }
+            enum "qcow2" {
+              description
+                "Supported by the QEMU emulator that can expand
+                 dynamically and supports Copy on Write.";
+            }
+            enum "raw" {
+              description
+                "An unstructured disk image format; if you have a
+                 file without an extension it is possibly a raw
+                 format.";
+            }
+            enum "vdi" {
+              description
+                "Supported by VirtualBox virtual machine monitor
+                 and the QEMU emulator.";
+            }
+            enum "vhd" {
+              description
+                "The VHD disk format, a common disk format used by
+                 virtual machine monitors from VMware, Xen,
+                 Microsoft, VirtualBox, and others.";
+            }
+            enum "vhdx" {
+              description
+                "The VHDX disk format, an enhanced version of the
+                 VHD format, which supports larger disk sizes among
+                 other features.";
+            }
+            enum "vmdk" {
+              description
+                "Common disk format supported by many common virtual
+                 machine monitors.";
+            }
+          }
+          description
+            "The disk format of a software image is the format of
+             the underlying disk image.";
+        }
+        leaf min-disk {
+          type uint64;
+          units "Gb";
+          description
+            "The minimal disk size requirement for this software
+             image. The value of the 'size of storage' attribute
+             of the VirtualStorageDesc referencing this
+             SwImageDesc shall not be smaller than the value of
+             minDisk.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.5, SwImageDesc
+             information element.";
+        }
+        leaf min-ram {
+          type decimal64 {
+            fraction-digits 1;
+            range "0..max";
+          }
+          units "Gb";
+          description
+            "The minimal RAM requirement for this software image.
+             The value of the 'size' attribute of
+             VirtualMemoryData of the Vdu referencing this
+             SwImageDesc shall not be smaller than the value of
+             minRam.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.5, SwImageDesc
+             information element.";
+        }
+        leaf size {
+          type uint64;
+          units "Gb";
+          description
+            "The size of this software image.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.5, SwImageDesc
+             information element.";
+        }
+        leaf image {
+          mandatory true;
+          type inet:uri;
+          description
+            "This is a reference to the actual software image.
+             The reference can be relative to the root of the VNF
+             Package or can be a URL";
+          reference
+            "GS NFV IFA011: Section 7.1.6.5, SwImageDesc
+             information element.";
+        }
+        leaf operating-system {
+          type string;
+          description
+            "Identifies the operating system used in the software
+             image. This attribute may also identify if a 32 bit
+             or 64 bit software image is used.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.5, SwImageDesc
+             information element.";
+        }
+        leaf-list supported-virtualization-environment {
+          type string;
+          description
+            "Identifies the virtualisation environments
+             (e.g. hypervisor) compatible with this software
+             image.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.5, SwImageDesc
+             information element.";
+        }
+      }
+
       list int-virtual-link-desc {
         key "id";
         description
@@ -1088,8 +1096,8 @@ submodule etsi-nfv-vnf {
           description
             "Unique identifier of this internal VLD in VNFD.";
           reference
-            "GS NFV IFA011: Section 7.1.7, Information elements 
-             related to the VLD.";
+            "GS NFV IFA011: Section 7.1.7.2, VnfVirtualLinkDesc
+             Information elements.";
         }
 
         list desc-flavor {
@@ -1098,8 +1106,8 @@ submodule etsi-nfv-vnf {
             "Describes a specific flavour of the VL with specific
              bitrate requirements.";
           reference
-            "GS NFV IFA011: Section 7.1.7, Information elements
-             related to the VLD.";
+            "GS NFV IFA011: Section 7.1.7.2, VnfVirtualLinkDesc
+             Information elements.";
 
           leaf id {
             type string;
@@ -1151,9 +1159,9 @@ submodule etsi-nfv-vnf {
             }
           }
         }
-        
-        uses connectivity-type;
-        
+
+        uses common:connectivity-type;
+
         leaf-list test-access {
           type string;
           description
@@ -1183,10 +1191,10 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.11.3, MonitoringParameter
              information element.";
           }
-          uses monitoring-parameter;
+          uses common:monitoring-parameter;
         }
       }
-      
+
       list ext-cpd {
         key "id";
         min-elements 1;
@@ -1196,15 +1204,15 @@ submodule etsi-nfv-vnf {
            connection with a Virual Link";
         reference
           "GS NFV IFA011: Section 7.1.2, VNFD information element.";
-        
-        leaf virtual-link-desc {
+
+        leaf int-virtual-link-desc {
           description
             "Reference to the internal Virtual Link Descriptor (VLD)
              to which CPs instantiated from this external CP
              Descriptor (CPD) connect. Either intVirtualLinkDesc or
              intCpd shall be present.";
           type leafref {
-            path "../../nfv:virtual-link-desc/nfv:id";
+            path "../../nfv:int-virtual-link-desc/nfv:id";
           }
         }
         /*
@@ -1277,7 +1285,7 @@ submodule etsi-nfv-vnf {
               "GS NFV IFA011: Section 7.1.8.3, VduProfile information
                element.";
           }
-          uses local-affinity-or-anti-affinity-rule;
+          uses common:local-affinity-or-anti-affinity-rule;
           list affinity-or-anti-affinity-group {
             key "id";
             description
@@ -1312,7 +1320,7 @@ submodule etsi-nfv-vnf {
                  information element.";
             }
             leaf scope {
-              type affinity-scope;
+              type common:affinity-scope;
               description
                 "Specifies the scope of the rule, possible values are
                  'NFVI-PoP', 'Zone', 'ZoneGroup', 'NFVI-node'";
@@ -1333,7 +1341,7 @@ submodule etsi-nfv-vnf {
 
           leaf id {
             type leafref {
-              path "../../../nfv:virtual-link-desc/nfv:id";
+              path "../../../nfv:int-virtual-link-desc/nfv:id";
             }
             description
               "Uniquely identifies a Vnf VLD.";
@@ -1343,8 +1351,8 @@ submodule etsi-nfv-vnf {
           }
           leaf flavor {
             type leafref {
-              path "deref(../nfv:virtual-link-desc)" +
-                   "/../nfv:descriptor-flavor/nfv:id";
+              path "deref(../../../ext-cpd/int-virtual-link-desc)" +
+                   "/../desc-flavor/id";
             }
             description
               "Identifies a flavour within the VnfVirtualLinkDesc.";
@@ -1352,7 +1360,7 @@ submodule etsi-nfv-vnf {
               "GS NFV IFA011: Section 7.1.8.4, VirtualLinkProfile
                information element.";
           }
-          uses local-affinity-or-anti-affinity-rule;
+          uses common:local-affinity-or-anti-affinity-rule;
           list affinity-or-anti-affinity-group {
             key "id";
             leaf id {
@@ -1426,12 +1434,12 @@ submodule etsi-nfv-vnf {
             }
             leaf number-of-instances {
               type uint16;
-              must ". <= ../../../" +
-                   "nfv:vdu-profile[vdu=current()/../" +
-                   "nfv:vdu]/nfv:max-number-of-instances";
-              must ". >= ../../../" +
-                   "nfv:vdu-profile[vdu=current()/../" +
-                   "nfv:vdu]/nfv:min-number-of-instances";
+              must ". <= ../../../../nfv:deployment-flavor/" +
+                   "nfv:vdu-profile[id=current()]/" +
+                   "nfv:max-number-of-instances";
+              must ". >= ../../../../nfv:deployment-flavor/" +
+                   "nfv:vdu-profile[id=current()]/" +
+                   "nfv:min-number-of-instances";
               mandatory true;
               description
                 "Number of instances of VNFC based on this VDU to
@@ -1486,7 +1494,7 @@ submodule etsi-nfv-vnf {
         }
         leaf-list supported-operation {
           type identityref {
-            base supported-operation;
+            base common:supported-operation;
           }
           description
             "Indicates which operations are available for this DF via
@@ -1709,7 +1717,7 @@ submodule etsi-nfv-vnf {
 
           leaf type {
             mandatory true;
-            type affinity-type;
+            type common:affinity-type;
             description
               "Specifies whether the rule is an affinity rule or an
                anti-affinity rule.";
@@ -1720,7 +1728,7 @@ submodule etsi-nfv-vnf {
 
           leaf scope {
             mandatory true;
-            type affinity-scope;
+            type common:affinity-scope;
             description
               "Specifies the scope of the rule, possible values are
                'NFVI-PoP', 'Zone', 'ZoneGroup', 'NFVI-node'.";
@@ -1747,7 +1755,7 @@ submodule etsi-nfv-vnf {
               "GS NFV IFA011: Section 7.1.11.3 MonitoringParameter
                information element";
           }
-          uses monitoring-parameter;
+          uses common:monitoring-parameter;
         }
 
         list scaling-aspect {
@@ -1886,7 +1894,7 @@ submodule etsi-nfv-vnf {
           "GS NFV IFA011: Section 7.1.2 VNFD information element";
 
         leaf event {
-          type internal-lifecycle-management-script-event;
+          type common:lifecycle-management-script-event;
           description
             "Describes VNF lifecycle event(s) or an external stimulus
              detected on a VNFM reference point.";
@@ -1979,7 +1987,7 @@ submodule etsi-nfv-vnf {
         }
         leaf-list virtual-link-desc {
           type leafref {
-            path "../../nfv:virtual-link-desc/nfv:id";
+            path "../../nfv:int-virtual-link-desc/nfv:id";
           }
           description
             "References to VnfVirtualLinkDesc that are part of this

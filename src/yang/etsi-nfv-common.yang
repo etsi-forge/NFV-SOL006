@@ -1,12 +1,11 @@
-submodule etsi-nfv-common {
-  belongs-to etsi-nfv {
-    prefix nfv;
-  }
+module etsi-nfv-common {
+  namespace "urn:etsi:params:xml:ns:yang:etsi-nfv-common";
+  prefix common;
 
   description
-    "Common types.";
+    "Common data types for ETSI data models.";
 
-  revision 2017-01-20 {
+  revision 2018-06-19 {
     description
       "Initial revision
 
