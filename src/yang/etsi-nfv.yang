@@ -10,25 +10,18 @@ module etsi-nfv {
     "European Telecommunications Standards Institute (ETSI)";
 
   description
-    "Network Function Virtualization Orchestrator";
+    "Network Function Virtualization Descriptors";
 
-  revision 2017-01-20 {
+  revision 2018-06-13 {
     description
       "Initial revision.
-       NSD according to ETSI GS NFV-IFA 014 V2.1.1 (2016-10)
-       VNFD according to ETSI GS NFV-IFA 011 V2.1.1 (2016-10)";
+       NSD and PNFD according to ETSI GS NFV-IFA 014 Ed251v244
+       VNFD according to ETSI GS NFV-IFA 011 Ed251v243";
   }
 
   container nfv {
     uses vnfd;
     uses nsd;
-
-    container vnf-info {}
-    container nsr {}
-    container ns-info {}
-
-    container onboarding {}
-
-    container settings {}
- } // nfv
+    uses pnfd{};
+  } // nfv
 }

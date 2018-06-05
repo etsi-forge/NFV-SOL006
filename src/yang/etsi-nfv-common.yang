@@ -10,10 +10,9 @@ submodule etsi-nfv-common {
     description
       "Initial revision
 
-       Common data structures to support VNFD and NSD
-       according to:
-       ETSI GS NFV-IFA 014 V2.1.1 (2016-10)
-       ETSI GS NFV-IFA 011 V2.1.1 (2016-10)";
+       Common data structures to support VNFD and NSD according to:
+       ETSI GS NFV-IFA 014 Ed251v244
+       ETSI GS NFV-IFA 011 Ed251v243";
   }
 
   /*
@@ -36,7 +35,7 @@ submodule etsi-nfv-common {
   identity IPv6 {
     base layer-protocol;
   }
-  identity Psuedo-Wire {
+  identity Pseudo-Wire {
     base layer-protocol;
   }
 
@@ -72,12 +71,110 @@ submodule etsi-nfv-common {
   }
   identity instantiate-vnf {
     base supported-operation;
+    description
+      "This operation instantiates a particular DF of a VNF based on
+       the definition in the VNFD.";
+    reference
+      "GS NFV IFA007: Section 7.2.3 Instantiate VNF Operation";
+  }
+  identity scale-vnf {
+    base supported-operation;
+    description
+      "This operation provides methods to request scaling a VNF in
+       multiple ways:
+       • horizontal scaling:
+         - scale out: adding additional VNFC instances to the VNF to
+           increase capacity
+         - scale in: removing VNFC instances from the VNF, in order to
+           release unused capacity";
+    reference
+      "GS NFV IFA007: Section 7.2.4 Scale VNF Operation";
+  }
+  identity scale-vnf-to-level {
+    base supported-operation;
+    description
+      "This operation scales an instantiated VNF of a particular DF to
+       a target size. The target size is either expressed as an
+       instantiation level of that DF as defined in the VNFD, or given
+       as a list of scale levels, one per scaling aspect of that DF.
+       Instantiation levels and scaling aspects are declared in the
+       VNFD. Typically, the result of this operation is adding and/or
+       removing Network Functions Virtualization Infrastructure (NFVI)
+       resources to/from the VNF.";
+    reference
+      "GS NFV IFA007: Section 7.2.5 Scale VNF To Level Operation";
+  }
+  identity change-vnf-flavour {
+    base supported-operation;
+    description
+      "This operation changes the DF of a VNF instance.";
+    reference
+      "GS NFV IFA007: Section 7.2.6 Change VNF Flavour Operation";
   }
   identity terminate-vnf {
     base supported-operation;
+    description
+      "This operation terminates a VNF.
+
+       A VNF can be terminated gracefully or forcefully. Graceful
+       termination means that the VNFM arranges to take the
+       VNF out of service, e.g. by asking the VNF's EM to take the
+       VNF out of service, and only after that shuts down the
+       VNF and releases the resources. Forceful termination means that
+       the VNFM immediately shuts down the VNF and releases the
+       resources. A time interval can be specified for taking the VNF
+       out of service, after which the VNF is shut down if taking it
+       out of service has not completed.";
+    reference
+      "GS NFV IFA007: Section 7.2.7 Terminate VNF Operation";
   }
   identity query-vnf {
     base supported-operation;
+    description
+      "This operation provides information about VNF instances. The
+       applicable VNF instances can be chosen based on
+       filtering criteria, and the information can be restricted to
+       selected attributes.";
+    reference
+      "GS NFV IFA007: Section 7.2.9 Query VNF Operation";
+  }
+  identity heal-vnf {
+    base supported-operation;
+    description
+      "This operation enables the NFVO to request a VNFM to perform a
+       VNF healing procedure.";
+    reference
+      "GS NFV IFA007: Section 7.2.10 Heal VNF Operation";
+  }
+  identity operate-vnf {
+    base supported-operation;
+    description
+      "This operation enables requesting to change the state of a VNF
+       instance, including starting and stopping the VNF instance.";
+    reference
+      "GS NFV IFA007: Section 7.2.11 Operate VNF Operation";
+  }
+  identity modify-vnf-information {
+    base supported-operation;
+    description
+      "This operation allows updating information about a VNF
+       instance.";
+    reference
+      "GS NFV IFA007: Section 7.2.12 Modify VNF Operation";
+  }
+
+  identity cp-role {
+    description
+      "Identifies the role of the port in the context of the traffic
+       flow patterns in the VNF or parent NS.";
+    reference
+      "GS NFV IFA011: Section 7.1.6.3 Cpd information element";
+  }
+  identity root {
+    base cp-role;
+  }
+  identity leaf {
+    base cp-role;
   }
 
   /*
@@ -89,13 +186,6 @@ submodule etsi-nfv-common {
       enum line;
       enum tree;
       enum mesh;
-    }
-  }
-
-  typedef cp-role {
-    type enumeration {
-      enum "root";
-      enum "leaf";
     }
   }
 
@@ -115,7 +205,7 @@ submodule etsi-nfv-common {
     }
   }
 
-  typedef lifecycle-management-script-event {
+  typedef internal-lifecycle-management-script-event {
     type enumeration {
       enum "start-instantiation";
       enum "end-instantiation";
@@ -228,12 +318,12 @@ submodule etsi-nfv-common {
     leaf performance-metric {
       type string;
       description
-        "Defines the virtualised resource performance metric. The
-         VNFM collects the performance metrics defined in this
-         attribute from the VIM using one or more PM Jobs.";
+        "Performance metric that is monitored. This attribute shall
+         contain the related 'Measurement Name' value as defined in
+         clause 7.2 of ETSI GS NFV-IFA 027";
       reference
         "GS NFV IFA011: Section 7.1.11.3, MonitoringParameter
-         information element.";
+         information element and Section 7.2 of ETSI GS NFV-IFA 027.";
     }
     leaf collection-period {
       type uint64;

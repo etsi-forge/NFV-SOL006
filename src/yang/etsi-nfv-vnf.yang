@@ -1886,7 +1886,7 @@ submodule etsi-nfv-vnf {
           "GS NFV IFA011: Section 7.1.2 VNFD information element";
 
         leaf event {
-          type lifecycle-management-script-event;
+          type internal-lifecycle-management-script-event;
           description
             "Describes VNF lifecycle event(s) or an external stimulus
              detected on a VNFM reference point.";
