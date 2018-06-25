@@ -20,20 +20,6 @@ submodule etsi-nfv-ns {
        "ETSI GS NFV-IFA 011 Ed251v243";
   }
 
-  grouping security-parameters {
-    container security {
-      leaf signature {
-        type string;
-      }
-      leaf algorithm {
-        type string;
-      }
-      leaf certificate {
-        type string;
-      }
-    }
-  }
-
   grouping resource-handle {
     leaf vim-id {
       type string;
@@ -92,12 +78,9 @@ submodule etsi-nfv-ns {
            descriptor consists of.";
         leaf vnfd {
           type leafref {
-            path "/nfv/vnfd/id";
+            path "../../../vnfd/id";
           }
         }
-      }
-      leaf-list pnfd {
-        type string;
       }
       list service-access-point-descriptor {
         key "id";
@@ -226,7 +209,7 @@ submodule etsi-nfv-ns {
         leaf description {
           type string;
         }
-        uses security-parameters;
+        uses common:security-parameters;
       }
       // vnffgd skipped since not fully specified by the spec
       list monitored-info {
@@ -373,7 +356,7 @@ submodule etsi-nfv-ns {
           key "pnfd";
           leaf pnfd {
             type leafref {
-              path "../../../pnfd";
+              path "../../../../pnfd/id";
             }
           }
           // no virtual-link-connectivity as we don't have PNFD modelled.
@@ -589,7 +572,7 @@ submodule etsi-nfv-ns {
           }
         }
       }
-      uses security-parameters;
+      uses common:security-parameters;
     }
   }
 }

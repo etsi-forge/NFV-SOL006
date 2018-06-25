@@ -339,4 +339,182 @@ module etsi-nfv-common {
          information element.";
     }
   }
+
+  grouping security-parameters {
+    leaf signature {
+      type string;
+      description
+        "Provides the signature of the signed part of the
+         descriptor.";
+      reference
+        "GS NFV IFA014: Section 6.2.5, SecurityParameters
+         information element.";
+    }
+    leaf algorithm {
+      type string;
+      description
+        "Identifies the algorithm used to compute the signature.";
+      reference
+        "GS NFV IFA014: Section 6.2.5, SecurityParameters
+         information element.";
+    }
+    leaf certificate {
+      type string;
+      description
+        "Provides a certificate or a reference to a certificate to
+         validate the signature.";
+      reference
+        "GS NFV IFA014: Section 6.2.5, SecurityParameters
+         information element.";
+    }
+  }
+  grouping cpd {
+    description
+      "A Cpd information element describes network connectivity to a
+       compute resource or a VL.";
+    reference
+      "GS NFC IFA011: Section 7.1.6.3 Cpd Information Element";
+    leaf id {
+      type string;
+      description
+        "Identifier of this Cpd information element.";
+      reference
+        "GS NFV IFA011: Section 7.1.6.3, Cpd information element.";
+    }
+    leaf layer-protocol {
+      mandatory true;
+      type identityref {
+        base common:layer-protocol;
+      }
+      description
+        "Identifies which protocol the CP uses for connectivity
+         purposes (Ethernet, MPLS, ODU2, IPV4, IPV6, Pseudo-Wire,
+         etc.).";
+      reference
+        "GS NFV IFA011: Section 7.1.6.3, Cpd information element.";
+    }
+    leaf role {
+      type identityref {
+        base common:cp-role;
+      }
+      description
+        "Identifies the role of the port in the context of the
+         traffic flow patterns in the VNF or parent NS. For example a
+         VNF with a tree flow pattern within the VNF will have legal
+         cpRoles of ROOT and LEAF.";
+      reference
+        "GS NFV IFA011: Section 7.1.6.3, Cpd information element.";
+    }
+    leaf description {
+      type string;
+      description
+        "Human readable description of the connection point";
+      reference
+        "GS NFV IFA011: Section 7.1.6.3, Cpd information element.";
+    }
+    container protocol {
+      description
+        "Identifies the protocol layering information the CP uses for
+         connectivity purposes and associated information. There shall
+         be one cpProtocol for each layer protocol as indicated by the
+         attribute layerProtocol.";
+      reference
+        "GS NFV IFA011: Section 7.1.6.3, Cpd information element.";
+      leaf associated-layer-protocol {
+        type identityref {
+          base common:layer-protocol;
+        }
+        description
+          "One of the values of the attribute layerProtocol of the Cpd
+           IE.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.8, CpProtocolData information
+           element.";
+      }
+
+      list address-data {
+        key "address-type";
+        leaf address-type {
+          type identityref {
+            base common:address-type;
+          }
+          description
+            "Describes the type of the address to be assigned to the CP
+             instantiated from the parent CPD.
+             Value:
+             • MAC address.
+             • IP address.
+             • …
+             The content type shall be aligned with the address type
+             supported by the layerProtocol attribute of the parent CPD.";
+          reference
+            "GS NFV IFA011: Section 7.1.3.3, AddressData information
+             element.";
+        }
+        container l2-address-data {
+          when "../address-type='mac-address'";
+        }
+        container l3-address-data {
+          when "../address-type='ip-address'";
+          leaf ip-address-assignment {
+            type boolean;
+            description
+              "Specify if the address assignment is the responsibility
+               of management and orchestration function or not. If it
+               is set to True, it is the management and orchestration
+               function responsibility. ";
+            reference
+              "GS NFV IFA011: Section 7.1.3.4, L3AddressData
+               information element.";
+          }
+          leaf floating-ip-activated {
+            type boolean;
+            description
+              "Specify if the floating IP scheme is activated on the CP
+               or not.";
+            reference
+              "GS NFV IFA011: Section 7.1.3.4, L3AddressData
+               information element.";
+          }
+          leaf ip-address-type {
+            type enumeration {
+              enum "ipv4";
+              enum "ipv6";
+            }
+            description
+              "Define address type. The address type should be aligned
+               with the address type supported by the layerProtocol
+               attribute of the parent VnfExtCpd.";
+            reference
+              "GS NFV IFA011: Section 7.1.3.4, L3AddressData
+               information element.";
+          }
+          leaf number-of-ip-addresses {
+            type uint32;
+            description
+              "Minimum number of IP addresses to be assigned based on
+               this L3AddressData information element.";
+            reference
+              "GS NFV IFA011: Section 7.1.3.4, L3AddressData
+               information element.";
+          }
+        }
+        description
+          "The AddressData information element supports providing
+           information about the addressing scheme and parameters
+           applicable to a CP.";
+        reference
+          "GS NFV IFA011: Section 7.1.3.3, AddressData information
+           element.";
+      }
+    }
+    leaf trunk-mode {
+      type boolean;
+      description
+        "Information about whether the CP instantiated from this CPD
+         is in Trunk mode (802.1Q or other).";
+      reference
+        "GS NFV IFA011: Section 7.1.6.3, Cpd information element.";
+    }
+  }
 }

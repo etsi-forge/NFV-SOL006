@@ -6,6 +6,7 @@ module etsi-nfv {
     prefix common;
   }
   include etsi-nfv-vnf;
+  include etsi-nfv-pnf;
   include etsi-nfv-ns;
 
   organization
@@ -24,6 +25,6 @@ module etsi-nfv {
   container nfv {
     uses vnfd;
     uses nsd;
-    container pnfd {}
+    uses pnfd;
   } // nfv
 }
