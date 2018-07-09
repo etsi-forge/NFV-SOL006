@@ -256,7 +256,7 @@ submodule etsi-nfv-vnf {
       key "id";
       description
         "A VNF Descriptor (VNFD) is a deployment template which
-         describes a VNF in terms of deployment and operational 
+         describes a VNF in terms of deployment and operational
          behaviour requirements. It also contains connectivity,
          interface and virtualised resource requirements";
       reference
@@ -348,7 +348,7 @@ submodule etsi-nfv-vnf {
         reference
           "GS NFV-IFA011: Section 7.1.2, VNFD information element";
       }
-      
+
       list vdu {
         key "id";
         min-elements 1;
@@ -459,7 +459,7 @@ submodule etsi-nfv-vnf {
              element, and Section 7.1.9.2.2, VirtualComputeDesc
              information element.";
         }
-        
+
         leaf-list virtual-storage-desc {
           type leafref {
             path "../../nfv:virtual-storage-descriptor/" +
@@ -476,12 +476,27 @@ submodule etsi-nfv-vnf {
         }
         list boot-order {
           ordered-by user;
-          key "virtual-storage-desc";
-          leaf virtual-storage-desc {
+          key "key";
+          leaf key {
+            type uint32;
+          }
+          leaf value {
             type leafref {
               path "../../nfv:virtual-storage-desc";
             }
           }
+          description
+            "The key indicates the boot index (lowest index defines
+             highest boot priority). The Value references a descriptor
+             from which a valid boot device is created e.g.
+             VirtualStorageDesc from which a VirtualStorage instance
+             is created.
+
+             Editor's note: The boot-order node requires further
+             study.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.2, Vdu information
+             element.";
         }
         leaf sw-image-desc {
           type leafref {
@@ -517,32 +532,41 @@ submodule etsi-nfv-vnf {
           }
           uses common:monitoring-parameter;
         }
-        container configurable-properties {
-          description
-            "Describes the configurable properties of all VNFC
-             instances based on this VDU.";
-          reference
-            "GS NFV IFA011: Section 7.1.6.2, VDU Information
-             element.";
-          leaf auto-scalable {
-            type boolean;
-          }
-          leaf auto-healable {
-            type boolean;
-          }
-
-          leaf additional-configurable-property {
+        list configurable-properties {
+          key "key";
+          leaf key {
             type string;
-            description
-              "It provides VNFC configurable properties that can be
-               modified using the ModifyVnfInfo operation.";
-            reference
-              "GS NFV IFA011: Section 7.1.6.7,
-               VnfcConfigurableProperties Information element.";
           }
+          leaf value {
+            type string;
+          }
+          description
+            "It provides VNFC configurable properties that can be
+             modified using the ModifyVnfInfo operation.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.7,
+             VnfcConfigurableProperties Information element.";
+        }
+        list boot-data {
+          key "key";
+          leaf key {
+            type string;
+          }
+          leaf value {
+            type string;
+          }
+          description
+            "Contains a string or a URL to a file contained in the
+             VNF package used to customize a virtualised compute
+             resource at boot time. The bootData may contain variable
+             parts that are replaced by deployment specific values
+             before being sent to the VIM.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.7,
+             VnfcConfigurableProperties Information element.";
         }
       }
-      
+
       list virtual-compute-descriptor {
         key "id";
         description
@@ -582,7 +606,7 @@ submodule etsi-nfv-vnf {
                VDU. ETSI GS NFV-IFA 002 [i.1] describes acceleration
                capabilities.";
             reference
-              "GS NFV IFA011: Section 7.1.9.5, 
+              "GS NFV IFA011: Section 7.1.9.5,
                RequestedAdditionalCapabilityData Information
                element.";
           }
@@ -592,7 +616,7 @@ submodule etsi-nfv-vnf {
               "Indicates whether the requested additional capability
                is mandatory for successful operation.";
             reference
-              "GS NFV IFA011: Section 7.1.9.5, 
+              "GS NFV IFA011: Section 7.1.9.5,
                RequestedAdditionalCapabilityData Information
                element.";
           }
@@ -600,10 +624,10 @@ submodule etsi-nfv-vnf {
           leaf min-version {
             type string;
             description
-              "Identifies the minimum version of the requested 
+              "Identifies the minimum version of the requested
                additional capability.";
             reference
-              "GS NFV IFA011: Section 7.1.9.5, 
+              "GS NFV IFA011: Section 7.1.9.5,
                RequestedAdditionalCapabilityData Information
                element.";
           }
@@ -663,7 +687,7 @@ submodule etsi-nfv-vnf {
           leaf over-subscription-policy {
             type string;
             description
-              "The memory core oversubscription policy in terms of 
+              "The memory core oversubscription policy in terms of
                virtual memory to physical memory on the platform.
                The cardinality can be 0 during the allocation
                request, if no particular value is requested.";
@@ -795,7 +819,7 @@ submodule etsi-nfv-vnf {
           }
         }
       }
-      
+
       list virtual-storage-descriptor {
         key "id";
         description
@@ -807,7 +831,7 @@ submodule etsi-nfv-vnf {
             "Unique identifier of this VirtualStorageDesc in the
              VNFD.";
           reference
-            "GS NFV IFA011: Section 7.1.9.4, Information elements 
+            "GS NFV IFA011: Section 7.1.9.4, Information elements
              related to Virtual Storage.";
         }
 
@@ -820,10 +844,10 @@ submodule etsi-nfv-vnf {
           }
           mandatory true;
           description
-            "Type of virtualised storage resource (e.g. volume, 
+            "Type of virtualised storage resource (e.g. volume,
              object).";
           reference
-            "GS NFV IFA011: Section 7.1.9.4, Information elements 
+            "GS NFV IFA011: Section 7.1.9.4, Information elements
              related to Virtual Storage.";
         }
         leaf size-of-storage {
@@ -836,7 +860,7 @@ submodule etsi-nfv-vnf {
             "Size of virtualised storage resource (e.g. size of
              volume, in Gb)";
           reference
-            "GS NFV IFA011: Section 7.1.9.4, Information elements 
+            "GS NFV IFA011: Section 7.1.9.4, Information elements
              related to Virtual Storage.";
         }
         list vdu-storage-requirements {
@@ -875,8 +899,7 @@ submodule etsi-nfv-vnf {
         }
       }
 
-      list sw-image-desc {
-        key "id";
+      container sw-image-desc {
         description
           "Defines descriptors of software images to be used by the
            VNF.";
@@ -1514,7 +1537,7 @@ submodule etsi-nfv-vnf {
           reference
             "GS NFV IFA011: Section 7.1.8.2 VnfDf information
              element";
-          
+
           leaf instantiate-vnf-op-config {
             type string;
             description
@@ -1561,7 +1584,7 @@ submodule etsi-nfv-vnf {
           }
           container scale-vnf-to-level-op-config {
             description
-              "This information element defines attributes that 
+              "This information element defines attributes that
                affect the invocation of the ScaleVnfToLevel
                operation.";
             reference
@@ -1621,7 +1644,7 @@ submodule etsi-nfv-vnf {
           }
           container terminate-vnf-op-config {
             description
-              "This information element defines attributes that 
+              "This information element defines attributes that
                affect the invocation of the TerminateVnf operation.";
             reference
               "GS NFV IFA011: Section 7.1.5.2
@@ -1850,8 +1873,14 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.12 VnfConfigurableProperties
              information element";
         }
-        leaf-list additional-configurable-property {
-          type string;
+        list additional-configurable-property {
+          key "key";
+          leaf key {
+            type string;
+          }
+          leaf value {
+            type string;
+          }
           description
             "It provides VNF specific configurable properties that can
              be modified using the ModifyVnfConfiguration operation.";
@@ -1894,7 +1923,7 @@ submodule etsi-nfv-vnf {
           "GS NFV IFA011: Section 7.1.2 VNFD information element";
 
         leaf event {
-          type common:lifecycle-management-script-event;
+          type common:internal-lifecycle-management-script-event;
           description
             "Describes VNF lifecycle event(s) or an external stimulus
              detected on a VNFM reference point.";
