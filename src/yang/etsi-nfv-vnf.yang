@@ -433,17 +433,45 @@ submodule etsi-nfv-vnf {
         }
 
         list logical-node {
-          key "key";
-          leaf key {
+          key "id";
+
+          leaf id {
             type string;
+            description
+              "Identifies this set of logical node requirements.";
+            reference
+              "GS NFV IFA011: Section 7.1.9.6, LogicalNodeRequirements
+               Information elements.";
           }
-          leaf value {
-            type string;
+
+          list requirement-detail {
+            key "key";
+
+            leaf key {
+              type string;
+            }
+            leaf value {
+              type string;
+            }
+            description
+              "The logical node-level compute, memory and I/O
+               requirements. An array of key-value pairs that
+               articulate the deployment requirements.
+
+               This could include the number of CPU cores on this
+               logical node, a memory configuration specific to a
+               logical node (e.g. such as available in the Linux
+               kernel via the libnuma library) or a requirement
+               related to the association of an I/O device with the
+               logical node.";
+            reference
+              "GS NFV IFA011: Section 7.1.9.6, LogicalNodeRequirements
+               information element.";
           }
           description
-            "The logical Node requirements.";
+            "The logical node requirements.";
           reference
-            "GS NFV IFA011: Section 7.1.9.2.2, VirtualComputeDesc
+            "GS NFV IFA011: Section 7.1.9.2, VirtualComputeDesc
              information element.";
         }
 
