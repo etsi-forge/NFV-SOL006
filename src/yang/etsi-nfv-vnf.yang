@@ -1082,7 +1082,7 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.7.2, VnfVirtualLinkDesc
              information element.";
         }
-        list monitoring-parameter {
+        list monitoring-parameters {
           key "id";
           leaf id {
             type string;
