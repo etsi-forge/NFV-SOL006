@@ -1,4 +1,5 @@
 submodule etsi-nfv-vnf {
+  yang-version 1.1;
   belongs-to etsi-nfv {
     prefix nfv;
   }
@@ -12,7 +13,6 @@ submodule etsi-nfv-vnf {
   import etsi-nfv-common {
     prefix common;
   }
-  include etsi-nfv-ns;
 
   description
     "Models for VNFD according to GS NFV-IFA 011.";
@@ -101,6 +101,161 @@ submodule etsi-nfv-vnf {
     }
   }
 
+  // This grouping definition is for use within Vnfd as defined in
+  // IFA011. A similar definition of Cpd exists in IFA014, but
+  // that is for use with Sapd and Pnfd. Do not use this grouping
+  // for that.
+  grouping cpd {
+    description
+      "A Cpd information element describes network
+       connectivity to a compute resource or a VL.";
+    reference
+      "GS NFC IFA011: Section 7.1.6.3 Cpd Information
+       Element";
+    leaf id {
+      type string;
+      description
+	"Identifier of this Cpd information element.";
+      reference
+	"GS NFV IFA011: Section 7.1.6.3, Cpd information element.";
+    }
+    leaf layer-protocol {
+      mandatory true;
+      type identityref {
+	base common:layer-protocol;
+      }
+      description
+	"Identifies which protocol the CP uses for connectivity
+         purposes (Ethernet, MPLS, ODU2, IPV4, IPV6, Pseudo-Wire,
+         etc.).";
+      reference
+	"GS NFV IFA011: Section 7.1.6.3, Cpd information element.";
+    }
+    leaf role {
+      type identityref {
+	base common:cp-role;
+      }
+      description
+	"Identifies the role of the port in the context of the
+         traffic flow patterns in the VNF or parent NS. For example a
+         VNF with a tree flow pattern within the VNF will have legal
+         cpRoles of ROOT and LEAF.";
+      reference
+	"GS NFV IFA011: Section 7.1.6.3, Cpd information element.";
+    }
+    leaf description {
+      type string;
+      description
+	"Human readable description of the connection point";
+      reference
+	"GS NFV IFA011: Section 7.1.6.3, Cpd information element.";
+    }
+    container protocol {
+      description
+	"Identifies the protocol layering information the CP uses for
+         connectivity purposes and associated information. There shall
+         be one cpProtocol for each layer protocol as indicated by the
+         attribute layerProtocol.";
+      reference
+	"GS NFV IFA011: Section 7.1.6.3, Cpd information element.";
+      leaf associated-layer-protocol {
+	type identityref {
+	  base common:layer-protocol;
+	}
+	description
+	  "One of the values of the attribute layerProtocol of the Cpd
+           IE.";
+	reference
+	  "GS NFV IFA011: Section 7.1.6.8, CpProtocolData information
+           element.";
+      }
+
+      list address-data {
+	key "address-type";
+	leaf address-type {
+	  type identityref {
+	    base common:address-type;
+	  }
+	  description
+	    "Describes the type of the address to be assigned to the CP
+             instantiated from the parent CPD.
+             Value:
+             • MAC address.
+             • IP address.
+             • …
+             The content type shall be aligned with the address type
+             supported by the layerProtocol attribute of the parent CPD.";
+	  reference
+	    "GS NFV IFA011: Section 7.1.3.3, AddressData information
+             element.";
+	}
+	container l2-address-data {
+	  when "../address-type='mac-address'";
+	}
+	container l3-address-data {
+	  when "../address-type='ip-address'";
+	  leaf ip-address-assignment {
+	    type boolean;
+	    description
+	      "Specify if the address assignment is the responsibility
+               of management and orchestration function or not. If it
+               is set to True, it is the management and orchestration
+               function responsibility. ";
+	    reference
+	      "GS NFV IFA011: Section 7.1.3.4, L3AddressData
+               information element.";
+	  }
+	  leaf floating-ip-activated {
+	    type boolean;
+	    description
+	      "Specify if the floating IP scheme is activated on the CP
+               or not.";
+	    reference
+	      "GS NFV IFA011: Section 7.1.3.4, L3AddressData
+               information element.";
+	  }
+	  leaf ip-address-type {
+	    type enumeration {
+	      enum "ipv4";
+	      enum "ipv6";
+	    }
+	    description
+	      "Define address type. The address type should be aligned
+               with the address type supported by the layerProtocol
+               attribute of the parent VnfExtCpd.";
+	    reference
+	      "GS NFV IFA011: Section 7.1.3.4, L3AddressData
+               information element.";
+	  }
+	  leaf number-of-ip-addresses {
+	    type uint32;
+	    description
+	      "Minimum number of IP addresses to be assigned based on
+               this L3AddressData information element.";
+	    reference
+	      "GS NFV IFA011: Section 7.1.3.4, L3AddressData
+               information element.";
+	  }
+	}
+	description
+	  "The AddressData information element supports providing
+           information about the addressing scheme and parameters
+           applicable to a CP.";
+	reference
+	  "GS NFV IFA011: Section 7.1.3.3, AddressData information
+           element.";
+      }
+    }
+    leaf trunk-mode {
+      type boolean;
+      description
+	"Information about whether the CP instantiated from this CPD
+         is in Trunk mode (802.1Q or other).";
+      reference
+	"GS NFV IFA011: Section 7.1.6.3, Cpd information element.";
+    }
+  }
+  
   grouping vnfd {
     list vnfd {
       key "id";
@@ -241,6 +396,7 @@ submodule etsi-nfv-vnf {
              an external connection point.";
           reference
             "GS NFV IFA011: Section 7.1.6.2, Vdu information element";
+
           choice cp-connection {
             mandatory true;
             description
@@ -294,12 +450,18 @@ submodule etsi-nfv-vnf {
               "GS NFV IFA011: Section 7.1.6.4, VduCpd information
                element.";
           }
-          uses common:cpd;
+
+          uses cpd;
         }
         leaf virtual-compute-desc {
           type leafref {
             path "../../nfv:virtual-compute-descriptor/" +
                  "nfv:id";
+          }
+          must "../../nfv:virtual-compute-descriptor[id=current()]/" +
+               "nfv:virtual-memory/size >=" +
+               "../../nfv:sw-image-desc[id=current()/" +
+               "../sw-image-desc]/min-ram" {
           }
           description
             "Describes CPU, Memory and acceleration requirements of
@@ -553,7 +715,6 @@ submodule etsi-nfv-vnf {
               fraction-digits 1;
               range "0..max";
             }
-            must ". >= ../../../sw-image-desc[id=current()]/min-ram";
             units "Gb";
             mandatory true;
             description
@@ -729,8 +890,6 @@ submodule etsi-nfv-vnf {
              related to Virtual Storage.";
         }
         leaf size-of-storage {
-          must ". >= ../../sw-image-desc[id=current()]/min-disk";
-
           type uint64;
           units "Gb";
           mandatory true;
@@ -768,6 +927,9 @@ submodule etsi-nfv-vnf {
           type leafref {
             path "../../sw-image-desc/id";
           }
+          must "../nfv:size-of-storage >=" +
+            "../../nfv:sw-image-desc[id=current()]/min-disk" {
+          }
           description
             "Software image to be loaded on the VirtualStorage
              resource created based on this VirtualStorageDesc.";
@@ -777,7 +939,8 @@ submodule etsi-nfv-vnf {
         }
       }
 
-      container sw-image-desc {
+      list sw-image-desc {
+        key "id";
         description
           "Defines descriptors of software images to be used by the
            VNF.";
@@ -916,6 +1079,7 @@ submodule etsi-nfv-vnf {
         leaf min-disk {
           type uint64;
           units "Gb";
+          default 0;
           description
             "The minimal disk size requirement for this software
              image. The value of the 'size of storage' attribute
@@ -932,6 +1096,7 @@ submodule etsi-nfv-vnf {
             range "0..max";
           }
           units "Gb";
+          default 0;
           description
             "The minimal RAM requirement for this software image.
              The value of the 'size' attribute of
@@ -1122,10 +1287,10 @@ submodule etsi-nfv-vnf {
           ext-CP to the VDU's CP.
         */
         uses virtual-network-interface-requirements;
-        uses common:cpd;
+        uses cpd;
       }
 
-      list deployment-flavor {
+      list df {
         must "nfv:default-instantiation-level or " +
              "count(nfv:instantiation-level) = 1";
         key "id";
@@ -1335,11 +1500,11 @@ submodule etsi-nfv-vnf {
             }
             leaf number-of-instances {
               type uint16;
-              must ". <= ../../../../nfv:deployment-flavor/" +
-                   "nfv:vdu-profile[id=current()]/" +
+              must ". <= ../../../../nfv:df/" +
+                   "nfv:vdu-profile[id=current()/../nfv:id]/" +
                    "nfv:max-number-of-instances";
-              must ". >= ../../../../nfv:deployment-flavor/" +
-                   "nfv:vdu-profile[id=current()]/" +
+              must ". >= ../../../../nfv:df/" +
+                   "nfv:vdu-profile[id=current()/../nfv:id]/" +
                    "nfv:min-number-of-instances";
               mandatory true;
               description
@@ -1694,31 +1859,160 @@ submodule etsi-nfv-vnf {
               "GS NFV IFA011: Section 7.1.10.2 ScalingAspect
                information element";
           }
-          leaf associated-group {
-            type leafref {
-              path "../../../nfv:element-group/nfv:id";
-            }
-            description
-              "Reference to the group of Vnfd elements defining this
-               aspect. If present, scaling for this aspect is limited
-               to the elements of the group, but there is no
-               assumption that all the elements of the groups will be
-               increased at each step.";
-            reference
-              "GS NFV IFA011: Section 7.1.10.2 ScalingAspect
-               information element";
-          }
           leaf max-scale-level {
             type uint32 {
               range "1..max";
             }
             description
               "The maximum scaleLevel for total number of scaling
-               steps that can be applied w.r.t. this aspect. The value
-               of this attribute corresponds to the number of scaling
-               steps can be applied to this aspect when scaling it
-               from the minimum scale level (i.e. 0) to the maximum
-               scale level defined by this attribute.";
+               steps that can be applied w.r.t. this aspect. The
+               value of this attribute corresponds to the number of
+               scaling steps can be applied to this aspect when
+               scaling it from the minimum scale level (i.e. 0) to the
+               maximum scale level defined by this attribute.";
+            reference
+              "GS NFV IFA011: Section 7.1.10.2 ScalingAspect
+               information element";
+          }
+
+          container aspect-delta-details {
+            list deltas {
+              key "id";
+              min-elements 1;
+
+              leaf id {
+                type string;
+                description
+                  "Identifier of this scaling delta.";
+                reference
+                  "GS NFV IFA011: Section 7.1.10.4 ScalingDelta
+                   information element";
+              }
+
+              list vdu-delta {
+                key "id";
+
+                leaf id {
+                  type leafref {
+                    path "/nfv/vnfd/vdu/id";
+                  }
+                  description
+                    "Uniquely identifies a VDU.";
+                  reference
+                    "GS NFV IFA011: Section 7.1.8.9 VduLevel
+                     information element";
+                }
+
+                leaf number-of-instances {
+                  type uint32 {
+                    range "0..max";
+                  }
+                  description
+                    "Number of instances of VNFC based on this VDU to
+                     deploy for an instantiation level or for a
+                     scaling delta. Shall be zero or greater.";
+                  reference
+                    "GS NFV IFA011: Section 7.1.8.9 VduLevel
+                     information element";
+                }
+                description
+                  "The number of VNFC instances based on particular
+                   VDUs to be created or removed.";
+                reference
+                  "GS NFV IFA011: Section 7.1.10.4 ScalingDelta
+                   information element";
+              }
+
+              list virtual-link-bit-rate-delta {
+                key "id";
+
+                leaf id {
+                  type string;
+                  description
+                    "Uniquely identifies a VnfVirtualLinkDesc.";
+                  reference
+                    "GS NFV IFA011: Section 7.1.10.5
+                     VirtualLinkBitRateLevel information element";
+                }
+
+                container bit-rate-requirements {
+                  leaf root {
+                    type uint32;
+                    units bits/sec;
+                    mandatory true;
+                    description
+                      "Throughput requirement of the link (e.g.
+                       bitrate of E-Line, root bitrate of E-Tree,
+                       aggregate capacity of E-LAN).";
+                    reference
+                      "GS NFV IFA011: Section 7.1.8.6
+                       LinkBitrateRequirements information element";
+                  }
+
+                  leaf leaf {
+                    type uint32;
+                    units bits/sec;
+                    description
+                      "Throughput requirement of leaf connections to
+                       the link when applicable to the connectivity
+                       type (e.g. for E-Tree and E-LAN branches).";
+                    reference
+                      "GS NFV IFA011: Section 7.1.8.6
+                       LinkBitrateRequirements information element";
+                  }
+                  description
+                    "Bitrate requirements for an instantiation level
+                     or bitrate delta for a scaling step.";
+                  reference
+                    "GS NFV IFA011: Section 7.1.10.5
+                     VirtualLinkBitRateLevel information element";
+                }
+                description
+                  "The bitrate to be added or removed to virtual links
+                   created from particular virtual link descriptors.";
+                reference
+                  "GS NFV IFA011: Section 7.1.10.4 ScalingDelta
+                   information element";
+              }
+              description
+                "Declares different scaling deltas, each of which is
+                 applied for one or more scaling steps of this
+                 aspect.";
+              reference
+                "GS NFV IFA011: Section 7.1.10.3 AspectDeltaDetails
+                 information element";
+            }
+
+            leaf step-deltas {
+              type leafref {
+                path "../deltas/id";
+              }
+              description
+                "Identifiers of the individual scaling deltas to be
+                 applied for the subsequent scaling steps of this
+                 aspect. The first entry in the array shall correspond
+                 to the first scaling step (between scale levels 0 to
+                 1) and the last entry in the array shall correspond
+                 to the last scaling step (between maxScaleLevel-1
+                 and maxScaleLevel).
+
+                 Each referenced scaling delta shall be declared in
+                 the 'deltas' attribute.";
+              reference
+                "GS NFV IFA011: Section 7.1.10.3 AspectDeltaDetails
+                 information element";
+            }
+            description
+              "A specification of the deltas in terms of number of
+               instances of VNFCs and virtual link bit rates that
+               correspond to the scaling steps of this aspect. A
+               cardinality of zero indicates that this mapping has to
+               be specified in a lifecycle management script or be
+               otherwise known to the VNFM. The information in this
+               attribute, if provided, shall be consistent with the
+               information provided in the 'InstantiationLevel'
+               information element. If this attribute is provided, it
+               shall be provided for all scaling aspects.";
             reference
               "GS NFV IFA011: Section 7.1.10.2 ScalingAspect
                information element";
