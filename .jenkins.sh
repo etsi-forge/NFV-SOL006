@@ -7,12 +7,12 @@
 
 YANG_MODULES="yang/yang/*"
 OUTPUT="etsi-nfv.html"
-IMG_NAME="nfv-sol6"
-VERSION=1.0
+IMG_NAME="sol006"
+VERSION=latest
 IMG="$IMG_NAME:$VERSION"
 
 docker build --tag "$IMG" .
-docker run "$IMG" "/bin/sh" -c "pyang -f jstree $YANG_MODULES" > "$OUTPUT"
+docker run "$IMG"
 
-exit $([ -f "$OUTPUT" ])
+exit $?
 

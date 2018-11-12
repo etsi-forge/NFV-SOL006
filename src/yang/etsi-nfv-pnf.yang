@@ -1,4 +1,5 @@
 submodule etsi-nfv-pnf {
+  yang-version 1.1;
   belongs-to etsi-nfv {
     prefix nfv;
   }
@@ -9,11 +10,6 @@ submodule etsi-nfv-pnf {
   import etsi-nfv-common {
     prefix common;
   }
-
-  /*
-   * Include
-   */
-  include etsi-nfv-ns;
 
   description
     "Models for PNFD according to GS NFV-IFA 014.";
@@ -37,7 +33,9 @@ submodule etsi-nfv-pnf {
     reference
       "GS NFV-IFA014: Section 6.6.2, Pnfd information element";
 
-    container pnfd {
+    list pnfd {
+      key "id";
+
       leaf id {
         type string;
         description
@@ -83,7 +81,7 @@ submodule etsi-nfv-pnf {
         reference
           "GS NFV-IFA014: Section 6.6.2, Pnfd information element";
       }
-      list ext-cp {
+      list ext-cpd {
         key "id";
         uses common:cpd;
         description
