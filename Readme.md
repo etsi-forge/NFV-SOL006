@@ -2,18 +2,18 @@
 
 This repository contains YANG modules for ETSI NFV descriptors.
 
-More information at [NFV Solutions wiki](https://nfvwiki.etsi.org/index.php?title=NFV_Solutions).
+More information can be found at [NFV Solutions wiki](https://nfvwiki.etsi.org/index.php?title=NFV_Solutions).
 
 **Disclaimer:** **The materials in this repository relate to a DRAFT i.e. a working document of ETSI ISG NFV. It is provided for information only and is still under development within ETSI ISG NFV. DRAFTS may be updated, deleted, replaced, or** **obsoleted by other documents at any time.**
 **ETSI and its Members accept no liability for any further use/implementation of the present DRAFT. Do not use as reference material.**
 
 ## ETSI NFV drafts
- ETSI NFV public DRAFTS are available in: [http://docbox.etsi.org/ISG/NFV/Open/Drafts/](http://docbox.etsi.org/ISG/NFV/Open/Drafts/)
+ ETSI NFV public DRAFTS are available at: [http://docbox.etsi.org/ISG/NFV/Open/Drafts/](http://docbox.etsi.org/ISG/NFV/Open/Drafts/)
 
 ## How to raise issues
 Change requests can be filed at ETSI Forge Bugzilla. Please report errors, bugs or other issues here.
 
-Report  feedback related to the specifications via the NFV issue tracker: [http://nfvwiki.etsi.org/index.php?title=NFV_Issue_Tracker](http://nfvwiki.etsi.org/index.php?title=NFV_Issue_Tracker)
+Report feedback related to the specifications via the NFV issue tracker: [http://nfvwiki.etsi.org/index.php?title=NFV_Issue_Tracker](http://nfvwiki.etsi.org/index.php?title=NFV_Issue_Tracker)
 
 ## How to contribute
 ETSI Forge uses Gitlab to manage submissions to the repository. Check out the project page [here](https://forge.etsi.org/rep/nfv/SOL006).
