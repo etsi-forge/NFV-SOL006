@@ -81,17 +81,16 @@ submodule etsi-nfv-vnf {
           "GS NFV-IFA011: Section 7.1.6.6,
            VirtualNetworkInterfaceRequirements information element";
       }
+
       leaf niclo-requirements {
-        mandatory true;
-        type string; // remove once leafref is resolved.
-        //type leafref {
-          // add path statement here to logical-node-data.
-        //}
+        type leafref {
+          path "/nfv/vnfd/virtual-compute-descriptor/id";
+        }
         description
-          "This references (couples) the CPD with any logical node I/O
-           requirements (for network devices) that may have been
-           created. Linking these attributes is necessary so that so
-           that I/O requirements that need to be articulated at the
+          "This references (couples) the CPD with any logical node
+           I/O requirements (for network devices) that may have been
+           created. Linking these attributes is necessary so that
+           I/O requirements that need to be articulated at the
            logical node level can be associated with the network
            interface requirements associated with the CPD.";
         reference
