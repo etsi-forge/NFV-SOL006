@@ -7,9 +7,7 @@ submodule etsi-nfv-pnf {
   /*
    * Import
    */
-  import etsi-nfv-common {
-    prefix common;
-  }
+  include etsi-nfv-common;
 
   description
     "Models for PNFD according to GS NFV-IFA 014.";
@@ -83,7 +81,7 @@ submodule etsi-nfv-pnf {
       }
       list ext-cpd {
         key "id";
-        uses common:cpd;
+        uses cpd;
         description
           "Specifies the characteristics of one or more connection
            points where to connect the PNF to a VL.";
@@ -92,7 +90,7 @@ submodule etsi-nfv-pnf {
       }
       list security {
         key "signature";
-        uses common:security-parameters;
+        uses security-parameters;
         description
           "Provides a signature to prevent tampering.
            Editor's Note: While IFA014 does specify that the PNFD

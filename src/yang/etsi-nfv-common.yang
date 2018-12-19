@@ -1,8 +1,8 @@
-module etsi-nfv-common {
-  namespace "urn:etsi:params:xml:ns:yang:etsi-nfv-common";
+submodule etsi-nfv-common {
   yang-version 1.1;
-  prefix common;
-
+  belongs-to etsi-nfv {
+    prefix nfv;
+  }
   description
     "Common data types for ETSI data models.";
 
@@ -41,13 +41,13 @@ module etsi-nfv-common {
 
   identity address-type {
     description
-      "Describes the type of the address to be assigned to the CP 
+      "Describes the type of the address to be assigned to the CP
        instantiated from the parent CPD.
        Value:
        • MAC address.
        • IP address.
        • …
-       The content type shall be aligned with the address type 
+       The content type shall be aligned with the address type
        supported by the layerProtocol attribute of the parent CPD.";
     reference
       "GS NFV IFA011: Section 7.1.3.3, AddressData information
@@ -180,7 +180,7 @@ module etsi-nfv-common {
   /*
    * Typedefs
    */
-      
+
   typedef flow-pattern {
     type enumeration {
       enum line;
@@ -395,7 +395,7 @@ module etsi-nfv-common {
     leaf layer-protocol {
       mandatory true;
       type identityref {
-        base common:layer-protocol;
+        base layer-protocol;
       }
       description
         "Identifies a protocol that the connection points
@@ -406,7 +406,7 @@ module etsi-nfv-common {
     }
     leaf role {
       type identityref {
-        base common:cp-role;
+        base cp-role;
       }
       description
         "Identifies the role of the connection points
