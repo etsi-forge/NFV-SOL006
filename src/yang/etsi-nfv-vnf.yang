@@ -54,7 +54,7 @@ submodule etsi-nfv-vnf {
            VirtualNetworkInterfaceRequirements information element";
       }
       leaf support-mandatory {
-        mandatory true;
+        default "false";
         type boolean;
         description
           "Indicates whether fulfilling the constraint is
@@ -117,7 +117,7 @@ submodule etsi-nfv-vnf {
         "GS NFV IFA011: Section 7.1.6.3, Cpd information element.";
     }
     leaf layer-protocol {
-      mandatory true;
+      default Ethernet;
       type identityref {
         base layer-protocol;
       }
@@ -700,8 +700,8 @@ submodule etsi-nfv-vnf {
               fraction-digits 1;
               range "0..max";
             }
-            units "Gb";
-            mandatory true;
+            units "MBytes";
+            default 1;
             description
               "Amount of virtual memory in MB.";
             reference
@@ -773,7 +773,7 @@ submodule etsi-nfv-vnf {
             type uint16 {
               range "1..max";
             }
-            mandatory true;
+            default 1;
             description
               "Number of virtual CPUs.";
             reference
@@ -820,7 +820,7 @@ submodule etsi-nfv-vnf {
           container virtual-cpu-pinning {
             presence "Set to specify CPU pinning.";
             leaf cpu-pinning-policy {
-              mandatory true;
+              default "dynamic";
               type enumeration {
                 enum "static";
                 enum "dynamic";
@@ -866,7 +866,7 @@ submodule etsi-nfv-vnf {
             enum "swap";
             enum "ephemeral";
           }
-          mandatory true;
+          default "root";
           description
             "Type of virtualised storage resource (e.g. volume,
              object).";
@@ -877,7 +877,7 @@ submodule etsi-nfv-vnf {
         leaf size-of-storage {
           type uint64;
           units "Gb";
-          mandatory true;
+          default 1;
           description
             "Size of virtualised storage resource (e.g. size of
              volume, in Gb)";
@@ -964,7 +964,7 @@ submodule etsi-nfv-vnf {
              information element.";
         }
         leaf container-format {
-          mandatory true;
+          default "bare";
           type enumeration {
             enum "aki" {
               description
@@ -1004,7 +1004,7 @@ submodule etsi-nfv-vnf {
              information element.";
         }
         leaf disk-format {
-          mandatory true;
+          default "qcow2";
           type enumeration {
             enum "aki" {
               description
@@ -1102,7 +1102,7 @@ submodule etsi-nfv-vnf {
              information element.";
         }
         leaf image {
-          mandatory true;
+          default ".";
           type inet:uri;
           description
             "This is a reference to the actual software image.
@@ -1274,7 +1274,9 @@ submodule etsi-nfv-vnf {
               }
             }
             leaf cpd {
-              path "deref(../vdu-id)/../int-cpd/id";
+              type leafref {
+                path "deref(../vdu-id)/../int-cpd/id";
+              }
             }
           }
         }
@@ -1327,7 +1329,7 @@ submodule etsi-nfv-vnf {
           }
           leaf min-number-of-instances {
             type uint16;
-            mandatory true;
+            default 1;
             description
               "Minimum number of instances of the VNFC based on this
                VDU that is permitted to exist for this flavour.";
@@ -1337,7 +1339,7 @@ submodule etsi-nfv-vnf {
           }
           leaf max-number-of-instances {
             type uint16;
-            mandatory true;
+            default 1;
             must ". >= ../nfv:min-number-of-instances";
             reference
               "GS NFV IFA011: Section 7.1.8.3, VduProfile information
@@ -1498,7 +1500,7 @@ submodule etsi-nfv-vnf {
               must ". >= ../../../../nfv:df/" +
                    "nfv:vdu-profile[id=current()/../nfv:id]/" +
                    "nfv:min-number-of-instances";
-              mandatory true;
+              default 1;
               description
                 "Number of instances of VNFC based on this VDU to
                  deploy for this level.";
@@ -1795,6 +1797,118 @@ submodule etsi-nfv-vnf {
                AffinityOrAntiAffinityGroup information element";
           }
         }
+
+        list indicator {
+          key "id";
+
+          leaf id {
+            type string;
+            description
+              "Unique identifier.";
+            reference
+              "GS NFV IFA011: Section 7.1.11.2 VnfIndicator
+               information element";
+          }
+
+          leaf name {
+            type string;
+            description
+              "The human readable name of the VnfIndicator.";
+            reference
+              "GS NFV IFA011: Section 7.1.11.2 VnfIndicator
+               information element";
+          }
+
+          leaf indicator-value {
+            type string;
+            description
+              "Defines the allowed values or value ranges of this
+               indicator.";
+            reference
+              "GS NFV IFA011: Section 7.1.11.2 VnfIndicator
+               information element";
+          }
+
+          leaf source {
+            type enumeration {
+              enum vnf;
+              enum em;
+              enum both;
+            }
+            description
+              "Describe the source of the indicator. The possible
+               values are:
+               • VNF.
+               • EM.
+               • Both.
+
+               This tells the consumer where to send the subscription
+               request.";
+            reference
+              "GS NFV IFA011: Section 7.1.11.2 VnfIndicator
+               information element";
+          }
+
+          description
+            "Declares the VNF indicators that are supported by this
+             VNF (specific to this DF).";
+          reference
+            "GS NFV IFA011: Section 7.1.8.2 VnfDf information
+             element";
+        }
+
+        list supported-vnf-interfaces {
+          key "name";
+
+          leaf name {
+            type enumeration {
+              enum vnf-configuration;
+              enum vnf-indicator;
+            }
+            description
+              "Identifies an interface produced by the VNF. Valid
+               values:
+               - VNF_CONFIGURATION
+               - VNF_INDICATOR";
+            reference
+              "GS NFV IFA011: Section 7.1.8.16 VnfInterfaceDetails
+               information element";
+          }
+
+          leaf-list cpd-id {
+            type leafref {
+              path "../../../ext-cpd/id";
+            }
+            description
+              "References one or more CPDs from which to instantiate
+               external CPs through which interface endpoints on the
+               VNF side can be reached by the VNFM.";
+            reference
+              "GS NFV IFA011: Section 7.1.8.16 VnfInterfaceDetails
+               information element";
+          }
+
+          list interface-details {
+            key "key";
+
+            leaf key {
+              type string;
+            }
+
+            leaf value {
+              type string;
+            }
+          }
+
+          description
+            "Indicates which interfaces the VNF produces and provides
+             additional details on how to access the interface
+             endpoints.";
+          reference
+            "GS NFV IFA011: Section 7.1.8.2 VnfDf information
+             element";
+        }
+
         list monitoring-parameter {
           key "id";
 
