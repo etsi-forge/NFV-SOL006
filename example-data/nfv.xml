@@ -11,17 +11,14 @@
       <name>Firewall VDU</name>
       <int-cpd>
         <id>inside</id>
-        <ext-cpd>inside</ext-cpd>
         <layer-protocol>Ethernet</layer-protocol>
       </int-cpd>
       <int-cpd>
         <id>management</id>
-        <ext-cpd>management</ext-cpd>
         <layer-protocol>Ethernet</layer-protocol>
       </int-cpd>
       <int-cpd>
         <id>outside</id>
-        <ext-cpd>outside</ext-cpd>
         <layer-protocol>Ethernet</layer-protocol>
       </int-cpd>
       <virtual-compute-desc>asa-vcd</virtual-compute-desc>
@@ -51,14 +48,26 @@
     </sw-image-desc>
     <ext-cpd>
       <id>inside</id>
+      <int-cpd>
+	<vdu-id>firewall</vdu-id>
+	<cpd>inside</cpd>
+      </int-cpd>
       <layer-protocol>Ethernet</layer-protocol>
     </ext-cpd>
     <ext-cpd>
       <id>management</id>
+      <int-cpd>
+	<vdu-id>firewall</vdu-id>
+	<cpd>management</cpd>
+      </int-cpd>
       <layer-protocol>Ethernet</layer-protocol>
     </ext-cpd>
     <ext-cpd>
       <id>outside</id>
+      <int-cpd>
+	<vdu-id>firewall</vdu-id>
+	<cpd>outside</cpd>
+      </int-cpd>
       <layer-protocol>Ethernet</layer-protocol>
     </ext-cpd>
     <df>
@@ -97,17 +106,14 @@
       <name>Router VDU</name>
       <int-cpd>
         <id>left</id>
-        <ext-cpd>left</ext-cpd>
         <layer-protocol>Ethernet</layer-protocol>
       </int-cpd>
       <int-cpd>
         <id>management</id>
-        <ext-cpd>management</ext-cpd>
         <layer-protocol>Ethernet</layer-protocol>
       </int-cpd>
       <int-cpd>
         <id>right</id>
-        <ext-cpd>right</ext-cpd>
         <layer-protocol>Ethernet</layer-protocol>
       </int-cpd>
       <virtual-compute-desc>csr-vcd</virtual-compute-desc>
@@ -137,14 +143,26 @@
     </sw-image-desc>
     <ext-cpd>
       <id>left</id>
+      <int-cpd>
+	<vdu-id>router</vdu-id>
+	<cpd>left</cpd>
+      </int-cpd>
       <layer-protocol>Ethernet</layer-protocol>
     </ext-cpd>
     <ext-cpd>
       <id>management</id>
+      <int-cpd>
+	<vdu-id>router</vdu-id>
+	<cpd>management</cpd>
+      </int-cpd>
       <layer-protocol>Ethernet</layer-protocol>
     </ext-cpd>
     <ext-cpd>
       <id>right</id>
+      <int-cpd>
+	<vdu-id>router</vdu-id>
+	<cpd>right</cpd>
+      </int-cpd>
       <layer-protocol>Ethernet</layer-protocol>
     </ext-cpd>
     <df>
