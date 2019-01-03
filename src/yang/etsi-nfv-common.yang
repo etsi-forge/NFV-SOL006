@@ -253,14 +253,20 @@ submodule etsi-nfv-common {
 
   grouping connectivity-type {
     container connectivity-type {
-      leaf layer-protocol {
-        mandatory true;
-        type identityref {
-          base layer-protocol;
-        }
+      list layer-protocol {
+	key "protocol";
+
+	leaf protocol {
+          type identityref {
+            base layer-protocol;
+          }
+	}
         description
-          "Identifies the protocol this VL gives access to (Ethernet,
-           MPLS, ODU2, IPV4, IPV6, Pseudo-Wire).";
+          "Identifies the protocols that the VL uses (Ethernet,
+           MPLS, ODU2, IPV4, IPV6, Pseudo-Wire). The top layer
+           protocol of the VL protocol stack shall always be provided.
+           The lower layer protocols may be included when there are
+           specific requirements on these layers.";
         reference
           "GS NFV IFA011: Section 7.1.7.3, ConnectivityType
            information element.";

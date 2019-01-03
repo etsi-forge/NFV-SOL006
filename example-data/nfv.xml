@@ -224,7 +224,9 @@
     <virtual-link-desc>
       <id>fw2dpi</id>
       <connectivity-type>
-        <layer-protocol>Ethernet</layer-protocol>
+        <layer-protocol>
+	  <protocol>Ethernet</protocol>
+	</layer-protocol>
       </connectivity-type>
       <df>
         <id>normal</id>
@@ -237,7 +239,9 @@
     <virtual-link-desc>
       <id>mgmt</id>
       <connectivity-type>
-        <layer-protocol>IPv4</layer-protocol>
+        <layer-protocol>
+	  <protocol>IPv4</protocol>
+	</layer-protocol>
       </connectivity-type>
       <df>
         <id>normal</id>
@@ -250,7 +254,9 @@
     <virtual-link-desc>
       <id>r2fw</id>
       <connectivity-type>
-        <layer-protocol>Ethernet</layer-protocol>
+        <layer-protocol>
+	  <protocol>Ethernet</protocol>
+	</layer-protocol>
       </connectivity-type>
       <df>
         <id>normal</id>
@@ -473,7 +479,9 @@
     <virtual-link-desc>
       <id>r2fw</id>
       <connectivity-type>
-        <layer-protocol>IPv4</layer-protocol>
+        <layer-protocol>
+	  <protocol>IPv4</protocol>
+	</layer-protocol>
       </connectivity-type>
       <df>
         <id>r2fw</id>
