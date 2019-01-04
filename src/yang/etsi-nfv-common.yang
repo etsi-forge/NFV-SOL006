@@ -6,13 +6,13 @@ submodule etsi-nfv-common {
   description
     "Common data types for ETSI data models.";
 
-  revision 2018-06-19 {
+  revision 2019-03-18 {
     description
       "Initial revision
 
        Common data structures to support VNFD and NSD according to:
-       ETSI GS NFV-IFA 014 Ed251v244
-       ETSI GS NFV-IFA 011 Ed251v243";
+       ETSI GS NFV-IFA 014 Ed261v252
+       ETSI GS NFV-IFA 011 Ed261v254";
   }
 
   /*
