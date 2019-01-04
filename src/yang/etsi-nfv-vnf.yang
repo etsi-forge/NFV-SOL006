@@ -700,7 +700,7 @@ submodule etsi-nfv-vnf {
               fraction-digits 1;
               range "0..max";
             }
-            units "MBytes";
+            units "Gb";
             default 1;
             description
               "Amount of virtual memory in MB.";
@@ -877,7 +877,7 @@ submodule etsi-nfv-vnf {
         leaf size-of-storage {
           type uint64;
           units "Gb";
-          default 1;
+          default 0;
           description
             "Size of virtualised storage resource (e.g. size of
              volume, in Gb)";
@@ -1187,6 +1187,7 @@ submodule etsi-nfv-vnf {
                information element.";
           }
           container qos {
+	    presence "VL QoS parameters";
             description
               "QoS of the VL.";
             reference
