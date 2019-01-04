@@ -82,7 +82,7 @@ submodule etsi-nfv-vnf {
            VirtualNetworkInterfaceRequirements information element";
       }
 
-      leaf niclo-requirements {
+      leaf nicio-requirements {
         type leafref {
           path "/nfv/vnfd/virtual-compute-descriptor/id";
         }
