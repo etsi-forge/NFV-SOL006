@@ -1041,6 +1041,7 @@ submodule etsi-nfv-vnf {
                information element.";
           }
           container qos {
+	    presence "VL QoS parameters";
             description
               "QoS of the VL.";
             reference
