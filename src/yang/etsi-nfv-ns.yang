@@ -14,14 +14,14 @@ submodule etsi-nfv-ns {
   description
     "Models for NS according to ETSI GS NFV-IFA 014.";
 
-  revision 2017-01-20 {
+  revision 2019-03-18 {
     description
       "Initial revision
        Common data structure to support NSD according to:
-       ETSI GS NFV-IFA 011 Ed251v243";
+       ETSI GS NFV-IFA 014 Ed261v252";
 
     reference
-      "ETSI GS NFV-IFA 011 Ed251v243";
+      "ETSI GS NFV-IFA 014 Ed261v252";
   }
 
   grouping resource-handle {
