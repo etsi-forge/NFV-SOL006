@@ -376,30 +376,23 @@ submodule etsi-nfv-common {
     }
   }
 
-  // The following grouping is Cpd information element as defined in
-  // IFA014. IFA011 defines its own Cpd information element, which
-  // is defined in etsi-nfv-vnf.yang file. Do not use this grouping
-  // for inclusion in a Vnf.
   grouping cpd {
     description
-      "The Cpd information element specifies the characteristics of
-       connection points attached to NFs and NSs. This is an
-       abstract class used as parent for the various Cpd classes.
-       It has an attribute 'trunkMode' which enables the NFVO to
-       identify whether the Cp instantiated from the Cpd is in trunk
-       mode or not.";
+      "A Cpd information element describes network
+       connectivity to a compute resource or a VL.";
     reference
-      "GS NFC IFA014: Section 6.6.3.1 Cpd information element";
+      "GS NFV IFA011: Section 7.1.6.3 Cpd information element";
 
     leaf id {
       type string;
       description
         "Identifier of this Cpd information element.";
       reference
-        "GS NFC IFA014: Section 6.6.3.1 Cpd information element";
+        "GS NFV IFA011: Section 7.1.6.3 Cpd information element";
     }
-    leaf layer-protocol {
-      mandatory true;
+
+    leaf-list layer-protocol {
+      default Ethernet;
       type identityref {
         base layer-protocol;
       }
@@ -408,8 +401,9 @@ submodule etsi-nfv-common {
          corresponding to the CPD support for connectivity purposes
          (e.g. Ethernet, MPLS, ODU2, IPV4, IPV6, Pseudo-Wire, etc.).";
       reference
-        "GS NFC IFA014: Section 6.6.3.1 Cpd information element";
+        "GS NFV IFA011: Section 7.1.6.3 Cpd information element";
     }
+
     leaf role {
       type identityref {
         base cp-role;
@@ -421,8 +415,9 @@ submodule etsi-nfv-common {
          a tree flow pattern within the NS will have legal cpRoles
          of ROOT and LEAF.";
       reference
-        "GS NFC IFA014: Section 6.6.3.1 Cpd information element";
+        "GS NFV IFA011: Section 7.1.6.3 Cpd information element";
     }
+
     leaf description {
       type string;
       description
@@ -430,8 +425,140 @@ submodule etsi-nfv-common {
          connection point (e.g. connection point for control plane
          traffic).";
       reference
-        "GS NFC IFA014: Section 6.6.3.1 Cpd information element";
+        "GS NFV IFA011: Section 7.1.6.3 Cpd information element";
     }
+
+    list protocol {
+      key "associated-layer-protocol";
+
+      leaf associated-layer-protocol {
+        type identityref {
+          base layer-protocol;
+        }
+        description
+          "One of the values of the attribute layerProtocol of the Cpd
+           IE.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.8 CpProtocolData information
+           element";
+      }
+
+      list address-data {
+        key "type";
+
+        leaf type {
+          type identityref {
+            base address-type;
+          }
+          description
+            "Describes the type of the address to be assigned to the
+             CP instantiated from the parent CPD.
+             Value:
+               • MAC address.
+               • IP address.
+               • Etc.
+             The content type shall be aligned with the address type
+             supported by the layerProtocol attribute of the parent
+             CPD.";
+          reference
+            "GS NFV IFA011: Section 7.1.3.3 AddressData information
+             element";
+        }
+
+        container l2-address-data {
+          when "../type='mac-address'";
+          leaf mac-address-assignment {
+            type boolean;
+            default true;
+            description
+              "Specify if the MAC address assignment is the
+               responsibility of management and orchestration function
+               or not. If it is set to True, it is the management and
+               orchestration function responsibility. If it is set to
+               False, it will be provided by an external entity,
+               e.g. OSS/BSS.";
+            reference
+              "GS NFV IFA011: Section 7.1.3.5 L2AddressData
+               information element";
+          }
+
+          description
+            "Provides the information on the MAC addresses to be
+             assigned to the CP(s) instantiated from the parent CPD.
+             Shall be present when the addressType is MAC address.";
+          reference
+            "GS NFV IFA011: Section 7.1.3.3 AddressData information
+             element";
+        }
+
+        container l3-address-data {
+          when "../type='ip-address'";
+          leaf ip-address-assignment {
+            type boolean;
+            default "true";
+            description
+              "Specify if the address assignment is the responsibility
+               of management and orchestration function or not. If it
+               is set to True, it is the management and orchestration
+               function responsibility. ";
+            reference
+              "GS NFV IFA011: Section 7.1.3.4, L3AddressData
+               information element.";
+          }
+
+          leaf floating-ip-activated {
+            type boolean;
+            default "true";
+            description
+              "Specify if the floating IP scheme is activated on the CP
+               or not.";
+            reference
+              "GS NFV IFA011: Section 7.1.3.4, L3AddressData
+               information element.";
+          }
+
+          leaf ip-address-type {
+            type enumeration {
+              enum "ipv4";
+              enum "ipv6";
+            }
+            description
+              "Define address type. The address type should be aligned
+               with the address type supported by the layerProtocol
+               attribute of the parent VnfExtCpd.";
+            reference
+              "GS NFV IFA011: Section 7.1.3.4, L3AddressData
+               information element.";
+          }
+
+          leaf number-of-ip-addresses {
+            type uint32;
+            description
+              "Minimum number of IP addresses to be assigned based on
+               this L3AddressData information element.";
+            reference
+              "GS NFV IFA011: Section 7.1.3.4, L3AddressData
+               information element.";
+          }
+        }
+        description
+          "Provides information on the addresses to be assigned to the
+           CP(s) instantiated from the CPD.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.8 CpProtocolData information
+           element";
+      }
+      description
+        "Identifies the protocol layering information the CP uses for
+         connectivity purposes and associated information. There shall
+         be one cpProtocol for each layer protocol as indicated by the
+         attribute layerProtocol. When a PnfExtCpd as defined in ETSI
+         GS NFV-IFA 014 [i.8] is inherited from this Cpd, the
+         cardinality is set to 0.";
+      reference
+        "GS NFV IFA011: Section 7.1.6.3 Cpd information element";
+    }
+
     leaf trunk-mode {
       type boolean;
       description
@@ -442,7 +569,7 @@ submodule etsi-nfv-common {
          is not configured for the Cp i.e. It is equivalent to
          Boolean value 'false'.";
       reference
-        "GS NFC IFA014: Section 6.6.3.1 Cpd information element";
+        "GS NFV IFA011: Section 7.1.6.3 Cpd information element";
     }
   }
 }

@@ -130,7 +130,7 @@ submodule etsi-nfv-ns {
           description
             "Identifier of this Cpd information element.";
           reference
-            "GS NFC IFA014: Section 6.6.3.1 Cpd information element";
+            "GS NFV IFA014: Section 6.6.3.1 Cpd information element";
         }
 
         leaf address-assignment {
