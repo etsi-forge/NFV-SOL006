@@ -434,25 +434,53 @@ submodule etsi-nfv-ns {
           key "id";
 
           description
-            "A pool of descriptors of connection points attached to
-             one of the constituent VNFs and PNFs and/or one of the
-             SAPs of the parent NS or of a nested NS.";
+            "Describes a pool of descriptors of connection points
+             attached to one of the constituent VNFs and PNFs and/or
+             one of the SAPs of the parent NS or of a nested NS.";
           reference
             "GS NFV IFA014: Section 6.4.2.2 Vnffgd information
              element";
 
           leaf id {
             type string;
-            description
-              "Identifier of this CpdPool information element. It
-               identifies a pool of descriptors of connection points
-               and NS SAPs.";
-            reference
-              "GS NFV IFA014: Section 6.4.4.2 CpdPool information
-               element";
           }
 
-          choice cpd-id {
+          choice constituent-base-element-id {
+	    container vnf-profile {
+	      leaf vnf-profile-id {
+		must ". = deref(../../vnfd-profile-id)" {
+		}
+		type leafref {
+		  path "/nfv/nsd/df/vnf-profile/id";
+		}
+	      }
+	    }
+	    container pnf-profile {
+	      leaf pnf-profile-id {
+		must ". = deref(../../pnfd-profile-id)" {
+		}
+		type leafref {
+		  path "/nfv/nsd/df/pnf-profile/id";
+		}
+	      }
+	    }
+	    container ns-profile {
+	      leaf ns-profile-id {
+		must ". = deref(../../ns-profile-id)" {
+		}
+		type leafref {
+		  path "/nfv/nsd/df/ns-profile/id";
+		}
+	      }
+	    }
+            description
+              "Reference to the profile of an NS constituent.";
+            reference
+              "GS NFV IFA014: Section 6.4.8 CpdInConstituentElement
+               information element";
+          }
+
+          choice constituent-cpd-id {
             container vnf {
               leaf vnfd-id {
                 must ". = deref(../../vnfd-profile-id)/../vnfd-id" {
