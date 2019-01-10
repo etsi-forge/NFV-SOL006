@@ -1479,6 +1479,16 @@ submodule etsi-nfv-ns {
                 "GS NFV IFA014: Section 6.2.8.2 MonitoringParameter
                  information element";
             }
+
+            leaf collection-period {
+              type string;
+              description
+                "An attribute that describes the periodicity at which
+                 to collect the performance information.";
+              reference
+                "GS NFV IFA014: Section 6.2.8.2 MonitoringParameter
+                 information element";
+            }
           }
 	}
       }
