@@ -229,26 +229,7 @@ submodule etsi-nfv-ns {
              information element";
         }
 
-        leaf provider {
-          type string;
-          description
-            "Defines the organization generating the VLD.";
-          reference
-            "GS NFV IFA014: Section 6.5.2.2 NsVirtualLinkDesc
-             information element";
-        }
-
-        leaf version {
-          mandatory true;
-          type string;
-          description
-            "Specifies the version of the VLD.";
-          reference
-            "GS NFV IFA014: Section 6.5.2.2 NsVirtualLinkDesc
-             information element";
-        }
-
-        uses common:connectivity-type;
+        uses connectivity-type;
 
         list df {
           key "id";
