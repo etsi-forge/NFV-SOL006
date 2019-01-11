@@ -241,7 +241,6 @@
     </sapd>
     <virtual-link-desc>
       <id>fw2dpi</id>
-      <version>1.0</version>
       <connectivity-type>
         <layer-protocol>
 	  <protocol>Ethernet</protocol>
@@ -257,7 +256,6 @@
     </virtual-link-desc>
     <virtual-link-desc>
       <id>mgmt</id>
-      <version>1.0</version>
       <connectivity-type>
         <layer-protocol>
 	  <protocol>IPv4</protocol>
@@ -273,7 +271,6 @@
     </virtual-link-desc>
     <virtual-link-desc>
       <id>r2fw</id>
-      <version>1.0</version>
       <connectivity-type>
         <layer-protocol>
 	  <protocol>Ethernet</protocol>
@@ -499,7 +496,6 @@
     </sapd>
     <virtual-link-desc>
       <id>r2fw</id>
-      <version>1.0</version>
       <connectivity-type>
         <layer-protocol>
 	  <protocol>IPv4</protocol>
