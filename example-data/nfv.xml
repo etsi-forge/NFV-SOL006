@@ -298,11 +298,17 @@
         <max-number-of-instances>1</max-number-of-instances>
         <virtual-link-connectivity>
           <virtual-link-profile-id>mgmt</virtual-link-profile-id>
-          <cpd-id>management</cpd-id>
+	  <constituent-cpd-id>
+            <constituent-base-element-id>firewall</constituent-base-element-id>
+	    <constituent-cpd-id>management</constituent-cpd-id>
+	  </constituent-cpd-id>
         </virtual-link-connectivity>
         <virtual-link-connectivity>
           <virtual-link-profile-id>r2fw</virtual-link-profile-id>
-          <cpd-id>outside</cpd-id>
+	  <constituent-cpd-id>
+	    <constituent-base-element-id>firewall</constituent-base-element-id>
+            <constituent-cpd-id>outside</constituent-cpd-id>
+	  </constituent-cpd-id>
         </virtual-link-connectivity>
       </vnf-profile>
       <vnf-profile>
@@ -314,11 +320,17 @@
         <max-number-of-instances>1</max-number-of-instances>
         <virtual-link-connectivity>
           <virtual-link-profile-id>mgmt</virtual-link-profile-id>
-          <cpd-id>management</cpd-id>
+	  <constituent-cpd-id>
+	    <constituent-base-element-id>router</constituent-base-element-id>
+            <constituent-cpd-id>management</constituent-cpd-id>
+	  </constituent-cpd-id>
         </virtual-link-connectivity>
         <virtual-link-connectivity>
           <virtual-link-profile-id>r2fw</virtual-link-profile-id>
-          <cpd-id>right</cpd-id>
+	  <constituent-cpd-id>
+	    <constituent-base-element-id>router</constituent-base-element-id>
+            <constituent-cpd-id>right</constituent-cpd-id>
+	  </constituent-cpd-id>
         </virtual-link-connectivity>
       </vnf-profile>
       <virtual-link-profile>
@@ -367,15 +379,24 @@
         <max-number-of-instances>1</max-number-of-instances>
         <virtual-link-connectivity>
           <virtual-link-profile-id>fw2dpi</virtual-link-profile-id>
-          <cpd-id>inside</cpd-id>
+	  <constituent-cpd-id>
+	    <constituent-base-element-id>firewall</constituent-base-element-id>
+            <constituent-cpd-id>inside</constituent-cpd-id>
+	  </constituent-cpd-id>
         </virtual-link-connectivity>
         <virtual-link-connectivity>
           <virtual-link-profile-id>mgmt</virtual-link-profile-id>
-          <cpd-id>management</cpd-id>
+	  <constituent-cpd-id>
+	    <constituent-base-element-id>firewall</constituent-base-element-id>
+            <constituent-cpd-id>management</constituent-cpd-id>
+	  </constituent-cpd-id>
         </virtual-link-connectivity>
         <virtual-link-connectivity>
           <virtual-link-profile-id>r2fw</virtual-link-profile-id>
-          <cpd-id>outside</cpd-id>
+	  <constituent-cpd-id>
+	    <constituent-base-element-id>firewall</constituent-base-element-id>
+            <constituent-cpd-id>outside</constituent-cpd-id>
+	  </constituent-cpd-id>
         </virtual-link-connectivity>
       </vnf-profile>
       <vnf-profile>
@@ -387,11 +408,17 @@
         <max-number-of-instances>1</max-number-of-instances>
         <virtual-link-connectivity>
           <virtual-link-profile-id>mgmt</virtual-link-profile-id>
-          <cpd-id>management</cpd-id>
+	  <constituent-cpd-id>
+	    <constituent-base-element-id>router</constituent-base-element-id>
+            <constituent-cpd-id>management</constituent-cpd-id>
+	  </constituent-cpd-id>
         </virtual-link-connectivity>
         <virtual-link-connectivity>
           <virtual-link-profile-id>r2fw</virtual-link-profile-id>
-          <cpd-id>right</cpd-id>
+	  <constituent-cpd-id>
+	    <constituent-base-element-id>router</constituent-base-element-id>
+            <constituent-cpd-id>right</constituent-cpd-id>
+	  </constituent-cpd-id>
         </virtual-link-connectivity>
       </vnf-profile>
       <pnf-profile>
@@ -399,7 +426,10 @@
         <pnfd-id>physical-dpi</pnfd-id>
         <virtual-link-connectivity>
           <virtual-link-profile-id>fw2dpi</virtual-link-profile-id>
-          <cpd-id>outside</cpd-id>
+	  <constituent-cpd-id>
+	    <constituent-base-element-id>physical-dpi</constituent-base-element-id>
+            <constituent-cpd-id>outside</constituent-cpd-id>
+	  </constituent-cpd-id>
         </virtual-link-connectivity>
       </pnf-profile>
       <virtual-link-profile>
@@ -494,7 +524,10 @@
         <max-number-of-instances>1</max-number-of-instances>
         <virtual-link-connectivity>
           <virtual-link-profile-id>r2fw</virtual-link-profile-id>
-          <cpd-id>right</cpd-id>
+	  <constituent-cpd-id>
+	    <constituent-base-element-id>router</constituent-base-element-id>
+            <constituent-cpd-id>right</constituent-cpd-id>
+	  </constituent-cpd-id>
         </virtual-link-connectivity>
       </vnf-profile>
       <virtual-link-profile>
@@ -528,7 +561,10 @@
         <max-number-of-instances>1</max-number-of-instances>
         <virtual-link-connectivity>
           <virtual-link-profile-id>r2fw</virtual-link-profile-id>
-          <cpd-id>outside</cpd-id>
+	  <constituent-cpd-id>
+	    <constituent-base-element-id>firewall</constituent-base-element-id>
+            <constituent-cpd-id>outside</constituent-cpd-id>
+	  </constituent-cpd-id>
         </virtual-link-connectivity>
       </ns-profile>
     </df>

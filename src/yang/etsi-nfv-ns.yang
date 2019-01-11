@@ -805,18 +805,41 @@ submodule etsi-nfv-ns {
                  information element.";
             }
 
-            leaf-list cpd-id {
-              type leafref {
-                path "deref(../../vnfd-id)/../ext-cpd/id";
-              }
+            list constituent-cpd-id {
+              key "constituent-base-element-id";
+
               description
-                "References the descriptor of a connection point on a
-                 VNF/PNF or a SAP which connects to virtual links
-                 instantiated from the profile identified in the
-                 virtualLinkProfileId attribute.";
+                "Describes a connection point on a VNF/PNF or a SAP
+                 which connects to virtual links instantiated from
+                 the profile identified in the virtualLinkProfileId
+                 attribute.";
               reference
-                "GS NFV IFA014: Section 6.3.7.2, NsVirutalLinkConnectivity
-                 information element.";
+                "GS NFV IFA014: Section 6.3.7
+                 NsVirtualLinkConnectivity information element";
+
+              leaf constituent-base-element-id {
+                type leafref {
+                  path "../../../id";
+                }
+                description
+                  "Reference to the profile of an NS constituent.";
+                reference
+                  "GS NFV IFA014: Section 6.4.8
+                   CpdInConstituentElement information element";
+              }
+
+              leaf constituent-cpd-id {
+                type leafref {
+                  path "deref(../../../vnfd-id)/../nfv:ext-cpd/nfv:id";
+                }
+                description
+                  "A reference to the descriptor of a connection point
+                   attached to one of the constituent VNFs and PNFs or to
+                   the descriptor of a NS SAP.";
+                reference
+                  "GS NFV IFA014: Section 6.4.4.2 CpdPool information
+                   element";
+              }
             }
           }
         }
@@ -872,18 +895,41 @@ submodule etsi-nfv-ns {
                  information element.";
             }
 
-            leaf-list cpd-id {
-              type leafref {
-                path "deref(../../pnfd-id)/../ext-cpd/id";
-              }
+            list constituent-cpd-id {
+              key "constituent-base-element-id";
+
               description
-                "References the descriptor of a connection point on a
-                 VNF/PNF or a SAP which connects to virtual links
-                 instantiated from the profile identified in the
-                 virtualLinkProfileId attribute.";
+                "Describes a connection point on a VNF/PNF or a SAP
+                 which connects to virtual links instantiated from
+                 the profile identified in the virtualLinkProfileId
+                 attribute.";
               reference
-                "GS NFV IFA014: Section 6.3.7.2, NsVirutalLinkConnectivity
-                 information element.";
+                "GS NFV IFA014: Section 6.3.7
+                 NsVirtualLinkConnectivity information element";
+
+              leaf constituent-base-element-id {
+                type leafref {
+                  path "../../../id";
+                }
+                description
+                  "Reference to the profile of an NS constituent.";
+                reference
+                  "GS NFV IFA014: Section 6.4.8
+                   CpdInConstituentElement information element";
+              }
+
+              leaf constituent-cpd-id {
+                type leafref {
+                  path "deref(../../../pnfd-id)/../nfv:ext-cpd/nfv:id";
+                }
+                description
+                  "A reference to the descriptor of a connection point
+                   attached to one of the constituent VNFs and PNFs or to
+                   the descriptor of a NS SAP.";
+                reference
+                  "GS NFV IFA014: Section 6.4.4.2 CpdPool information
+                   element";
+              }
             }
           }
         }
@@ -1338,28 +1384,45 @@ submodule etsi-nfv-ns {
                 "GS NFV IFA014: Section 6.3.7.2, NsVirutalLinkConnectivity
                  information element.";
             }
-            leaf-list cpd-id {
-              type leafref {
-                path "deref(../../nsd-id)/../sapd/id";
-              }
-	      description
-                "References the descriptor of a connection point on a
-                 VNF/PNF or a SAP which connects to virtual links
-                 instantiated from the profile identified in the
-                 virtualLinkProfileId attribute.";
+
+            list constituent-cpd-id {
+              key "constituent-base-element-id";
+
+              description
+                "Describes a connection point on a VNF/PNF or a SAP
+                 which connects to virtual links instantiated from
+                 the profile identified in the virtualLinkProfileId
+                 attribute.";
               reference
-                "GS NFV IFA014: Section 6.3.7.2, NsVirutalLinkConnectivity
-                 information element.";
-	    }
-            description
-              "Defines the connection information of the NS, it
-               contains connection relationship between an NS SAP and
-               a NS virtual Link of the composite NS.";
-            reference
-              "GS NFV IFA014: Section 6.3.11.2 NsProfile information
-               element";
-          }
-        }
+                "GS NFV IFA014: Section 6.3.7
+                 NsVirtualLinkConnectivity information element";
+
+              leaf constituent-base-element-id {
+                type leafref {
+                  path "../../../id";
+                }
+                description
+                  "Reference to the profile of an NS constituent.";
+                reference
+                  "GS NFV IFA014: Section 6.4.8
+                   CpdInConstituentElement information element";
+              }
+
+              leaf constituent-cpd-id {
+                type leafref {
+                  path "deref(../../../nsd-id)/../nfv:sapd/nfv:id";
+                }
+                description
+                  "A reference to the descriptor of a connection point
+                   attached to one of the constituent VNFs and PNFs or to
+                   the descriptor of a NS SAP.";
+                reference
+                  "GS NFV IFA014: Section 6.4.4.2 CpdPool information
+                   element";
+              }
+            }
+	  }
+	}
 
         list dependencies {
           key "id";
