@@ -80,7 +80,7 @@ submodule etsi-nfv-vnf {
           "GS NFV-IFA011: Section 7.1.6.6,
            VirtualNetworkInterfaceRequirements information element";
       }
-      leaf niclo-requirements {
+      leaf nicio-requirements {
         type leafref {
           path "/nfv/vnfd/virtual-compute-descriptor/id";
         }
