@@ -4,7 +4,7 @@
     <provider>My Company</provider>
     <product-name>My Company ASAv</product-name>
     <software-version>9.8</software-version>
-    <version>9.8 </version>
+    <version>9.8</version>
     <vnfm-info>My Company Vnfm</vnfm-info>
     <vdu>
       <id>firewall</id>
