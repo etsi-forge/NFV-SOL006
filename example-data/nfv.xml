@@ -188,7 +188,7 @@
       <vnf-profile>
         <id>firewall</id>
         <vnfd-id>ASA</vnfd-id>
-        <flavor-id>normal</flavor-id>
+        <flavour-id>normal</flavour-id>
         <instantiation-level>single</instantiation-level>
         <min-number-of-instances>1</min-number-of-instances>
         <max-number-of-instances>1</max-number-of-instances>
@@ -265,7 +265,7 @@
       <vnf-profile>
         <id>firewall</id>
         <vnfd-id>ASA</vnfd-id>
-        <flavor-id>normal</flavor-id>
+        <flavour-id>normal</flavour-id>
         <instantiation-level>single</instantiation-level>
         <min-number-of-instances>1</min-number-of-instances>
         <max-number-of-instances>1</max-number-of-instances>
@@ -287,7 +287,7 @@
       <vnf-profile>
         <id>router</id>
         <vnfd-id>CSR</vnfd-id>
-        <flavor-id>normal</flavor-id>
+        <flavour-id>normal</flavour-id>
         <instantiation-level>single</instantiation-level>
         <min-number-of-instances>1</min-number-of-instances>
         <max-number-of-instances>1</max-number-of-instances>
@@ -309,7 +309,7 @@
       <virtual-link-profile>
         <id>mgmt</id>
         <virtual-link-desc-id>mgmt</virtual-link-desc-id>
-        <flavor-id>normal</flavor-id>
+        <flavour-id>normal</flavour-id>
         <max-bitrate-requirements>
           <root>1000</root>
         </max-bitrate-requirements>
@@ -320,7 +320,7 @@
       <virtual-link-profile>
         <id>r2fw</id>
         <virtual-link-desc-id>r2fw</virtual-link-desc-id>
-        <flavor-id>normal</flavor-id>
+        <flavour-id>normal</flavour-id>
         <max-bitrate-requirements>
           <root>10000000</root>
         </max-bitrate-requirements>
@@ -346,7 +346,7 @@
       <vnf-profile>
         <id>firewall</id>
         <vnfd-id>ASA</vnfd-id>
-        <flavor-id>normal</flavor-id>
+        <flavour-id>normal</flavour-id>
         <instantiation-level>single</instantiation-level>
         <min-number-of-instances>1</min-number-of-instances>
         <max-number-of-instances>1</max-number-of-instances>
@@ -375,7 +375,7 @@
       <vnf-profile>
         <id>router</id>
         <vnfd-id>CSR</vnfd-id>
-        <flavor-id>normal</flavor-id>
+        <flavour-id>normal</flavour-id>
         <instantiation-level>single</instantiation-level>
         <min-number-of-instances>1</min-number-of-instances>
         <max-number-of-instances>1</max-number-of-instances>
@@ -408,7 +408,7 @@
       <virtual-link-profile>
         <id>fw2dpi</id>
         <virtual-link-desc-id>fw2dpi</virtual-link-desc-id>
-        <flavor-id>normal</flavor-id>
+        <flavour-id>normal</flavour-id>
         <max-bitrate-requirements>
           <root>1000000</root>
         </max-bitrate-requirements>
@@ -419,7 +419,7 @@
       <virtual-link-profile>
         <id>mgmt</id>
         <virtual-link-desc-id>mgmt</virtual-link-desc-id>
-        <flavor-id>normal</flavor-id>
+        <flavour-id>normal</flavour-id>
         <max-bitrate-requirements>
           <root>1000</root>
         </max-bitrate-requirements>
@@ -430,7 +430,7 @@
       <virtual-link-profile>
         <id>r2fw</id>
         <virtual-link-desc-id>r2fw</virtual-link-desc-id>
-        <flavor-id>normal</flavor-id>
+        <flavour-id>normal</flavour-id>
         <max-bitrate-requirements>
           <root>1000000</root>
         </max-bitrate-requirements>
@@ -488,7 +488,7 @@
       <vnf-profile>
         <id>router</id>
         <vnfd-id>CSR</vnfd-id>
-        <flavor-id>normal</flavor-id>
+        <flavour-id>normal</flavour-id>
         <instantiation-level>single</instantiation-level>
         <min-number-of-instances>1</min-number-of-instances>
         <max-number-of-instances>1</max-number-of-instances>
@@ -503,7 +503,7 @@
       <virtual-link-profile>
         <id>r2fw</id>
         <virtual-link-desc-id>r2fw</virtual-link-desc-id>
-        <flavor-id>r2fw</flavor-id>
+        <flavour-id>r2fw</flavour-id>
         <max-bitrate-requirements>
           <root>500</root>
         </max-bitrate-requirements>

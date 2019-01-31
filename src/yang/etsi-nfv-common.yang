@@ -215,8 +215,8 @@ submodule etsi-nfv-common {
       enum "end-healing";
       enum "start-termination";
       enum "end-termination";
-      enum "start-vnf-flavor-change";
-      enum "end-vnf-flavor-change";
+      enum "start-vnf-flavour-change";
+      enum "end-vnf-flavour-change";
       enum "start-vnf-operation-change";
       enum "end-vnf-operation-change";
       enum "start-vnf-ext-conn-change";

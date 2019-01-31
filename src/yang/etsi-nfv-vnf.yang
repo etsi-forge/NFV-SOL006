@@ -45,6 +45,7 @@ submodule etsi-nfv-vnf {
           "GS NFV-IFA011: Section 7.1.6.6,
            VirtualNetworkInterfaceRequirements information element";
       }
+
       leaf description {
         type string;
         description
@@ -53,6 +54,7 @@ submodule etsi-nfv-vnf {
           "GS NFV-IFA011: Section 7.1.6.6,
            VirtualNetworkInterfaceRequirements information element";
       }
+
       leaf support-mandatory {
         mandatory true;
         type boolean;
@@ -64,8 +66,11 @@ submodule etsi-nfv-vnf {
           "GS NFV-IFA011: Section 7.1.6.6,
            VirtualNetworkInterfaceRequirements information element";
       }
+
       list network-interface-requirements {
         key "key";
+        min-elements "1";
+
         leaf key {
           type string;
         }
@@ -662,29 +667,51 @@ submodule etsi-nfv-vnf {
               "GS NFV IFA011: Section 7.1.9.3.2, VirtualCpuData
                information element.";
           }
-          container virtual-cpu-pinning {
+          container pinning {
             presence "Set to specify CPU pinning.";
-            leaf cpu-pinning-policy {
-              mandatory true;
+            leaf policy {
+              default "dynamic";
               type enumeration {
                 enum "static";
                 enum "dynamic";
               }
               description
-                "Indicates the policy for CPU pinning. The policy can
-                 take values of 'static' or 'dynamic'. The cardinality
-                 can be 0 during the allocation request, if no
-                 particular value is requested.";
+                "The policy can take values of 'static' or 'dynamic'.
+                 In case of 'static' the virtual CPU cores are
+                 requested to be allocated to logical CPU cores
+                 according to the rules defined in
+                 virtualCpuPinningRules. In case of 'dynamic' the
+                 allocation of virtual CPU cores to logical CPU cores
+                 is decided by the VIM. (e.g. SMT (Simultaneous
+                 MultiThreading) requirements).";
+              reference
+                "GS NFV IFA011: Section 7.1.9.2.4,
+                 VirtualCpuPinningData information element.";
             }
-            container cpu-pinning-map {
-              when "../nfv:cpu-pinning-policy = 'static'";
+
+            list rule {
+              when "../nfv:policy = 'static'";
+              key "key";
+              leaf key {
+                type string;
+              }
+              leaf value {
+                type string;
+              }
+              description
+                "A list of rules that should be considered during the
+                 allocation of the virtual CPUs to logical CPUs in case
+                 of 'static' virtualCpuPinningPolicy.";
+              reference
+                "GS NFV IFA011: Section 7.1.9.2.4,
+                 VirtualCpuPinningData information element.";
             }
             description
-              "If cpuPinningPolicy is defined as 'static', the
-               cpuPinningMap provides the map of pinning virtual
-               CPU cores to physical CPU cores/threads. Cardinality
-               is 0 if cpuPinningPolicy has a different value than
-               'static'.";
+              "The virtual CPU pinning configuration for the
+               virtualised compute resource.";
+            reference
+              "GS NFV IFA011: Section 7.1.9.2.3,
+                 VirtualCpuData information element.";
           }
         }
       }
@@ -996,7 +1023,7 @@ submodule etsi-nfv-vnf {
              Information elements.";
         }
 
-        list desc-flavor {
+        list flavour {
           key "id";
           description
             "Describes a specific flavour of the VL with specific
@@ -1010,14 +1037,14 @@ submodule etsi-nfv-vnf {
             description
               "Identifies a flavour within a VnfVirtualLinkDesc.";
             reference
-              "GS NFV IFA011: Section 7.1.8.5, VirtualLinkDescFlavor
+              "GS NFV IFA011: Section 7.1.8.5, VirtualLinkDescFlavour
                information element.";
           }
           container qos {
             description
               "QoS of the VL.";
             reference
-              "GS NFV IFA011: Section 7.1.8.5, VirtualLinkDescFlavor
+              "GS NFV IFA011: Section 7.1.8.5, VirtualLinkDescFlavour
                information element.";
 
             leaf latency {
@@ -1145,15 +1172,15 @@ submodule etsi-nfv-vnf {
             "Identifier of this DF within the VNFD.";
           reference
             "GS NFV IFA011: Section 7.1.8, Information elements
-             to the DeploymentFlavor.";
+             to the DeploymentFlavour.";
         }
         leaf description {
           type string;
           description
-            "Human readable description of the deployment flavor";
+            "Human readable description of the deployment flavour";
           reference
             "GS NFV IFA011: Section 7.1.8, Information elements
-             to the DeploymentFlavor.";
+             to the DeploymentFlavour.";
         }
         list vdu-profile {
           key "id";
@@ -1163,7 +1190,7 @@ submodule etsi-nfv-vnf {
              a given VDU used in a deployment flavour.";
           reference
             "GS NFV IFA011: Section 7.1.8, Information elements
-             to the DeploymentFlavor.";
+             to the DeploymentFlavour.";
           leaf id {
             type leafref {
               path "../../../nfv:vdu/nfv:id";
@@ -1236,7 +1263,7 @@ submodule etsi-nfv-vnf {
           }
         }
         list virtual-link-profile {
-          key "id flavor";
+          key "id flavour";
           description
             "Defines the internal VLD along with additional data which
              is used in this DF.";
@@ -1254,10 +1281,11 @@ submodule etsi-nfv-vnf {
               "GS NFV IFA011: Section 7.1.8.4, VirtualLinkProfile
                information element.";
           }
-          leaf flavor {
+
+          leaf flavour {
             type leafref {
               path "deref(../../../ext-cpd/int-virtual-link-desc)" +
-                   "/../desc-flavor/id";
+                   "/../flavour/id";
             }
             description
               "Identifies a flavour within the VnfVirtualLinkDesc.";
@@ -1266,6 +1294,7 @@ submodule etsi-nfv-vnf {
                information element.";
           }
           uses local-affinity-or-anti-affinity-rule;
+
           list affinity-or-anti-affinity-group {
             key "id";
             leaf id {
@@ -1282,7 +1311,248 @@ submodule etsi-nfv-vnf {
               "GS NFV IFA011: Section 7.1.8.4, VirtualLinkProfile
                information element.";
           }
+
+          container max-bit-rate-requirements {
+            leaf root {
+              mandatory "true";
+              type uint32;
+              description
+                "Throughput requirement of the link (e.g. bitrate of
+                 E-Line, root bitrate of E-Tree, aggregate capacity
+                 of E-LAN).";
+              reference
+                "GS NFV IFA011: Section 7.1.8.6,
+                 LinkBitrateRequirements information element.";
+            }
+
+            leaf leaf {
+              type uint32;
+              description
+                "Throughput requirement of leaf connections to the
+                 link when applicable to the connectivity type
+                 (e.g. for E-Tree and E-LAN branches).";
+              reference
+                "GS NFV IFA011: Section 7.1.8.6,
+                 LinkBitrateRequirements information element.";
+            }
+            description
+              "Specifies the maximum bitrate requirements for a VL
+               instantiated according to this profile.";
+            reference
+              "GS NFV IFA011: Section 7.1.8.4, VirtualLinkProfile
+               information element.";
+          }
+
+          container min-bit-rate-requirements {
+            leaf root {
+              mandatory "true";
+              type uint32;
+              description
+                "Throughput requirement of the link (e.g. bitrate of
+                 E-Line, root bitrate of E-Tree, aggregate capacity
+                 of E-LAN).";
+              reference
+                "GS NFV IFA011: Section 7.1.8.6,
+                 LinkBitrateRequirements information element.";
+            }
+
+            leaf leaf {
+              type uint32;
+              description
+                "Throughput requirement of leaf connections to the
+                 link when applicable to the connectivity type
+                 (e.g. for E-Tree and E-LAN branches).";
+              reference
+                "GS NFV IFA011: Section 7.1.8.6,
+                 LinkBitrateRequirements information element.";
+            }
+            description
+              "Specifies the minimum bitrate requirements for a VL
+               instantiated according to this profile.";
+            reference
+              "GS NFV IFA011: Section 7.1.8.4, VirtualLinkProfile
+               information element.";
+          }
+
+          container virtual-link-protocol-data {
+            leaf associated-layer-protocol {
+              type identityref {
+                base layer-protocol;
+              }
+              description
+                "One of the values of the attribute layerProtocol of
+                 the ConnectivityType IE.";
+              reference
+                "GS NFV IFA011: Section 7.1.8.13,
+                 VirtualLinkProtocolData information element.";
+            }
+
+            container l2-protocol-data {
+              when "(../associated-layer-protocol = 'Ethernet') or " +
+                "(../associated-layer-protocol = 'MPLS') or " +
+                "(../associated-layer-protocol = 'ODU2') or " +
+                "(../associated-layer-protocol = 'Pseudo-Wire')";
+              leaf name {
+                type string;
+                description
+                  "Network name associated with this L2 protocol.";
+                reference
+                  "GS NFV IFA011: Section 7.1.8.14,
+                   L2ProtocolData information element.";
+              }
+
+              leaf network-type {
+                type enumeration {
+                  enum flat;
+                  enum vlan;
+                  enum vxlan;
+                  enum gre;
+                }
+                description
+                  "Specifies the network type for this L2 protocol.
+                   Possible values: FLAT, VLAN, VXLAN, GRE.";
+                reference
+                  "GS NFV IFA011: Section 7.1.8.14,
+                   L2ProtocolData information element.";
+              }
+
+              leaf vlan-transparent {
+                type boolean;
+                description
+                  "Specifies whether to support VLAN transparency for
+                   this L2 protocol or not.";
+                reference
+                  "GS NFV IFA011: Section 7.1.8.14,
+                   L2ProtocolData information element.";
+              }
+
+              leaf mtu {
+                type uint16;
+                description
+                  "Specifies the maximum transmission unit (MTU) value
+                   for this L2 protocol.";
+                reference
+                  "GS NFV IFA011: Section 7.1.8.14,
+                   L2ProtocolData information element.";
+              }
+              description
+                "Specifies the L2 protocol data for this virtual link.
+                 Shall be present when the associatedLayerProtocol
+                 attribute indicates a L2 protocol and shall be absent
+                 otherwise.";
+              reference
+                "GS NFV IFA011: Section 7.1.8.13,
+                 VirtualLinkProtocolData information element.";
+            }
+
+            container l3-protocol-data {
+              when "(../associated-layer-protocol = 'IPv4') or " +
+                "(../associated-layer-protocol = 'IPv6')";
+
+              leaf name {
+                type string;
+                description
+                  "Network name associated with this L3 protocol.";
+                reference
+                  "GS NFV IFA011: Section 7.1.8.15,
+                   L3ProtocolData information element.";
+              }
+
+              leaf ip-version {
+                type enumeration {
+                  enum ipv4;
+                  enum ipv6;
+                }
+                default "ipv4";
+                description
+                  "Specifies IP version of this L3 protocol.
+                   Value:
+                   • IPV4.
+                   • IPV6.";
+                reference
+                  "GS NFV IFA011: Section 7.1.8.15,
+                   L3ProtocolData information element.";
+              }
+
+              leaf cidr {
+                type string;
+                description
+                  "Specifies the CIDR (Classless InterDomain Routing)
+                   of this L3 protocol.";
+                reference
+                  "GS NFV IFA011: Section 7.1.8.15,
+                   L3ProtocolData information element.";
+              }
+
+              leaf-list ip-allocation-pools {
+                type string;
+                description
+                  "Specifies the allocation pools with start and end
+                   IP addresses for this L3 protocol.";
+                reference
+                  "GS NFV IFA011: Section 7.1.8.15,
+                   L3ProtocolData information element.";
+              }
+
+              leaf gateway-ip {
+                type inet:ip-address;
+                description
+                  "Specifies the gateway IP address for this L3
+                   protocol.";
+                reference
+                  "GS NFV IFA011: Section 7.1.8.15,
+                   L3ProtocolData information element.";
+              }
+
+              leaf dhcp-enabled {
+                type boolean;
+                default "true";
+                description
+                  "Indicates whether DHCP (Dynamic Host Configuration
+                   Protocol) is enabled or disabled for this L3
+                   protocol.";
+                reference
+                  "GS NFV IFA011: Section 7.1.8.15,
+                   L3ProtocolData information element.";
+              }
+
+              leaf ipv6-address-mode {
+                when "../ip-version = 'ipv6'";
+                type enumeration {
+                  enum slaac;
+                  enum dhcpv6-stateful;
+                  enum dhcpv6-stateless;
+                }
+                description
+                  "Specifies IPv6 address mode. Possible values:
+                   • SLAAC.
+                   • DHCPV6-STATEFUL.
+                   • DHCPV6-STATELESS.
+                  May be present when the value of the ipVersion
+                  attribute is 'IPV6' and shall be absent otherwise.";
+                reference
+                  "GS NFV IFA011: Section 7.1.8.15,
+                   L3ProtocolData information element.";
+              }
+              description
+                "Specifies the L3 protocol data for this virtual link.
+                 Shall be present when the associatedLayerProtocol
+                 attribute indicates a L3 protocol and shall be absent
+                 otherwise.";
+              reference
+                "GS NFV IFA011: Section 7.1.8.13,
+                 VirtualLinkProtocolData information element.";
+            }
+            description
+              "Specifies the protocol data for a VL instantiated
+               according to this profile. Cardinality 0 is used when
+               no protocol data needs to be specified.";
+            reference
+              "GS NFV IFA011: Section 7.1.8.4, VirtualLinkProfile
+               information element.";
+          }
         }
+
         list instantiation-level {
           key "id";
           min-elements 1;
@@ -1420,8 +1690,23 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.8.2 VnfDf information
              element";
 
-          leaf instantiate-vnf-op-config {
-            type string;
+          container instantiate-vnf-op-config {
+            list parameter {
+              key "key";
+              leaf key {
+                type string;
+              }
+              leaf value {
+                type string;
+              }
+              description
+                "Array of KVP requirements for VNF-specific parameters
+                 to be passed when invoking the InstantiateVnf
+                 operation.";
+              reference
+                "GS NFV IFA011: Section 7.1.5.3
+                 InstantiateVnfOpConfig information element";
+            }
             description
               "Configuration parameters for the InstantiateVnf
                operation.";
@@ -1429,6 +1714,7 @@ submodule etsi-nfv-vnf {
               "GS NFV IFA011: Section 7.1.5.2
                VnfLcmOperationsConfiguration information element";
           }
+
           container scale-vnf-op-config {
             description
               "Configuration parameters for the ScaleVnf operation.";
@@ -1445,12 +1731,13 @@ submodule etsi-nfv-vnf {
                 type string;
               }
               description
-                "VNF-specific parameter to be passed when invoking
-                 the ScaleVnf operation.";
-              reference
+                "Array of KVP requirements for VNFspecific parameters
+                 to be passed when invoking the ScaleVnf operation.";
+               reference
                 "GS NFV IFA011: Section 7.1.5.4 ScaleVnfOpConfig
                  information element";
             }
+
             leaf scaling-by-more-than-one-step-supported {
               type boolean;
               default false;
@@ -1464,6 +1751,7 @@ submodule etsi-nfv-vnf {
                  ScaleVnfOpConfig information element";
             }
           }
+
           container scale-vnf-to-level-op-config {
             description
               "This information element defines attributes that
@@ -1482,14 +1770,17 @@ submodule etsi-nfv-vnf {
                 type string;
               }
               description
-                "VNF-specific parameter to be passed when invoking
-                 the ScaleVnfToLevel operation.";
+                "Array of KVP requirements for VNF-specific parameters
+                 to be passed when invoking the ScaleVnfToLevel
+                 operation.";
               reference
                 "GS NFV IFA011: Section 7.1.5.5
                  ScaleVnfToLevelOpConfig information element";
             }
+
             leaf arbitrary-target-levels-supported {
               type boolean;
+              default "false";
               description
                 "Signals whether scaling according to the parameter
                  'scaleInfo' is supported by this VNF.";
@@ -1498,6 +1789,7 @@ submodule etsi-nfv-vnf {
                  ScaleVnfToLevelOpConfig information element";
             }
           }
+
           container heal-vnf-op-config {
             description
               "This information element defines attributes that
@@ -1506,16 +1798,23 @@ submodule etsi-nfv-vnf {
               "GS NFV IFA011: Section 7.1.5.2
                VnfLcmOperationsConfiguration information element";
 
-            leaf parameter {
-              type string;
+            list parameter {
+              key "key";
+              leaf key {
+                type string;
+              }
+              leaf value {
+                type string;
+              }
               description
-                "VNF-specific parameter to be passed when invoking
-                 the HealVnf operation.";
+                "Array of KVP requirements for VNF-specific parameters
+                 to be passed when invoking the HealVnf operation.";
               reference
                 "GS NFV IFA011: Section 7.1.5.6 HealVnfOpConfig
                  information element";
             }
-            leaf cause {
+
+            leaf-list cause {
               type string;
               description
                 "Supported 'cause' parameter values.";
@@ -1524,6 +1823,7 @@ submodule etsi-nfv-vnf {
                  information element";
             }
           }
+
           container terminate-vnf-op-config {
             description
               "This information element defines attributes that
@@ -1531,8 +1831,10 @@ submodule etsi-nfv-vnf {
             reference
               "GS NFV IFA011: Section 7.1.5.2
                VnfLcmOperationsConfiguration information element";
+
             leaf min-graceful-termination {
               type yang:timeticks;
+              default "1";
               description
                 "Minimum timeout value for graceful termination of
                  a VNF instance.";
@@ -1540,6 +1842,7 @@ submodule etsi-nfv-vnf {
                 "GS NFV IFA011: Section 7.1.5.7
                  TerminateVnfOpConfig information element";
             }
+
             leaf max-recommended-graceful-termination {
               type yang:timeticks;
               description
@@ -1554,7 +1857,25 @@ submodule etsi-nfv-vnf {
                 "GS NFV IFA011: Section 7.1.5.7
                  TerminateVnfOpConfig information element";
             }
+
+            list parameter {
+              key "key";
+              leaf key {
+                type string;
+              }
+              leaf value {
+                type string;
+              }
+              description
+                "Array of KVP requirements for VNF-specific parameters
+                 to be passed when invoking the TerminateVnf
+                 operation.";
+              reference
+                "GS NFV IFA011: Section 7.1.5.7
+                 TerminateVnfOpConfig information element";
+            }
           }
+
           container operate-vnf-op-config {
             description
               "This information element defines attributes that
@@ -1565,6 +1886,7 @@ submodule etsi-nfv-vnf {
 
             leaf min-graceful-stop-timeout {
               type yang:timeticks;
+              default "1";
               description
                 "Minimum timeout value for graceful stop of a VNF
                  instance.";
@@ -1572,6 +1894,7 @@ submodule etsi-nfv-vnf {
                 "GS NFV IFA011: Section 7.1.5.8
                  OperateVnfOpConfig information element";
             }
+
             leaf max-recommended-graceful-stop-timeout {
               type yang:timeticks;
               description
@@ -1586,8 +1909,77 @@ submodule etsi-nfv-vnf {
                 "GS NFV IFA011: Section 7.1.5.8
                  OperateVnfOpConfig information element";
             }
+
+            list parameter {
+              key "key";
+              leaf key {
+                type string;
+              }
+              leaf value {
+                type string;
+              }
+              description
+                "Array of KVP requirements for VNF-specific parameters
+                 to be passed when invoking the OperateVnf
+                 operation.";
+              reference
+                "GS NFV IFA011: Section 7.1.5.8
+                 OperateVnfOpConfig information element";
+            }
+          }
+
+          container change-vnf-flavour-op-config {
+            list parameter {
+              key "key";
+              leaf key {
+                type string;
+              }
+              leaf value {
+                type string;
+              }
+              description
+                "Array of KVP requirements for VNF-specific parameters
+                 to be passed when invoking the OperateVnf
+                 operation.";
+              reference
+                "GS NFV IFA011: Section 7.1.5.9
+                 ChangeVnfFlavour information element";
+            }
+            description
+              "Configuration parameters for the ChangeVnfFlavour
+               operation.";
+            reference
+              "GS NFV IFA011: Section 7.1.5.2
+               VnfLcmOperationsConfiguration information element";
+          }
+
+          container change-ext-vnf-connectivity-op-config {
+            list parameter {
+              key "key";
+              leaf key {
+                type string;
+              }
+              leaf value {
+                type string;
+              }
+              description
+                "Array of KVP requirements for VNF-specific parameters
+                 to be passed when invoking the
+                 ChangeExtVnfConnectivity operation.";
+              reference
+                "GS NFV IFA011: Section 7.1.5.10
+                 ChangeExtVnfConnectivityOpConfig information
+                 element";
+            }
+            description
+              "Configuration parameters for the
+               ChangeExtVnfConnectivity operation.";
+            reference
+              "GS NFV IFA011: Section 7.1.5.2
+               VnfLcmOperationsConfiguration information element";
           }
         }
+
         list affinity-or-anti-affinity-group {
           key "id";
           description
@@ -1866,7 +2258,7 @@ submodule etsi-nfv-vnf {
         reference
           "GS NFV IFA011: Section 7.1.2 VNFD information element";
 
-        leaf auto-scalable {
+        leaf is-auto-scalable-enabled {
           type boolean;
           description
             "It permits to enable (TRUE) / disable (FALSE) the
@@ -1875,7 +2267,8 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.12 VnfConfigurableProperties
              information element";
         }
-        leaf auto-healable {
+
+        leaf is-auto-heal-enabled {
           type boolean;
           description
             "It permits to enable (TRUE) / disable (FALSE) the
@@ -1884,6 +2277,7 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.12 VnfConfigurableProperties
              information element";
         }
+
         list additional-configurable-property {
           key "key";
           leaf key {
@@ -1942,7 +2336,7 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.13 LifeCycleManagementScript
              information element";
         }
-        leaf lcm-transition-event {
+        leaf-list lcm-transition-event {
           type string;
           description
             "Describes the transition VNF lifecycle event(s) that

@@ -676,7 +676,7 @@ submodule etsi-nfv-ns {
             "GS NFV IFA014: Section 6.3.2.2 NsDf information element";
         }
 
-        leaf flavor-key {
+        leaf flavour-key {
           type leafref {
             path "../monitored-info/id";
           }
@@ -727,7 +727,7 @@ submodule etsi-nfv-ns {
                element";
           }
 
-          leaf flavor-id {
+          leaf flavour-id {
             mandatory true;
             type leafref {
               path "deref(../vnfd-id)/../df/id";
@@ -742,7 +742,7 @@ submodule etsi-nfv-ns {
           leaf instantiation-level {
             mandatory true;
             type leafref {
-              path "deref(../flavor-id)/../instantiation-level/id";
+              path "deref(../flavour-id)/../instantiation-level/id";
             }
             description
               "Identifier of the instantiation level of the VNF DF
@@ -976,7 +976,7 @@ submodule etsi-nfv-ns {
                information element";
           }
 
-          leaf flavor-id {
+          leaf flavour-id {
             mandatory true;
             type leafref {
               path "deref(../virtual-link-desc-id)/../df/id";
