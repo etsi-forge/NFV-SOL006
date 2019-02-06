@@ -545,10 +545,10 @@ submodule etsi-nfv-vnf {
               fraction-digits 1;
               range "0..max";
             }
-            units "Gb";
-            mandatory true;
+            units "GB";
+            default 1;
             description
-              "Amount of virtual memory in MB.";
+              "Amount of virtual memory in GB.";
             reference
               "GS NFV IFA011: Section 7.1.9.3, Information elements
                related to Virtual Memory.";
@@ -721,11 +721,11 @@ submodule etsi-nfv-vnf {
         }
         leaf size-of-storage {
           type uint64;
-          units "Gb";
-          mandatory true;
+          units "GB";
+          default 0;
           description
             "Size of virtualised storage resource (e.g. size of
-             volume, in Gb)";
+             volume, in GB)";
           reference
             "GS NFV IFA011: Section 7.1.9.4, Information elements
              related to Virtual Storage.";
@@ -908,7 +908,7 @@ submodule etsi-nfv-vnf {
         }
         leaf min-disk {
           type uint64;
-          units "Gb";
+          units "GB";
           default 0;
           description
             "The minimal disk size requirement for this software
@@ -925,7 +925,7 @@ submodule etsi-nfv-vnf {
             fraction-digits 1;
             range "0..max";
           }
-          units "Gb";
+          units "GB";
           default 0;
           description
             "The minimal RAM requirement for this software image.
@@ -939,7 +939,7 @@ submodule etsi-nfv-vnf {
         }
         leaf size {
           type uint64;
-          units "Gb";
+          units "GB";
           description
             "The size of this software image.";
           reference
