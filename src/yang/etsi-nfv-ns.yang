@@ -448,33 +448,34 @@ submodule etsi-nfv-ns {
           }
 
           choice constituent-base-element-id {
-	    container vnf-profile {
-	      leaf vnf-profile-id {
-		must ". = deref(../../vnfd-profile-id)" {
-		}
-		type leafref {
-		  path "/nfv/nsd/df/vnf-profile/id";
-		}
-	      }
-	    }
-	    container pnf-profile {
-	      leaf pnf-profile-id {
-		must ". = deref(../../pnfd-profile-id)" {
-		}
-		type leafref {
-		  path "/nfv/nsd/df/pnf-profile/id";
-		}
-	      }
-	    }
+            mandatory "true";
+            container vnf-profile {
+              leaf vnf-profile-id {
+                must ". = deref(../../vnfd-profile-id)" {
+                }
+                type leafref {
+                  path "/nfv/nsd/df/vnf-profile/id";
+                }
+              }
+            }
+            container pnf-profile {
+              leaf pnf-profile-id {
+                must ". = deref(../../pnfd-profile-id)" {
+                }
+                type leafref {
+                  path "/nfv/nsd/df/pnf-profile/id";
+                }
+              }
+            }
 	    container ns-profile {
-	      leaf ns-profile-id {
-		must ". = deref(../../ns-profile-id)" {
-		}
-		type leafref {
-		  path "/nfv/nsd/df/ns-profile/id";
-		}
-	      }
-	    }
+              leaf ns-profile-id {
+                must ". = deref(../../ns-profile-id)" {
+                }
+                type leafref {
+                  path "/nfv/nsd/df/ns-profile/id";
+                }
+              }
+            }
             description
               "Reference to the profile of an NS constituent.";
             reference
