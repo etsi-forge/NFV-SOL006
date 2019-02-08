@@ -1328,8 +1328,10 @@ submodule etsi-nfv-vnf {
                element.";
           }
           uses local-affinity-or-anti-affinity-rule;
+
           list affinity-or-anti-affinity-group {
             key "id";
+
             description
               "Identifier(s) of the affinity or anti-affinity
                group(s) the VDU belongs to.";
@@ -1349,29 +1351,9 @@ submodule etsi-nfv-vnf {
                 "GS NFV IFA011: Section 7.1.8.12, AffinityOrAntiAffinity
                  information element.";
             }
-            leaf type {
-              type enumeration {
-                enum affinity;
-                enum anti-affinity;
-              }
-              description
-                "Specifies whether the rule is an affinity rule or an
-                 anti-affinity rule.";
-              reference
-                "GS NFV IFA011: Section 7.1.8.12, AffinityOrAntiAffinity
-                 information element.";
-            }
-            leaf scope {
-              type affinity-scope;
-              description
-                "Specifies the scope of the rule, possible values are
-                 'NFVI-PoP', 'Zone', 'ZoneGroup', 'NFVI-node'";
-              reference
-                "GS NFV IFA011: Section 7.1.8.12, AffinityOrAntiAffinity
-                 information element.";
-            }
           }
         }
+
         list virtual-link-profile {
           key "id flavor";
           description
@@ -1403,6 +1385,7 @@ submodule etsi-nfv-vnf {
                information element.";
           }
           uses local-affinity-or-anti-affinity-rule;
+
           list affinity-or-anti-affinity-group {
             key "id";
             leaf id {
@@ -1420,6 +1403,7 @@ submodule etsi-nfv-vnf {
                information element.";
           }
         }
+
         list instantiation-level {
           key "id";
           min-elements 1;
@@ -1725,6 +1709,7 @@ submodule etsi-nfv-vnf {
             }
           }
         }
+
         list affinity-or-anti-affinity-group {
           key "id";
           description
