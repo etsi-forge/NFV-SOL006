@@ -1805,6 +1805,7 @@ submodule etsi-nfv-vnf {
 
             list parameter {
               key "key";
+
               leaf key {
                 type string;
               }
