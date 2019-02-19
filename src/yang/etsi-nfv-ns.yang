@@ -492,7 +492,8 @@ submodule etsi-nfv-ns {
             }
             container ns {
               leaf nsd-id {
-                must ". = deref(../../nested-ns-profile-id)/../nsd-id" {
+                must ". = deref(../../nested-ns-profile-id)/" +
+                     "../nsd-id" {
                 }
 
                 type leafref {
