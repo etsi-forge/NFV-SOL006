@@ -4,21 +4,24 @@ submodule etsi-nfv-ns {
     prefix nfv;
   }
 
-  include etsi-nfv-common;
+  import etsi-nfv-common {
+    prefix common;
+  }
+
   include etsi-nfv-vnf;
   include etsi-nfv-pnf;
 
   description
     "Models for NS according to ETSI GS NFV-IFA 014.";
 
-  revision 2019-03-18 {
+  revision 2017-01-20 {
     description
       "Initial revision
        Common data structure to support NSD according to:
-       ETSI GS NFV-IFA 014 Ed261v252";
+       ETSI GS NFV-IFA 011 Ed251v243";
 
     reference
-      "ETSI GS NFV-IFA 014 Ed261v252";
+      "ETSI GS NFV-IFA 011 Ed251v243";
   }
 
   grouping resource-handle {
@@ -130,7 +133,7 @@ submodule etsi-nfv-ns {
           description
             "Identifier of this Cpd information element.";
           reference
-            "GS NFV IFA014: Section 6.6.3.1 Cpd information element";
+            "GS NFC IFA014: Section 6.6.3.1 Cpd information element";
         }
 
         leaf address-assignment {
@@ -245,7 +248,7 @@ submodule etsi-nfv-ns {
              information element";
         }
 
-        uses connectivity-type;
+        uses common:connectivity-type;
 
         list df {
           key "id";
@@ -269,7 +272,6 @@ submodule etsi-nfv-ns {
           }
 
           container qos {
-	    presence "VL QoS parameters";
             description
               "The QoS information element specifies quality of
                service parameters applicable to a VL.";
@@ -362,7 +364,7 @@ submodule etsi-nfv-ns {
             "GS NFV IFA014: Section 6.5.2.2 NsVirtualLinkDesc
              information element";
         }
-        uses security-parameters;
+        uses common:security-parameters;
       }
 
       list vnffgd {
@@ -483,7 +485,7 @@ submodule etsi-nfv-ns {
             }
             container ns {
               leaf nsd-id {
-                must ". = deref(../../nested-ns-profile-id)/../nsd-id" {
+                must ". = deref(../../ns-profile-id)/../nsd-id" {
                 }
 
                 type leafref {
@@ -743,7 +745,7 @@ submodule etsi-nfv-ns {
           }
 
           leaf min-number-of-instances {
-            default 1;
+            mandatory true;
             type uint16;
             description
               "Minimum number of instances of the VNF based on this
@@ -754,7 +756,7 @@ submodule etsi-nfv-ns {
           }
 
           leaf max-number-of-instances {
-            default 1;
+            mandatory true;
             type uint16;
             description
               "Maximum number of instances of the VNF based on this
@@ -764,7 +766,7 @@ submodule etsi-nfv-ns {
                element";
           }
 
-          uses local-affinity-or-anti-affinity-rule;
+          uses common:local-affinity-or-anti-affinity-rule;
 
           list affinity-or-anti-affinity-group {
             key "id";
@@ -930,7 +932,7 @@ submodule etsi-nfv-ns {
                information element";
           }
 
-          uses local-affinity-or-anti-affinity-rule;
+          uses common:local-affinity-or-anti-affinity-rule;
 
           list affinity-or-anti-affinity-group {
             key "id";
@@ -957,7 +959,7 @@ submodule etsi-nfv-ns {
             reference
               "GS NFV IFA014: Section 6.3.4.2 VirtualLinkProfile
                information element";
-            uses link-bitrate-requirements;
+            uses common:link-bitrate-requirements;
           }
           container min-bitrate-requirements {
             description
@@ -966,7 +968,7 @@ submodule etsi-nfv-ns {
             reference
               "GS NFV IFA014: Section 6.3.4.2 VirtualLinkProfile
                information element";
-            uses link-bitrate-requirements;
+            uses common:link-bitrate-requirements;
           }
         }
 
@@ -1046,7 +1048,7 @@ submodule etsi-nfv-ns {
 
           leaf affinity-type {
             mandatory true;
-            type affinity-type;
+            type common:affinity-type;
             description
               "Specifies the type of relationship that the members of
                the group have: 'affinity' or 'anti-affinity.'";
@@ -1057,7 +1059,7 @@ submodule etsi-nfv-ns {
 
           leaf affinity-scope {
             mandatory true;
-            type affinity-scope;
+            type common:affinity-scope;
             description
               "Specifies the scope of the affinity or anti-affinity
                relationship e.g. a NFVI node, an NFVI PoP, etc.";
@@ -1121,7 +1123,7 @@ submodule etsi-nfv-ns {
             }
 
             leaf number-of-instances {
-              default 1;
+              mandatory true;
               type uint32;
               description
                 "Specifies the number of VNF instances required for
@@ -1154,7 +1156,7 @@ submodule etsi-nfv-ns {
                  VirtualLinkToLevelMapping information element";
             }
 
-            uses link-bitrate-requirements;
+            uses common:link-bitrate-requirements;
           }
 
           list ns-to-level-mapping {
@@ -1181,7 +1183,7 @@ submodule etsi-nfv-ns {
             }
 
             leaf number-of-instances {
-              default 1;
+              mandatory true;
               type uint32;
               description
                 "Specifies the number of nested NS instances required
@@ -1287,7 +1289,7 @@ submodule etsi-nfv-ns {
           }
           leaf min-number-of-instances {
             type uint16;
-            default 1;
+            mandatory true;
             description
               "Minimum number of nested NS instances based on the
                referenced NSD that is permitted to exist for this
@@ -1298,7 +1300,7 @@ submodule etsi-nfv-ns {
           }
           leaf max-number-of-instances {
             type uint16;
-            default 1;
+            mandatory true;
             description
               "Maximum number of nested NS instances based on the
                referenced NSD that is permitted to exist for this
@@ -1482,7 +1484,7 @@ submodule etsi-nfv-ns {
           }
 	}
       }
-      uses security-parameters;
+      uses common:security-parameters;
     }
   }
 }
