@@ -11,17 +11,14 @@
       <name>Firewall VDU</name>
       <int-cpd>
         <id>inside</id>
-        <ext-cpd>inside</ext-cpd>
         <layer-protocol>Ethernet</layer-protocol>
       </int-cpd>
       <int-cpd>
         <id>management</id>
-        <ext-cpd>management</ext-cpd>
         <layer-protocol>Ethernet</layer-protocol>
       </int-cpd>
       <int-cpd>
         <id>outside</id>
-        <ext-cpd>outside</ext-cpd>
         <layer-protocol>Ethernet</layer-protocol>
       </int-cpd>
       <virtual-compute-desc>asa-vcd</virtual-compute-desc>
@@ -97,17 +94,14 @@
       <name>Router VDU</name>
       <int-cpd>
         <id>left</id>
-        <ext-cpd>left</ext-cpd>
         <layer-protocol>Ethernet</layer-protocol>
       </int-cpd>
       <int-cpd>
         <id>management</id>
-        <ext-cpd>management</ext-cpd>
         <layer-protocol>Ethernet</layer-protocol>
       </int-cpd>
       <int-cpd>
         <id>right</id>
-        <ext-cpd>right</ext-cpd>
         <layer-protocol>Ethernet</layer-protocol>
       </int-cpd>
       <virtual-compute-desc>csr-vcd</virtual-compute-desc>

@@ -4,10 +4,7 @@ submodule etsi-nfv-ns {
     prefix nfv;
   }
 
-  import etsi-nfv-common {
-    prefix common;
-  }
-
+  include etsi-nfv-common;
   include etsi-nfv-vnf;
   include etsi-nfv-pnf;
 
@@ -346,7 +343,7 @@ submodule etsi-nfv-ns {
             "GS NFV IFA014: Section 6.5.2.2 NsVirtualLinkDesc
              information element";
         }
-        uses common:security-parameters;
+        uses security-parameters;
       }
 
       list vnffgd {
@@ -777,7 +774,7 @@ submodule etsi-nfv-ns {
                element";
           }
 
-          uses common:local-affinity-or-anti-affinity-rule;
+          uses local-affinity-or-anti-affinity-rule;
 
           list affinity-or-anti-affinity-group {
             key "id";
@@ -989,7 +986,7 @@ submodule etsi-nfv-ns {
                information element";
           }
 
-          uses common:local-affinity-or-anti-affinity-rule;
+          uses local-affinity-or-anti-affinity-rule;
 
           list affinity-or-anti-affinity-group {
             key "id";
@@ -1016,7 +1013,7 @@ submodule etsi-nfv-ns {
             reference
               "GS NFV IFA014: Section 6.3.4.2 VirtualLinkProfile
                information element";
-            uses common:link-bitrate-requirements;
+            uses link-bitrate-requirements;
           }
           container min-bitrate-requirements {
             description
@@ -1025,7 +1022,7 @@ submodule etsi-nfv-ns {
             reference
               "GS NFV IFA014: Section 6.3.4.2 VirtualLinkProfile
                information element";
-            uses common:link-bitrate-requirements;
+            uses link-bitrate-requirements;
           }
         }
 
@@ -1105,7 +1102,7 @@ submodule etsi-nfv-ns {
 
           leaf affinity-type {
             mandatory true;
-            type common:affinity-type;
+            type affinity-type;
             description
               "Specifies the type of relationship that the members of
                the group have: 'affinity' or 'anti-affinity.'";
@@ -1116,7 +1113,7 @@ submodule etsi-nfv-ns {
 
           leaf affinity-scope {
             mandatory true;
-            type common:affinity-scope;
+            type affinity-scope;
             description
               "Specifies the scope of the affinity or anti-affinity
                relationship e.g. a NFVI node, an NFVI PoP, etc.";
@@ -1213,7 +1210,7 @@ submodule etsi-nfv-ns {
                  VirtualLinkToLevelMapping information element";
             }
 
-            uses common:link-bitrate-requirements;
+            uses link-bitrate-requirements;
           }
 
           list ns-to-level-mapping {
@@ -1568,7 +1565,7 @@ submodule etsi-nfv-ns {
           }
 	}
       }
-      uses common:security-parameters;
+      uses security-parameters;
     }
   }
 }
