@@ -4,14 +4,13 @@ submodule etsi-nfv-vnf {
     prefix nfv;
   }
 
+  include etsi-nfv-common;
+
   import ietf-inet-types {
     prefix inet;
   }
   import ietf-yang-types {
     prefix yang;
-  }
-  import etsi-nfv-common {
-    prefix common;
   }
 
   description
@@ -87,10 +86,10 @@ submodule etsi-nfv-vnf {
           path "/nfv/vnfd/virtual-compute-descriptor/id";
         }
         description
-          "This references (couples) the CPD with any logical node
-           I/O requirements (for network devices) that may have been
-           created. Linking these attributes is necessary so that
-           I/O requirements that need to be articulated at the
+          "This references (couples) the CPD with any logical node I/O
+           requirements (for network devices) that may have been
+           created. Linking these attributes is necessary so that so
+           that I/O requirements that need to be articulated at the
            logical node level can be associated with the network
            interface requirements associated with the CPD.";
         reference
@@ -104,7 +103,7 @@ submodule etsi-nfv-vnf {
   // IFA011. A similar definition of Cpd exists in IFA014, but
   // that is for use with Sapd and Pnfd. Do not use this grouping
   // for that.
-  grouping cpd {
+  grouping vnf-cpd {
     description
       "A Cpd information element describes network
        connectivity to a compute resource or a VL.";
@@ -121,7 +120,7 @@ submodule etsi-nfv-vnf {
     leaf layer-protocol {
       mandatory true;
       type identityref {
-	base common:layer-protocol;
+	base layer-protocol;
       }
       description
 	"Identifies which protocol the CP uses for connectivity
@@ -132,7 +131,7 @@ submodule etsi-nfv-vnf {
     }
     leaf role {
       type identityref {
-	base common:cp-role;
+	base cp-role;
       }
       description
 	"Identifies the role of the port in the context of the
@@ -159,7 +158,7 @@ submodule etsi-nfv-vnf {
 	"GS NFV IFA011: Section 7.1.6.3, Cpd information element.";
       leaf associated-layer-protocol {
 	type identityref {
-	  base common:layer-protocol;
+	  base layer-protocol;
 	}
 	description
 	  "One of the values of the attribute layerProtocol of the Cpd
@@ -173,7 +172,7 @@ submodule etsi-nfv-vnf {
 	key "address-type";
 	leaf address-type {
 	  type identityref {
-	    base common:address-type;
+	    base address-type;
 	  }
 	  description
 	    "Describes the type of the address to be assigned to the CP
@@ -254,7 +253,7 @@ submodule etsi-nfv-vnf {
 	"GS NFV IFA011: Section 7.1.6.3, Cpd information element.";
     }
   }
-  
+
   grouping vnfd {
     list vnfd {
       key "id";
@@ -450,7 +449,7 @@ submodule etsi-nfv-vnf {
                element.";
           }
 
-          uses cpd;
+          uses vnf-cpd;
         }
         leaf virtual-compute-desc {
           type leafref {
@@ -541,7 +540,7 @@ submodule etsi-nfv-vnf {
               "GS NFV IFA011: Section 7.1.11.3, MonitoringParameter
                information element.";
           }
-          uses common:monitoring-parameter;
+          uses monitoring-parameter;
         }
         list configurable-properties {
           key "key";
@@ -677,7 +676,7 @@ submodule etsi-nfv-vnf {
               "Identifies the preferred version of the requested
                additional capability.";
             reference
-              "GS NFV IFA011: Section 7.1.9.5, 
+              "GS NFV IFA011: Section 7.1.9.5,
                RequestedAdditionalCapabilityData Information
                element.";
           }
@@ -690,10 +689,10 @@ submodule etsi-nfv-vnf {
               type string;
             }
             description
-              "Identifies specific attributes, dependent on the 
+              "Identifies specific attributes, dependent on the
                requested additional capability type.";
             reference
-              "GS NFV IFA011: Section 7.1.9.5, 
+              "GS NFV IFA011: Section 7.1.9.5,
                RequestedAdditionalCapabilityData Information
                element.";
           }
@@ -1225,7 +1224,7 @@ submodule etsi-nfv-vnf {
           }
         }
 
-        uses common:connectivity-type;
+        uses connectivity-type;
 
         leaf-list test-access {
           type string;
@@ -1256,7 +1255,7 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.11.3, MonitoringParameter
              information element.";
           }
-          uses common:monitoring-parameter;
+          uses monitoring-parameter;
         }
       }
 
@@ -1286,7 +1285,7 @@ submodule etsi-nfv-vnf {
           ext-CP to the VDU's CP.
         */
         uses virtual-network-interface-requirements;
-        uses cpd;
+        uses vnf-cpd;
       }
 
       list df {
@@ -1350,7 +1349,7 @@ submodule etsi-nfv-vnf {
               "GS NFV IFA011: Section 7.1.8.3, VduProfile information
                element.";
           }
-          uses common:local-affinity-or-anti-affinity-rule;
+          uses local-affinity-or-anti-affinity-rule;
           list affinity-or-anti-affinity-group {
             key "id";
             description
@@ -1385,7 +1384,7 @@ submodule etsi-nfv-vnf {
                  information element.";
             }
             leaf scope {
-              type common:affinity-scope;
+              type affinity-scope;
               description
                 "Specifies the scope of the rule, possible values are
                  'NFVI-PoP', 'Zone', 'ZoneGroup', 'NFVI-node'";
@@ -1425,7 +1424,7 @@ submodule etsi-nfv-vnf {
               "GS NFV IFA011: Section 7.1.8.4, VirtualLinkProfile
                information element.";
           }
-          uses common:local-affinity-or-anti-affinity-rule;
+          uses local-affinity-or-anti-affinity-rule;
           list affinity-or-anti-affinity-group {
             key "id";
             leaf id {
@@ -1519,7 +1518,7 @@ submodule etsi-nfv-vnf {
             description
               "The InstantiationLevel information element describes a
                given level of resources to be instantiated within a
-               DF in term of the number of VNFC instances to be 
+               DF in term of the number of VNFC instances to be
                created from each VDU.";
             reference
               "GS NFV IFA011: Section 7.1.8.7 InstantiationLevel
@@ -1559,7 +1558,7 @@ submodule etsi-nfv-vnf {
         }
         leaf-list supported-operation {
           type identityref {
-            base common:supported-operation;
+            base supported-operation;
           }
           description
             "Indicates which operations are available for this DF via
@@ -1717,7 +1716,7 @@ submodule etsi-nfv-vnf {
           }
           container operate-vnf-op-config {
             description
-              "This information element defines attributes that 
+              "This information element defines attributes that
                affect the invocation of the OperateVnf operation.";
             reference
               "GS NFV IFA011: Section 7.1.5.2
@@ -1735,7 +1734,7 @@ submodule etsi-nfv-vnf {
             leaf max-recommended-graceful-stop-timeout {
               type yang:timeticks;
               description
-                "Maximum recommended timeout value that can be 
+                "Maximum recommended timeout value that can be
                  needed to gracefully stop a VNF instance of a
                  particular type under certain conditions, such as
                  maximum load condition. This is provided by VNF
@@ -1782,7 +1781,7 @@ submodule etsi-nfv-vnf {
 
           leaf type {
             mandatory true;
-            type common:affinity-type;
+            type affinity-type;
             description
               "Specifies whether the rule is an affinity rule or an
                anti-affinity rule.";
@@ -1793,7 +1792,7 @@ submodule etsi-nfv-vnf {
 
           leaf scope {
             mandatory true;
-            type common:affinity-scope;
+            type affinity-scope;
             description
               "Specifies the scope of the rule, possible values are
                'NFVI-PoP', 'Zone', 'ZoneGroup', 'NFVI-node'.";
@@ -1820,7 +1819,7 @@ submodule etsi-nfv-vnf {
               "GS NFV IFA011: Section 7.1.11.3 MonitoringParameter
                information element";
           }
-          uses common:monitoring-parameter;
+          uses monitoring-parameter;
         }
 
         list scaling-aspect {
@@ -2094,7 +2093,7 @@ submodule etsi-nfv-vnf {
           "GS NFV IFA011: Section 7.1.2 VNFD information element";
 
         leaf event {
-          type common:internal-lifecycle-management-script-event;
+          type internal-lifecycle-management-script-event;
           description
             "Describes VNF lifecycle event(s) or an external stimulus
              detected on a VNFM reference point.";

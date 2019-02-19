@@ -3,9 +3,10 @@ module etsi-nfv {
   namespace "urn:etsi:params:xml:ns:yang:etsi-nfv";
   prefix nfv;
 
+  include etsi-nfv-common;
+  include etsi-nfv-ns;
   include etsi-nfv-vnf;
   include etsi-nfv-pnf;
-  include etsi-nfv-ns;
 
   organization
     "European Telecommunications Standards Institute (ETSI)";
