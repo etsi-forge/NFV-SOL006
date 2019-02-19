@@ -1149,7 +1149,9 @@ submodule etsi-nfv-vnf {
               }
             }
             leaf cpd {
-              path "deref(../vdu-id)/../int-cpd/id";
+              type leafref {
+                path "deref(../vdu-id)/../int-cpd/id";
+              }
             }
           }
         }

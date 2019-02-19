@@ -11,14 +11,14 @@ submodule etsi-nfv-ns {
   description
     "Models for NS according to ETSI GS NFV-IFA 014.";
 
-  revision 2017-01-20 {
+  revision 2019-03-18 {
     description
       "Initial revision
        Common data structure to support NSD according to:
-       ETSI GS NFV-IFA 011 Ed251v243";
+       ETSI GS NFV-IFA 011 Ed261v252";
 
     reference
-      "ETSI GS NFV-IFA 011 Ed251v243";
+      "ETSI GS NFV-IFA 011 Ed261v252";
   }
 
   grouping resource-handle {
@@ -493,7 +493,8 @@ submodule etsi-nfv-ns {
             }
             container ns {
               leaf nsd-id {
-                must ". = deref(../../ns-profile-id)/../nsd-id" {
+                must ". = deref(../../nested-ns-profile-id)/" +
+		  "../nsd-id" {
                 }
 
                 type leafref {
@@ -753,7 +754,7 @@ submodule etsi-nfv-ns {
           }
 
           leaf min-number-of-instances {
-            mandatory true;
+            default 1;
             type uint16;
             description
               "Minimum number of instances of the VNF based on this
@@ -764,7 +765,7 @@ submodule etsi-nfv-ns {
           }
 
           leaf max-number-of-instances {
-            mandatory true;
+	    default 1;
             type uint16;
             description
               "Maximum number of instances of the VNF based on this
@@ -1177,7 +1178,7 @@ submodule etsi-nfv-ns {
             }
 
             leaf number-of-instances {
-              mandatory true;
+              default 1;
               type uint32;
               description
                 "Specifies the number of VNF instances required for
@@ -1237,7 +1238,7 @@ submodule etsi-nfv-ns {
             }
 
             leaf number-of-instances {
-              mandatory true;
+              default 1;
               type uint32;
               description
                 "Specifies the number of nested NS instances required
@@ -1343,7 +1344,7 @@ submodule etsi-nfv-ns {
           }
           leaf min-number-of-instances {
             type uint16;
-            mandatory true;
+            default 1;
             description
               "Minimum number of nested NS instances based on the
                referenced NSD that is permitted to exist for this
@@ -1354,7 +1355,7 @@ submodule etsi-nfv-ns {
           }
           leaf max-number-of-instances {
             type uint16;
-            mandatory true;
+            default 1;
             description
               "Maximum number of nested NS instances based on the
                referenced NSD that is permitted to exist for this
