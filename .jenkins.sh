@@ -14,5 +14,7 @@ IMG="$IMG_NAME:$VERSION"
 docker build --tag "$IMG" .
 docker run "$IMG"
 
+docker run -v"src/yang:/yang" mjethanandani/pyang "/bin/sh" -c "pyang -f jstree /yang/*" > "etsi-nfv.html"
+
 exit $?
 
