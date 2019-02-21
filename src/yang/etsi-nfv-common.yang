@@ -177,6 +177,42 @@ submodule etsi-nfv-common {
     base cp-role;
   }
 
+  identity checksum-algorithm {
+    description
+      "Identifies the algorithms supported for the purpose of
+       calculating the checksum.";
+    reference
+      "GS NFV IFA011: Section 7.1.6.10 Checksum information element.";
+  }
+
+  identity sha-224 {
+    base checksum-algorithm;
+    description
+      "SHA-224.";
+    reference
+      "GS NFV IFA011: Section 7.1.6.10 Checksum information element.";
+  }
+
+  identity sha-256 {
+    base checksum-algorithm;
+    description
+      "SHA-256.";
+    reference
+      "GS NFV IFA011: Section 7.1.6.10 Checksum information element.";
+  }
+
+  identity sha-384 {
+    base checksum-algorithm;
+    description
+      "SHA-384.";
+  }
+
+  identity sha-512 {
+    base checksum-algorithm;
+    description
+      "SHA-512.";
+  }
+      
   /*
    * Typedefs
    */
