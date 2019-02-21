@@ -205,12 +205,16 @@ submodule etsi-nfv-common {
     base checksum-algorithm;
     description
       "SHA-384.";
+    reference
+      "GS NFV IFA011: Section 7.1.6.10 Checksum information element.";
   }
 
   identity sha-512 {
     base checksum-algorithm;
     description
       "SHA-512.";
+    reference
+      "GS NFV IFA011: Section 7.1.6.10 Checksum information element.";
   }
       
   /*
