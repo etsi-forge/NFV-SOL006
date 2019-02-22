@@ -4,10 +4,7 @@ submodule etsi-nfv-ns {
     prefix nfv;
   }
 
-  import etsi-nfv-common {
-    prefix common;
-  }
-
+  include etsi-nfv-common;
   include etsi-nfv-vnf;
   include etsi-nfv-pnf;
 
@@ -345,7 +342,7 @@ submodule etsi-nfv-ns {
             "GS NFV IFA014: Section 6.5.2.2 NsVirtualLinkDesc
              information element";
         }
-        uses common:security-parameters;
+        uses security-parameters;
       }
 
       list vnffgd {
@@ -495,7 +492,8 @@ submodule etsi-nfv-ns {
             }
             container ns {
               leaf nsd-id {
-                must ". = deref(../../ns-profile-id)/../nsd-id" {
+                must ". = deref(../../nested-ns-profile-id)/" +
+                     "../nsd-id" {
                 }
 
                 type leafref {
@@ -755,7 +753,7 @@ submodule etsi-nfv-ns {
           }
 
           leaf min-number-of-instances {
-            mandatory true;
+            default 1;
             type uint16;
             description
               "Minimum number of instances of the VNF based on this
@@ -766,7 +764,7 @@ submodule etsi-nfv-ns {
           }
 
           leaf max-number-of-instances {
-            mandatory true;
+            default 1;
             type uint16;
             description
               "Maximum number of instances of the VNF based on this
@@ -776,7 +774,7 @@ submodule etsi-nfv-ns {
                element";
           }
 
-          uses common:local-affinity-or-anti-affinity-rule;
+          uses local-affinity-or-anti-affinity-rule;
 
           list affinity-or-anti-affinity-group {
             key "id";
@@ -988,7 +986,7 @@ submodule etsi-nfv-ns {
                information element";
           }
 
-          uses common:local-affinity-or-anti-affinity-rule;
+          uses local-affinity-or-anti-affinity-rule;
 
           list affinity-or-anti-affinity-group {
             key "id";
@@ -1015,7 +1013,7 @@ submodule etsi-nfv-ns {
             reference
               "GS NFV IFA014: Section 6.3.4.2 VirtualLinkProfile
                information element";
-            uses common:link-bitrate-requirements;
+            uses link-bitrate-requirements;
           }
           container min-bitrate-requirements {
             description
@@ -1024,7 +1022,7 @@ submodule etsi-nfv-ns {
             reference
               "GS NFV IFA014: Section 6.3.4.2 VirtualLinkProfile
                information element";
-            uses common:link-bitrate-requirements;
+            uses link-bitrate-requirements;
           }
         }
 
@@ -1104,7 +1102,7 @@ submodule etsi-nfv-ns {
 
           leaf affinity-type {
             mandatory true;
-            type common:affinity-type;
+            type affinity-type;
             description
               "Specifies the type of relationship that the members of
                the group have: 'affinity' or 'anti-affinity.'";
@@ -1115,7 +1113,7 @@ submodule etsi-nfv-ns {
 
           leaf affinity-scope {
             mandatory true;
-            type common:affinity-scope;
+            type affinity-scope;
             description
               "Specifies the scope of the affinity or anti-affinity
                relationship e.g. a NFVI node, an NFVI PoP, etc.";
@@ -1179,7 +1177,7 @@ submodule etsi-nfv-ns {
             }
 
             leaf number-of-instances {
-              mandatory true;
+              default 1;
               type uint32;
               description
                 "Specifies the number of VNF instances required for
@@ -1212,7 +1210,7 @@ submodule etsi-nfv-ns {
                  VirtualLinkToLevelMapping information element";
             }
 
-            uses common:link-bitrate-requirements;
+            uses link-bitrate-requirements;
           }
 
           list ns-to-level-mapping {
@@ -1239,7 +1237,7 @@ submodule etsi-nfv-ns {
             }
 
             leaf number-of-instances {
-              mandatory true;
+              default 1;
               type uint32;
               description
                 "Specifies the number of nested NS instances required
@@ -1345,7 +1343,7 @@ submodule etsi-nfv-ns {
           }
           leaf min-number-of-instances {
             type uint16;
-            mandatory true;
+            default 1;
             description
               "Minimum number of nested NS instances based on the
                referenced NSD that is permitted to exist for this
@@ -1356,7 +1354,7 @@ submodule etsi-nfv-ns {
           }
           leaf max-number-of-instances {
             type uint16;
-            mandatory true;
+            default 1;
             description
               "Maximum number of nested NS instances based on the
                referenced NSD that is permitted to exist for this
@@ -1567,7 +1565,7 @@ submodule etsi-nfv-ns {
           }
 	}
       }
-      uses common:security-parameters;
+      uses security-parameters;
     }
   }
 }
