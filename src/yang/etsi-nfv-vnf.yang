@@ -16,15 +16,15 @@ submodule etsi-nfv-vnf {
   description
     "Models for VNFD according to GS NFV-IFA 011.";
 
-  revision 2018-06-19 {
+  revision 2019-03-18 {
     description
       "Initial revision.
 
        Common data structure to support VNFD according to:
-       VNFD according to ETSI GS NFV-IFA 011 Ed251v243";
+       VNFD according to ETSI GS NFV-IFA 011 Ed261v254";
 
     reference
-      "ETSI GS NFV-IFA 011 Ed251v243";
+      "ETSI GS NFV-IFA 011 Ed261v254";
   }
 
   grouping virtual-network-interface-requirements {
@@ -1148,9 +1148,9 @@ submodule etsi-nfv-vnf {
               }
             }
             leaf cpd {
-              type leafref {
-                path "deref(../vdu-id)/../int-cpd/id";
-              }
+	      type leafref {
+		path "deref(../vdu-id)/../int-cpd/id";
+	      }
             }
           }
         }
