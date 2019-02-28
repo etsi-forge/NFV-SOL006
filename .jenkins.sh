@@ -15,7 +15,7 @@ docker build --tag "$IMG" .
 docker run "$IMG"
 
 echo "Building HTML tree"
-docker run -v"src/yang:/yang" mjethanandani/pyang "/bin/sh" -c "pyang -f jstree /yang/*" > "etsi-nfv.html"
+docker run -v"$(pwd)/src/yang:/yang/" mjethanandani/pyang "/bin/sh" -c "pyang -f jstree /yang/*" > "etsi-nfv.html"
 
 exit $?
 
