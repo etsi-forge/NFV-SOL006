@@ -70,6 +70,7 @@ submodule etsi-nfv-vnf {
       list network-interface-requirements {
         key "key";
         min-elements "1";
+        max-elements "1";
 
         leaf key {
           type string;
@@ -1148,7 +1149,9 @@ submodule etsi-nfv-vnf {
               }
             }
             leaf cpd {
-              path "deref(../vdu-id)/../int-cpd/id";
+              type leafref {
+                path "deref(../vdu-id)/../int-cpd/id";
+              }
             }
           }
         }
