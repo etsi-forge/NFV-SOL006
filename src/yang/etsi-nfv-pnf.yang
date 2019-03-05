@@ -111,6 +111,7 @@ submodule etsi-nfv-pnf {
         reference
           "GS NFV-IFA014: Section 6.6.2, Pnfd information element";
       }
+      uses security-group-rule;
     }
   }
 }
