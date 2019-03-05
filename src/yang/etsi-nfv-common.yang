@@ -215,8 +215,8 @@ submodule etsi-nfv-common {
       enum "end-healing";
       enum "start-termination";
       enum "end-termination";
-      enum "start-vnf-flavor-change";
-      enum "end-vnf-flavor-change";
+      enum "start-vnf-flavour-change";
+      enum "end-vnf-flavour-change";
       enum "start-vnf-operation-change";
       enum "end-vnf-operation-change";
       enum "start-vnf-ext-conn-change";
@@ -570,6 +570,116 @@ submodule etsi-nfv-common {
          Boolean value 'false'.";
       reference
         "GS NFV IFA011: Section 7.1.6.3 Cpd information element";
+    }
+
+    leaf security-group-rule-id {
+      type leafref {
+        path "/nfv/vnfd/security-group-rule/id";
+      }
+      description
+        "Reference of the security group rules bound to this
+         CPD.";
+      reference
+        "GS NFV IFA011: Section 7.1.6.3 Cpd information element";
+    }
+  }
+
+  grouping security-group-rule {
+    list security-group-rule {
+      key "id";
+
+      leaf id {
+        type string;
+        description
+          "Identifier of this SecurityGroupRule information
+           element.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.9, SecurityGroupRule
+           information element.";
+      }
+
+      leaf description {
+        type string;
+        description
+          "Human readable description of the security group rule.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.9, SecurityGroupRule
+           information element.";
+      }
+
+      leaf direction {
+        type enumeration {
+          enum ingress;
+          enum egress;
+        }
+        default "ingress";
+        description
+          "The direction in which the security group rule is applied.
+           Permitted values: INGRESS, EGRESS. Defaults to INGRESS.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.9, SecurityGroupRule
+           information element.";
+      }
+
+      leaf ether-type {
+        type enumeration {
+          enum ipv4;
+          enum ipv6;
+        }
+        default "ipv4";
+        description
+          "Indicates the protocol carried over the Ethernet layer.
+           Permitted values: IPV4, IPV6. Defaults to IPV4.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.9, SecurityGroupRule
+           information element.";
+      }
+
+      leaf protocol {
+        type enumeration {
+          enum tcp;
+          enum udp;
+          enum icmp;
+        }
+        default "tcp";
+        description
+          "Indicates the protocol carried over the IP layer.
+           Permitted values: any protocol defined in the IANA
+           protocol registry, e.g. TCP, UDP, ICMP, etc. Defaults
+           to TCP.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.9, SecurityGroupRule
+           information element.";
+      }
+
+      leaf port-range-min {
+        must ". <= ../port-range-max";
+        type uint16;
+        default "0";
+        description
+          "Indicates minimum port number in the range that is
+           matched by the security group rule. Defaults to 0.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.9, SecurityGroupRule
+           information element.";
+      }
+
+      leaf port-range-max {
+        must ". >= ../port-range-min";
+        type uint16;
+        default "65535";
+        description
+          "Indicates maximum port number in the range that is
+           matched by the security group rule. Defaults to 65535.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.9, SecurityGroupRule
+           information element.";
+      }
+
+      description
+        "Defines security group rules to be used by the VNF.";
+      reference
+        "GS NFV IFA011: Section 7.1.2, VNFD information element.";
     }
   }
 }
