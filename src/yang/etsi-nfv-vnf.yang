@@ -829,7 +829,9 @@ submodule etsi-nfv-vnf {
         }
         container checksum {
           leaf algorithm {
-            type string;
+            type identityref {
+	      base checksum-algorithm;
+	    }
             description
               "Species the algorithm used to obtain the checksum
                value.";
