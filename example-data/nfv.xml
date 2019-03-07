@@ -48,14 +48,26 @@
     </sw-image-desc>
     <ext-cpd>
       <id>inside</id>
+      <int-cpd>
+	<vdu-id>firewall</vdu-id>
+	<cpd>inside</cpd>
+      </int-cpd>
       <layer-protocol>Ethernet</layer-protocol>
     </ext-cpd>
     <ext-cpd>
       <id>management</id>
+      <int-cpd>
+	<vdu-id>firewall</vdu-id>
+	<cpd>management</cpd>
+      </int-cpd>
       <layer-protocol>Ethernet</layer-protocol>
     </ext-cpd>
     <ext-cpd>
       <id>outside</id>
+      <int-cpd>
+	<vdu-id>firewall</vdu-id>
+	<cpd>outside</cpd>
+      </int-cpd>
       <layer-protocol>Ethernet</layer-protocol>
     </ext-cpd>
     <df>
@@ -131,14 +143,26 @@
     </sw-image-desc>
     <ext-cpd>
       <id>left</id>
+      <int-cpd>
+	<vdu-id>router</vdu-id>
+	<cpd>left</cpd>
+      </int-cpd>
       <layer-protocol>Ethernet</layer-protocol>
     </ext-cpd>
     <ext-cpd>
       <id>management</id>
+      <int-cpd>
+	<vdu-id>router</vdu-id>
+	<cpd>management</cpd>
+      </int-cpd>
       <layer-protocol>Ethernet</layer-protocol>
     </ext-cpd>
     <ext-cpd>
       <id>right</id>
+      <int-cpd>
+	<vdu-id>router</vdu-id>
+	<cpd>right</cpd>
+      </int-cpd>
       <layer-protocol>Ethernet</layer-protocol>
     </ext-cpd>
     <df>
@@ -218,7 +242,9 @@
     <virtual-link-desc>
       <id>fw2dpi</id>
       <connectivity-type>
-        <layer-protocol>Ethernet</layer-protocol>
+        <layer-protocol>
+	  <protocol>Ethernet</protocol>
+	</layer-protocol>
       </connectivity-type>
       <df>
         <id>normal</id>
@@ -231,7 +257,9 @@
     <virtual-link-desc>
       <id>mgmt</id>
       <connectivity-type>
-        <layer-protocol>IPv4</layer-protocol>
+        <layer-protocol>
+	  <protocol>IPv4</protocol>
+	</layer-protocol>
       </connectivity-type>
       <df>
         <id>normal</id>
@@ -244,7 +272,9 @@
     <virtual-link-desc>
       <id>r2fw</id>
       <connectivity-type>
-        <layer-protocol>Ethernet</layer-protocol>
+        <layer-protocol>
+	  <protocol>Ethernet</protocol>
+	</layer-protocol>
       </connectivity-type>
       <df>
         <id>normal</id>
@@ -467,7 +497,9 @@
     <virtual-link-desc>
       <id>r2fw</id>
       <connectivity-type>
-        <layer-protocol>IPv4</layer-protocol>
+        <layer-protocol>
+	  <protocol>IPv4</protocol>
+	</layer-protocol>
       </connectivity-type>
       <df>
         <id>r2fw</id>
