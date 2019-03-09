@@ -394,14 +394,8 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.6.7,
              VnfcConfigurableProperties Information element.";
         }
-        list boot-data {
-          key "key";
-          leaf key {
-            type string;
-          }
-          leaf value {
-            type string;
-          }
+        leaf boot-data {
+	  type string;
           description
             "Contains a string or a URL to a file contained in the
              VNF package used to customize a virtualised compute
