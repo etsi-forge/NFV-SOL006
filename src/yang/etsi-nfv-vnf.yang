@@ -1646,7 +1646,7 @@ submodule etsi-nfv-vnf {
             }
           }
           list scaling-info {
-            key "id";
+            key "scaling-aspect-id";
             description
               "The InstantiationLevel information element describes a
                given level of resources to be instantiated within a
@@ -1655,7 +1655,8 @@ submodule etsi-nfv-vnf {
             reference
               "GS NFV IFA011: Section 7.1.8.7 InstantiationLevel
                information element";
-            leaf id {
+
+            leaf scaling-aspect-id {
               type leafref {
                 path "../../../nfv:scaling-aspect/nfv:id";
               }
