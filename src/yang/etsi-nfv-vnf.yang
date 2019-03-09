@@ -1610,7 +1610,7 @@ submodule etsi-nfv-vnf {
                information element";
           }
           list vdu-level {
-            key "id";
+            key "vdu-id";
             min-elements 1;
             description
               "Sets the number of instances for the VDU in this
@@ -1618,7 +1618,8 @@ submodule etsi-nfv-vnf {
             reference
               "GS NFV IFA011: Section 7.1.8.7 InstantiationLevel
                information element";
-            leaf id {
+
+            leaf vdu-id {
               type leafref {
                 path "../../../../nfv:vdu/nfv:id";
               }
@@ -1631,10 +1632,10 @@ submodule etsi-nfv-vnf {
             leaf number-of-instances {
               type uint16;
               must ". <= ../../../../nfv:df/" +
-                   "nfv:vdu-profile[id=current()/../nfv:id]/" +
+                   "nfv:vdu-profile[id=current()/../nfv:vdu-id]/" +
                    "nfv:max-number-of-instances";
               must ". >= ../../../../nfv:df/" +
-                   "nfv:vdu-profile[id=current()/../nfv:id]/" +
+                   "nfv:vdu-profile[id=current()/../nfv:vdu-id]/" +
                    "nfv:min-number-of-instances";
               default 1;
               description

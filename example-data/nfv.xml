@@ -80,14 +80,14 @@
       <instantiation-level>
         <id>double</id>
         <vdu-level>
-          <id>firewall</id>
+          <vdu-id>firewall</vdu-id>
           <number-of-instances>2</number-of-instances>
         </vdu-level>
       </instantiation-level>
       <instantiation-level>
         <id>single</id>
         <vdu-level>
-          <id>firewall</id>
+          <vdu-id>firewall</vdu-id>
           <number-of-instances>1</number-of-instances>
         </vdu-level>
       </instantiation-level>
@@ -175,14 +175,14 @@
       <instantiation-level>
         <id>double</id>
         <vdu-level>
-          <id>router</id>
+          <vdu-id>router</vdu-id>
           <number-of-instances>2</number-of-instances>
         </vdu-level>
       </instantiation-level>
       <instantiation-level>
         <id>single</id>
         <vdu-level>
-          <id>router</id>
+          <vdu-id>router</vdu-id>
           <number-of-instances>1</number-of-instances>
         </vdu-level>
       </instantiation-level>
