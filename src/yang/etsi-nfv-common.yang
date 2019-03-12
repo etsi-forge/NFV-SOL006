@@ -20,22 +20,22 @@ submodule etsi-nfv-common {
    */
   identity layer-protocol {
   }
-  identity Ethernet {
+  identity ethernet {
     base layer-protocol;
   }
-  identity MPLS {
+  identity mpls {
     base layer-protocol;
   }
-  identity ODU2 {
+  identity odu2 {
     base layer-protocol;
   }
-  identity IPv4 {
+  identity ipv4 {
     base layer-protocol;
   }
-  identity IPv6 {
+  identity ipv6 {
     base layer-protocol;
   }
-  identity Pseudo-Wire {
+  identity pseudo-wire {
     base layer-protocol;
   }
 
@@ -392,7 +392,7 @@ submodule etsi-nfv-common {
     }
 
     leaf-list layer-protocol {
-      default Ethernet;
+      default ethernet;
       type identityref {
         base layer-protocol;
       }
