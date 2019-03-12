@@ -2484,14 +2484,20 @@ submodule etsi-nfv-vnf {
       }
 
       list lifecycle-management-script {
-        key "event";
+        key "id";
         description
           "Includes a list of events and corresponding management
            scripts performed for the VNF.";
         reference
           "GS NFV IFA011: Section 7.1.2 VNFD information element";
 
-        leaf event {
+        leaf id {
+          type string;
+          description
+            "A unique string that identfies the script in question.";
+	}
+
+        leaf-list event {
           type internal-lifecycle-management-script-event;
           description
             "Describes VNF lifecycle event(s) or an external stimulus
