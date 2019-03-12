@@ -216,7 +216,30 @@ submodule etsi-nfv-common {
     reference
       "GS NFV IFA011: Section 7.1.6.10 Checksum information element.";
   }
-      
+
+  identity storage-type {
+    description
+      "Base type of storage that identities can derive from.";
+  }
+
+  identity root-storage {
+    base storage-type;
+    description
+      "Root type of storage.";
+  }
+
+  identity swap-storage {
+    base storage-type;
+    description
+      "Swap type of storage.";
+  }
+
+  identity ephemeral-storage {
+    base storage-type;
+    description
+      "Ephemeral type of storage.";
+  }
+  
   /*
    * Typedefs
    */
