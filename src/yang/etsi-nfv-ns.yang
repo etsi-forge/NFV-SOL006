@@ -146,63 +146,66 @@ submodule etsi-nfv-ns {
             "GS NFV IFA014: Section 6.2.3.2 Sapd information element";
         }
 
-        leaf virtual-link-desc {
-          type leafref {
-            path "../../virtual-link-desc/id";
-          }
-          description
-            "References the descriptor of the NS VL instance to
-             which the SAP instantiated from this SAPD connects to.";
-          reference
-            "GS NFV IFA014: Section 6.2.3.2 Sapd information element";
-        }
-
-        choice associated-cpd-id {
-          container vnf {
-            leaf vnfd-id {
-              mandatory true;
-              type leafref {
-                path "../../../../nfv:vnfd/nfv:id";
-              }
-              must "boolean(../../../vnfd-id[.=current()])";
+        choice cpd-or-virtual-link {
+          leaf virtual-link-desc {
+            type leafref {
+              path "../../virtual-link-desc/id";
             }
-
-            leaf ext-cpd-id {
-              mandatory true;
-              type leafref {
-                path "deref(../vnfd-id)/../nfv:ext-cpd/nfv:id";
-              }
-            }
+            description
+              "References the descriptor of the NS VL instance to
+               which the SAP instantiated from this SAPD connects to.";
+            reference
+              "GS NFV IFA014: Section 6.2.3.2 Sapd information element";
           }
-          container pnf {
-            leaf pnfd-id {
-              mandatory true;
+
+          choice associated-cpd-id {
+            container vnf {
+              leaf vnfd-id {
+                mandatory true;
                 type leafref {
-                path "../../../../nfv:pnfd/nfv:id";
+                  path "../../../../nfv:vnfd/nfv:id";
+                }
+                must "boolean(../../../vnfd-id[.=current()])";
               }
-              must "boolean(../pnfd-id[.=current()])";
+
+              leaf ext-cpd-id {
+                mandatory true;
+                type leafref {
+                  path "deref(../vnfd-id)/../nfv:ext-cpd/nfv:id";
+                }
+              }
             }
 
-            leaf ext-cpd-id {
-              mandatory true;
-              type leafref {
-                path "deref(../pnfd-id)/../nfv:ext-cpd/nfv:id";
+            container pnf {
+              leaf pnfd-id {
+                mandatory true;
+                type leafref {
+                  path "../../../../nfv:pnfd/nfv:id";
+                }
+                must "boolean(../pnfd-id[.=current()])";
+              }
+
+              leaf ext-cpd-id {
+                mandatory true;
+                type leafref {
+                  path "deref(../pnfd-id)/../nfv:ext-cpd/nfv:id";
+                }
               }
             }
-          }
-          container ns {
-            leaf nsd-id {
-            mandatory true;
-              type leafref {
-                path "../../../../nfv:nsd/nfv:id";
+            container ns {
+              leaf nsd-id {
+                mandatory true;
+                type leafref {
+                  path "../../../../nfv:nsd/nfv:id";
+                }
+                must "boolean(../nsd-id[.=current()])";
               }
-              must "boolean(../nsd-id[.=current()])";
-	    }
 
-            leaf ext-cpd-id {
-              mandatory true;
-              type leafref {
-                path "deref(../nsd-id)/../nfv:sapd/nfv:id";
+              leaf ext-cpd-id {
+                mandatory true;
+                type leafref {
+                  path "deref(../nsd-id)/../nfv:sapd/nfv:id";
+                }
               }
             }
           }
