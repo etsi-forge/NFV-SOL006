@@ -1,4 +1,4 @@
-<nfv xmlns="urn:etsi:params:xml:ns:yang:etsi-nfv">
+<nfv xmlns="urn:etsi:nfv:yang:etsi-nfv-descriptors">
   <vnfd>
     <id>ASA</id>
     <provider>My Company</provider>

@@ -1,6 +1,6 @@
 submodule etsi-nfv-common {
   yang-version 1.1;
-  belongs-to etsi-nfv {
+  belongs-to etsi-nfv-descriptors {
     prefix nfv;
   }
   description
