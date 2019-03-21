@@ -812,6 +812,7 @@ submodule etsi-nfv-vnf {
              information element";
         }
         leaf name {
+          mandatory true;
           type string;
           description
             "The name of this software image.";
@@ -819,7 +820,9 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.6.5 SwImageDesc
              information element.";
         }
+
         leaf version {
+	  mandatory true;
           type string;
           description
             "The version of this software image.";
@@ -827,8 +830,11 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.6.5 SwImageDesc
              information element.";
         }
+
         container checksum {
+
           leaf algorithm {
+	    mandatory true;
             type identityref {
 	      base checksum-algorithm;
 	    }
@@ -839,7 +845,9 @@ submodule etsi-nfv-vnf {
               "GS NFV IFA011: Section 7.1.6.10 ChecksumData
                information element.";
 	  }
+
 	  leaf hash {
+	    mandatory true;
 	    type string;
 	    description
 	      "Contains the result of applying the algorithm
@@ -855,6 +863,7 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.6.5 SwImageDesc
              information element.";
         }
+
         leaf container-format {
           default "bare";
           type enumeration {
@@ -895,6 +904,7 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.6.5 SwImageDesc
              information element.";
         }
+
         leaf disk-format {
           default "qcow2";
           type enumeration {
@@ -953,6 +963,7 @@ submodule etsi-nfv-vnf {
             "The disk format of a software image is the format of
              the underlying disk image.";
         }
+
         leaf min-disk {
           type uint64;
           units "GB";
@@ -967,6 +978,7 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.6.5, SwImageDesc
              information element.";
         }
+
         leaf min-ram {
           type decimal64 {
             fraction-digits 1;
@@ -984,7 +996,9 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.6.5, SwImageDesc
              information element.";
         }
+
         leaf size {
+	  mandatory true;
           type uint64;
           units "GB";
           description
@@ -993,6 +1007,7 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.6.5, SwImageDesc
              information element.";
         }
+
         leaf image {
           default ".";
           type inet:uri;
@@ -1004,6 +1019,7 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.6.5, SwImageDesc
              information element.";
         }
+
         leaf operating-system {
           type string;
           description
@@ -1014,6 +1030,7 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.6.5, SwImageDesc
              information element.";
         }
+
         leaf-list supported-virtualization-environment {
           type string;
           description
