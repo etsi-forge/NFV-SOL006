@@ -88,7 +88,7 @@ submodule etsi-nfv-vnf {
 
       leaf nicio-requirements {
         type leafref {
-          path "/nfv/vnfd/virtual-compute-descriptor/id";
+          path "/nfv/vnfd/virtual-compute-desc/id";
         }
         description
           "This references (couples) the CPD with any logical node I/O
@@ -290,10 +290,9 @@ submodule etsi-nfv-vnf {
         }
         leaf virtual-compute-desc {
           type leafref {
-            path "../../nfv:virtual-compute-descriptor/" +
-                 "nfv:id";
+            path "../../nfv:virtual-compute-desc/nfv:id";
           }
-          must "../../nfv:virtual-compute-descriptor[id=current()]/" +
+          must "../../nfv:virtual-compute-desc[id=current()]/" +
                "nfv:virtual-memory/size >=" +
                "../../nfv:sw-image-desc[id=current()/" +
                "../sw-image-desc]/min-ram" {
@@ -414,7 +413,7 @@ submodule etsi-nfv-vnf {
         }
       }
 
-      list virtual-compute-descriptor {
+      list virtual-compute-desc {
         key "id";
         description
           "Defines descriptors of virtual compute resources to be
