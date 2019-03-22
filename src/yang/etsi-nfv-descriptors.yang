@@ -1,6 +1,6 @@
-module etsi-nfv {
+module etsi-nfv-descriptors {
   yang-version 1.1;
-  namespace "urn:etsi:params:xml:ns:yang:etsi-nfv";
+  namespace "urn:etsi:nfv:yang:etsi-nfv-descriptors";
   prefix nfv;
 
   include etsi-nfv-common;
@@ -14,11 +14,11 @@ module etsi-nfv {
   description
     "Network Function Virtualization Descriptors";
 
-  revision 2018-06-13 {
+  revision 2019-03-18 {
     description
       "Initial revision.
-       NSD and PNFD according to ETSI GS NFV-IFA 014 Ed251v244
-       VNFD according to ETSI GS NFV-IFA 011 Ed251v243";
+       NSD and PNFD according to ETSI GS NFV-IFA 014 Ed261v252
+       VNFD according to ETSI GS NFV-IFA 011 Ed261v254";
   }
 
   container nfv {

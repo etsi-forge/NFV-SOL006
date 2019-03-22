@@ -1,18 +1,18 @@
 submodule etsi-nfv-common {
   yang-version 1.1;
-  belongs-to etsi-nfv {
+  belongs-to etsi-nfv-descriptors {
     prefix nfv;
   }
   description
     "Common data types for ETSI data models.";
 
-  revision 2018-06-19 {
+  revision 2019-03-18 {
     description
       "Initial revision
 
        Common data structures to support VNFD and NSD according to:
-       ETSI GS NFV-IFA 014 Ed251v244
-       ETSI GS NFV-IFA 011 Ed251v243";
+       ETSI GS NFV-IFA 014 Ed261v252
+       ETSI GS NFV-IFA 011 Ed261v254";
   }
 
   /*
@@ -177,6 +177,46 @@ submodule etsi-nfv-common {
     base cp-role;
   }
 
+  identity checksum-algorithm {
+    description
+      "Identifies the algorithms supported for the purpose of
+       calculating the checksum.";
+    reference
+      "GS NFV IFA011: Section 7.1.6.10 Checksum information element.";
+  }
+
+  identity sha-224 {
+    base checksum-algorithm;
+    description
+      "SHA-224.";
+    reference
+      "GS NFV IFA011: Section 7.1.6.10 Checksum information element.";
+  }
+
+  identity sha-256 {
+    base checksum-algorithm;
+    description
+      "SHA-256.";
+    reference
+      "GS NFV IFA011: Section 7.1.6.10 Checksum information element.";
+  }
+
+  identity sha-384 {
+    base checksum-algorithm;
+    description
+      "SHA-384.";
+    reference
+      "GS NFV IFA011: Section 7.1.6.10 Checksum information element.";
+  }
+
+  identity sha-512 {
+    base checksum-algorithm;
+    description
+      "SHA-512.";
+    reference
+      "GS NFV IFA011: Section 7.1.6.10 Checksum information element.";
+  }
+      
   /*
    * Typedefs
    */
@@ -253,14 +293,20 @@ submodule etsi-nfv-common {
 
   grouping connectivity-type {
     container connectivity-type {
-      leaf layer-protocol {
-        mandatory true;
-        type identityref {
-          base layer-protocol;
-        }
+      list layer-protocol {
+	key "protocol";
+
+	leaf protocol {
+          type identityref {
+            base layer-protocol;
+          }
+	}
         description
-          "Identifies the protocol this VL gives access to (Ethernet,
-           MPLS, ODU2, IPV4, IPV6, Pseudo-Wire).";
+          "Identifies the protocols that the VL uses (Ethernet,
+           MPLS, ODU2, IPV4, IPV6, Pseudo-Wire). The top layer
+           protocol of the VL protocol stack shall always be provided.
+           The lower layer protocols may be included when there are
+           specific requirements on these layers.";
         reference
           "GS NFV IFA011: Section 7.1.7.3, ConnectivityType
            information element.";

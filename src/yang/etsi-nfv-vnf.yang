@@ -1,6 +1,6 @@
 submodule etsi-nfv-vnf {
   yang-version 1.1;
-  belongs-to etsi-nfv {
+  belongs-to etsi-nfv-descriptors {
     prefix nfv;
   }
 
@@ -16,15 +16,15 @@ submodule etsi-nfv-vnf {
   description
     "Models for VNFD according to GS NFV-IFA 011.";
 
-  revision 2018-06-19 {
+  revision 2019-03-18 {
     description
       "Initial revision.
 
        Common data structure to support VNFD according to:
-       VNFD according to ETSI GS NFV-IFA 011 Ed251v243";
+       VNFD according to ETSI GS NFV-IFA 011 Ed261v254";
 
     reference
-      "ETSI GS NFV-IFA 011 Ed251v243";
+      "ETSI GS NFV-IFA 011 Ed261v254";
   }
 
   grouping virtual-network-interface-requirements {
@@ -56,7 +56,7 @@ submodule etsi-nfv-vnf {
       }
 
       leaf support-mandatory {
-        mandatory true;
+        default "false";
         type boolean;
         description
           "Indicates whether fulfilling the constraint is
@@ -624,7 +624,7 @@ submodule etsi-nfv-vnf {
             type uint16 {
               range "1..max";
             }
-            mandatory true;
+            default 1;
             description
               "Number of virtual CPUs.";
             reference
@@ -739,7 +739,7 @@ submodule etsi-nfv-vnf {
             enum "swap";
             enum "ephemeral";
           }
-          mandatory true;
+          default "root";
           description
             "Type of virtualised storage resource (e.g. volume,
              object).";
@@ -828,8 +828,28 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.6.5 SwImageDesc
              information element.";
         }
-        leaf checksum {
-          type string;
+        container checksum {
+          leaf algorithm {
+            type identityref {
+	      base checksum-algorithm;
+	    }
+            description
+              "Species the algorithm used to obtain the checksum
+               value.";
+            reference
+              "GS NFV IFA011: Section 7.1.6.10 ChecksumData
+               information element.";
+	  }
+	  leaf hash {
+	    type string;
+	    description
+	      "Contains the result of applying the algorithm
+               indicated by the algorithm attribute to the data to
+               which this ChecksumData refers.";
+            reference
+              "GS NFV IFA011: Section 7.1.6.10 ChecksumData
+               information element.";
+	  }
           description
             "The checksum of the software image file.";
           reference
@@ -837,7 +857,7 @@ submodule etsi-nfv-vnf {
              information element.";
         }
         leaf container-format {
-          mandatory true;
+          default "bare";
           type enumeration {
             enum "aki" {
               description
@@ -877,7 +897,7 @@ submodule etsi-nfv-vnf {
              information element.";
         }
         leaf disk-format {
-          mandatory true;
+          default "qcow2";
           type enumeration {
             enum "aki" {
               description
@@ -975,7 +995,7 @@ submodule etsi-nfv-vnf {
              information element.";
         }
         leaf image {
-          mandatory true;
+          default ".";
           type inet:uri;
           description
             "This is a reference to the actual software image.
@@ -1042,6 +1062,7 @@ submodule etsi-nfv-vnf {
                information element.";
           }
           container qos {
+	    presence "VL QoS parameters";
             description
               "QoS of the VL.";
             reference
@@ -1149,9 +1170,9 @@ submodule etsi-nfv-vnf {
               }
             }
             leaf cpd {
-              type leafref {
-                path "deref(../vdu-id)/../int-cpd/id";
-              }
+	      type leafref {
+		path "deref(../vdu-id)/../int-cpd/id";
+	      }
             }
           }
         }
@@ -1204,7 +1225,7 @@ submodule etsi-nfv-vnf {
           }
           leaf min-number-of-instances {
             type uint16;
-            mandatory true;
+            default 1;
             description
               "Minimum number of instances of the VNFC based on this
                VDU that is permitted to exist for this flavour.";
@@ -1214,15 +1235,17 @@ submodule etsi-nfv-vnf {
           }
           leaf max-number-of-instances {
             type uint16;
-            mandatory true;
+            default 1;
             must ". >= ../nfv:min-number-of-instances";
             reference
               "GS NFV IFA011: Section 7.1.8.3, VduProfile information
                element.";
           }
           uses local-affinity-or-anti-affinity-rule;
+
           list affinity-or-anti-affinity-group {
             key "id";
+
             description
               "Identifier(s) of the affinity or anti-affinity
                group(s) the VDU belongs to.";
@@ -1242,29 +1265,9 @@ submodule etsi-nfv-vnf {
                 "GS NFV IFA011: Section 7.1.8.12, AffinityOrAntiAffinity
                  information element.";
             }
-            leaf type {
-              type enumeration {
-                enum affinity;
-                enum anti-affinity;
-              }
-              description
-                "Specifies whether the rule is an affinity rule or an
-                 anti-affinity rule.";
-              reference
-                "GS NFV IFA011: Section 7.1.8.12, AffinityOrAntiAffinity
-                 information element.";
-            }
-            leaf scope {
-              type affinity-scope;
-              description
-                "Specifies the scope of the rule, possible values are
-                 'NFVI-PoP', 'Zone', 'ZoneGroup', 'NFVI-node'";
-              reference
-                "GS NFV IFA011: Section 7.1.8.12, AffinityOrAntiAffinity
-                 information element.";
-            }
           }
         }
+
         list virtual-link-profile {
           key "id flavour";
           description
@@ -1618,7 +1621,7 @@ submodule etsi-nfv-vnf {
               must ". >= ../../../../nfv:df/" +
                    "nfv:vdu-profile[id=current()/../nfv:id]/" +
                    "nfv:min-number-of-instances";
-              mandatory true;
+              default 1;
               description
                 "Number of instances of VNFC based on this VDU to
                  deploy for this level.";
@@ -1803,6 +1806,7 @@ submodule etsi-nfv-vnf {
 
             list parameter {
               key "key";
+
               leaf key {
                 type string;
               }
@@ -2037,6 +2041,118 @@ submodule etsi-nfv-vnf {
                AffinityOrAntiAffinityGroup information element";
           }
         }
+
+        list indicator {
+          key "id";
+
+          leaf id {
+            type string;
+            description
+              "Unique identifier.";
+            reference
+              "GS NFV IFA011: Section 7.1.11.2 VnfIndicator
+               information element";
+          }
+
+          leaf name {
+            type string;
+            description
+              "The human readable name of the VnfIndicator.";
+            reference
+              "GS NFV IFA011: Section 7.1.11.2 VnfIndicator
+               information element";
+          }
+
+          leaf indicator-value {
+            type string;
+            description
+              "Defines the allowed values or value ranges of this
+               indicator.";
+            reference
+              "GS NFV IFA011: Section 7.1.11.2 VnfIndicator
+               information element";
+          }
+
+          leaf source {
+            type enumeration {
+              enum vnf;
+              enum em;
+              enum both;
+            }
+            description
+              "Describe the source of the indicator. The possible
+               values are:
+               • VNF.
+               • EM.
+               • Both.
+
+               This tells the consumer where to send the subscription
+               request.";
+            reference
+              "GS NFV IFA011: Section 7.1.11.2 VnfIndicator
+               information element";
+          }
+
+          description
+            "Declares the VNF indicators that are supported by this
+             VNF (specific to this DF).";
+          reference
+            "GS NFV IFA011: Section 7.1.8.2 VnfDf information
+             element";
+        }
+
+        list supported-vnf-interfaces {
+          key "name";
+
+          leaf name {
+            type enumeration {
+              enum vnf-configuration;
+              enum vnf-indicator;
+            }
+            description
+              "Identifies an interface produced by the VNF. Valid
+               values:
+               - VNF_CONFIGURATION
+               - VNF_INDICATOR";
+            reference
+              "GS NFV IFA011: Section 7.1.8.16 VnfInterfaceDetails
+               information element";
+          }
+
+          leaf-list cpd-id {
+            type leafref {
+              path "../../../ext-cpd/id";
+            }
+            description
+              "References one or more CPDs from which to instantiate
+               external CPs through which interface endpoints on the
+               VNF side can be reached by the VNFM.";
+            reference
+              "GS NFV IFA011: Section 7.1.8.16 VnfInterfaceDetails
+               information element";
+          }
+
+          list interface-details {
+            key "key";
+
+            leaf key {
+              type string;
+            }
+
+            leaf value {
+              type string;
+            }
+          }
+
+          description
+            "Indicates which interfaces the VNF produces and provides
+             additional details on how to access the interface
+             endpoints.";
+          reference
+            "GS NFV IFA011: Section 7.1.8.2 VnfDf information
+             element";
+        }
+
         list monitoring-parameter {
           key "id";
 
@@ -2307,7 +2423,23 @@ submodule etsi-nfv-vnf {
         leaf-list extension {
           type string;
           description
-            "'Extension' attributes of VnfInfo that are writeable.";
+            "Additional VNF-specific attributes of VnfInfo that
+             affect the lifecycle management of a VNF instance and
+             that are writeable.
+
+             For each VNF instance, these attributes are stored
+             persistently by the VNFM and can be queried and
+             modified through the VNFM.
+
+             These attributes are intended to be consumed by the
+             VNFM or by the lifecycle management scripts during the
+             execution of VNF lifecycle management operations.
+
+             Modifying these values has no direct effect on the VNF
+             instance; however, modified values can be considered
+             during subsequent VNF lifecycle management operations,
+             which means that the modified values can indirectly
+             affect the configuration of the VNF instance.";
           reference
             "GS NFV IFA011: Section 7.1.14 VnfInfoModifiableAttributes
              information element";
@@ -2315,7 +2447,22 @@ submodule etsi-nfv-vnf {
         leaf-list metadata {
           type string;
           description
-            "'Metadata' attributes of VnfInfo that are writeable.";
+            "Additional VNF-specific attributes of VnfInfo that are
+             writeable and that provide metadata describing the VNF
+             instance.
+
+             For each VNF instance, these attributes are stored
+             persistently by the VNFM and can be queried and modified
+             through the VNFM.
+
+             These attributes are intended to provide information to
+             functional blocks external to the VNFM and will not be
+             used by the VNFM or the VNF lifecycle management
+             scripts when executing lifecycle management operations.
+
+             Modifying these attributes has no effect on the VNF
+             instance. It only affects the attribute values stored by
+             the VNFM.";
           reference
             "GS NFV IFA011: Section 7.1.14 VnfInfoModifiableAttributes
              information element";
