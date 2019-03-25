@@ -70,6 +70,7 @@ submodule etsi-nfv-vnf {
       list network-interface-requirements {
         key "key";
         min-elements "1";
+        max-elements "1";
 
         leaf key {
           type string;
