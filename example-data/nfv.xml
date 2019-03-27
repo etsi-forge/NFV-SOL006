@@ -41,9 +41,16 @@
     </virtual-storage-descriptor>
     <sw-image-desc>
       <id>asa-image</id>
+      <name>ASA image</name>
+      <version>1.1</version>
+      <checksum>
+	<algorithm>sha-224</algorithm>
+	<hash>deadbeef</hash>
+      </checksum>
       <container-format>bare</container-format>
       <disk-format>qcow2</disk-format>
       <min-ram>2.0</min-ram>
+      <size>1</size>
       <image>http://www.cisco.com/asa.qcow2</image>
     </sw-image-desc>
     <ext-cpd>
@@ -136,9 +143,16 @@
     </virtual-storage-descriptor>
     <sw-image-desc>
       <id>csr-image</id>
+      <name>CSR image</name>
+      <version>1.1</version>
+      <checksum>
+	<algorithm>sha-224</algorithm>
+	<hash>deadbeef</hash>
+      </checksum>
       <container-format>bare</container-format>
       <disk-format>qcow2</disk-format>
       <min-ram>2.0</min-ram>
+      <size>1</size>
       <image>http://www.cisco.com/csr.qcow2</image>
     </sw-image-desc>
     <ext-cpd>
