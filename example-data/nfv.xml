@@ -36,7 +36,7 @@
     </virtual-compute-desc>
     <virtual-storage-descriptor>
       <id>asa-vsd</id>
-      <type-of-storage>root</type-of-storage>
+      <type-of-storage>root-storage</type-of-storage>
       <size-of-storage>0</size-of-storage>
     </virtual-storage-descriptor>
     <sw-image-desc>
@@ -131,7 +131,7 @@
     </virtual-compute-desc>
     <virtual-storage-descriptor>
       <id>csr-vsd</id>
-      <type-of-storage>root</type-of-storage>
+      <type-of-storage>root-storage</type-of-storage>
       <size-of-storage>0</size-of-storage>
     </virtual-storage-descriptor>
     <sw-image-desc>

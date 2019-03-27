@@ -727,12 +727,10 @@ submodule etsi-nfv-vnf {
 
         leaf type-of-storage {
           // Needed to be able to onboard images
-          type enumeration {
-            enum "root";
-            enum "swap";
-            enum "ephemeral";
-          }
-          default "root";
+          default "root-storage";
+          type identityref {
+	    base storage-type;
+	  }
           description
             "Type of virtualised storage resource (e.g. volume,
              object).";
