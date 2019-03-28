@@ -6,7 +6,7 @@
 # https://forge.etsi.org/etsi-software-license
 
 YANG_MODULES="yang/yang/*"
-OUTPUT="etsi-nfv.html"
+OUTPUT="etsi-nfv-descriptors.html"
 IMG_NAME="sol006"
 VERSION=latest
 IMG="$IMG_NAME:$VERSION"

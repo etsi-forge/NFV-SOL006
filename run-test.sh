@@ -10,7 +10,7 @@ cd src
 echo "Testing compilation"
 CONFD_OPTS="--fail-on-warnings"
 CONFD_OPTS=""
-confdc -c $CONFD_OPTS -o /opt/confd/etc/confd/etsi-nfv.fxs etsi-nfv.yang
+confdc -c $CONFD_OPTS -o /opt/confd/etc/confd/etsi-nfv-descriptors.fxs etsi-nfv-descriptors.yang
 
 echo "Starting ConfD"
 confd

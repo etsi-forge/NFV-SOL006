@@ -1,6 +1,6 @@
 submodule etsi-nfv-pnf {
   yang-version 1.1;
-  belongs-to etsi-nfv {
+  belongs-to etsi-nfv-descriptors {
     prefix nfv;
   }
 
@@ -111,6 +111,7 @@ submodule etsi-nfv-pnf {
         reference
           "GS NFV-IFA014: Section 6.6.2, Pnfd information element";
       }
+      uses security-group-rule;
     }
   }
 }

@@ -1,6 +1,6 @@
-module etsi-nfv {
+module etsi-nfv-descriptors {
   yang-version 1.1;
-  namespace "urn:etsi:params:xml:ns:yang:etsi-nfv";
+  namespace "urn:etsi:nfv:yang:etsi-nfv-descriptors";
   prefix nfv;
 
   include etsi-nfv-common;
