@@ -44,7 +44,7 @@
       <container-format>bare</container-format>
       <disk-format>qcow2</disk-format>
       <min-ram>2.0</min-ram>
-      <image>http://www.cisco.com/asa.qcow2</image>
+      <image>http://mycompany.images.com/asa.qcow2</image>
     </sw-image-desc>
     <ext-cpd>
       <id>inside</id>
@@ -139,7 +139,7 @@
       <container-format>bare</container-format>
       <disk-format>qcow2</disk-format>
       <min-ram>2.0</min-ram>
-      <image>http://www.cisco.com/csr.qcow2</image>
+      <image>http://mycompany.images.com/csr.qcow2</image>
     </sw-image-desc>
     <ext-cpd>
       <id>left</id>
