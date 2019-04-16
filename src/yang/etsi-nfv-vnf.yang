@@ -2518,7 +2518,10 @@ submodule etsi-nfv-vnf {
             "Includes a VNF LCM script (e.g. written in a DSL as
              specified in requirement VNF_PACK.LCM.001) triggered to
              react to one of the events listed in the event
-             attribute.";
+             attribute.
+
+             The string value specified here is a path to a file in
+             the VNF package.";
           reference
             "GS NFV IFA011: Section 7.1.13 LifeCycleManagementScript
              information element";
