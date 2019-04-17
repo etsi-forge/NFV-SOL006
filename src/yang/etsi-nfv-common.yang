@@ -3,6 +3,9 @@ submodule etsi-nfv-common {
   belongs-to etsi-nfv-descriptors {
     prefix nfv;
   }
+  organization
+    "European Telecommunications Standards Institute (ETSI)";
+
   description
     "Common data types for ETSI data models.";
 
@@ -239,7 +242,7 @@ submodule etsi-nfv-common {
     description
       "Ephemeral type of storage.";
   }
-  
+
   /*
    * Typedefs
    */
@@ -316,14 +319,10 @@ submodule etsi-nfv-common {
 
   grouping connectivity-type {
     container connectivity-type {
-      list layer-protocol {
-	key "protocol";
-
-	leaf protocol {
-          type identityref {
-            base layer-protocol;
-          }
-	}
+      leaf-list layer-protocol {
+        type identityref {
+          base layer-protocol;
+        }
         description
           "Identifies the protocols that the VL uses (Ethernet,
            MPLS, ODU2, IPV4, IPV6, Pseudo-Wire). The top layer
@@ -631,17 +630,6 @@ submodule etsi-nfv-common {
          several VLANs. A cardinality of 0 implies that trunkMode
          is not configured for the Cp i.e. It is equivalent to
          Boolean value 'false'.";
-      reference
-        "GS NFV IFA011: Section 7.1.6.3 Cpd information element";
-    }
-
-    leaf security-group-rule-id {
-      type leafref {
-        path "/nfv/vnfd/security-group-rule/id";
-      }
-      description
-        "Reference of the security group rules bound to this
-         CPD.";
       reference
         "GS NFV IFA011: Section 7.1.6.3 Cpd information element";
     }

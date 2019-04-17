@@ -22,7 +22,19 @@ module etsi-nfv-descriptors {
   }
 
   container nfv {
-    uses vnfd;
+    list vnfd {
+      key "id";
+      description
+        "A VNF Descriptor (VNFD) is a deployment template which
+         describes a VNF in terms of deployment and operational
+         behaviour requirements. It also contains connectivity,
+         interface and virtualised resource requirements";
+      reference
+        "GS NFV-IFA011: Section 7.1.2, VNFD information element";
+
+      uses vnfd;
+    }
+
     uses nsd;
     uses pnfd;
   }

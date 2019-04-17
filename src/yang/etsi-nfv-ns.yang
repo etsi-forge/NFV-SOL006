@@ -1097,7 +1097,7 @@ submodule etsi-nfv-ns {
           leaf id {
             type string;
             description
-              "Identifier of Identifier of this 
+              "Identifier of Identifier of this
                AffinityOrAntiAffinityGroup information element.";
             reference
               "GS NFV IFA014: Section 6.3.5.2 AffinityOrAntiAffinity
@@ -1567,7 +1567,7 @@ submodule etsi-nfv-ns {
                  information element";
             }
           }
-	}
+        }
       }
       uses security-parameters;
     }
