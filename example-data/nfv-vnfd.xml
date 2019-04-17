@@ -1,4 +1,4 @@
-<pkg xmlns="urn:etsi:nfv:yang:etsi-nfv-pkg">
+<vnfd xmlns="urn:etsi:nfv:yang:etsi-nfv-vnfd">
   <id>ASA</id>
   <provider>My Company</provider>
   <product-name>My Company ASAv</product-name>
@@ -87,4 +87,4 @@
     </instantiation-level>
     <default-instantiation-level>single</default-instantiation-level>
   </df>
-</pkg>
+</vnfd>

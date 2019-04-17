@@ -1,6 +1,6 @@
-module etsi-nfv-pkg {
+module etsi-nfv-vnfd {
   yang-version 1.1;
-  namespace "urn:etsi:nfv:yang:etsi-nfv-pkg";
+  namespace "urn:etsi:nfv:yang:etsi-nfv-vnfd";
   prefix pkg;
 
   import etsi-nfv-descriptors {
@@ -11,7 +11,7 @@ module etsi-nfv-pkg {
     "European Telecommunications Standards Institute (ETSI)";
 
   description
-    "Network Function Virtualization Package.";
+    "Virtual Network Function Descriptor.";
 
   revision 2019-03-18 {
     description
@@ -19,8 +19,8 @@ module etsi-nfv-pkg {
        VNFD according to ETSI GS NFV-IFA 011 Ed261v254.";
   }
 
-  container pkg {
-    presence "Package container.";
+  container vnfd {
+    presence "VNFD container.";
     uses vnf:vnfd;
   }
 }

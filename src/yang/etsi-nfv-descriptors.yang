@@ -22,7 +22,7 @@ module etsi-nfv-descriptors {
   }
 
   container nfv {
-    list vnfd {
+    list vnfds {
       key "id";
       description
         "A VNF Descriptor (VNFD) is a deployment template which
@@ -35,7 +35,31 @@ module etsi-nfv-descriptors {
       uses vnfd;
     }
 
-    uses nsd;
-    uses pnfd;
+    list nsds {
+      key "id";
+
+      description
+        "The NSD information element is a deployment template whose
+         instances are used by the NFVO for the lifecycle
+         management of NSs.";
+      reference
+        "GS NFV-IFA014: Section 6.2.2, Network Service Descriptor
+         information element.";
+
+      uses nsd;
+    }
+
+    list pnfds {
+      key "id";
+
+      description
+	"The Pnfd information element is a deployment template
+         enabling on-boarding PNFs and referencing them from an
+         NSD. It focuses on connectivity aspects only.";
+      reference
+        "GS NFV-IFA014: Section 6.6.2, Pnfd information element.";
+
+      uses pnfd;
+    }
   }
 }

@@ -1,5 +1,5 @@
 <nfv xmlns="urn:etsi:nfv:yang:etsi-nfv-descriptors">
-  <vnfd>
+  <vnfds>
     <id>ASA</id>
     <provider>My Company</provider>
     <product-name>My Company ASAv</product-name>
@@ -100,8 +100,8 @@
       </instantiation-level>
       <default-instantiation-level>single</default-instantiation-level>
     </df>
-  </vnfd>
-  <vnfd>
+  </vnfds>
+  <vnfds>
     <id>CSR</id>
     <provider>My Company</provider>
     <product-name>My Company CSR 1000v</product-name>
@@ -202,8 +202,8 @@
       </instantiation-level>
       <default-instantiation-level>single</default-instantiation-level>
     </df>
-  </vnfd>
-  <nsd>
+  </vnfds>
+  <nsds>
     <id>firewall-nsd</id>
     <vnfd-id>ASA</vnfd-id>
     <sapd>
@@ -233,8 +233,8 @@
         </vnf-to-level-mapping>
       </ns-instantiation-level>
     </df>
-  </nsd>
-  <nsd>
+  </nsds>
+  <nsds>
     <id>service-chain-1</id>
     <vnfd-id>ASA</vnfd-id>
     <vnfd-id>CSR</vnfd-id>
@@ -483,8 +483,8 @@
         </vnf-to-level-mapping>
       </ns-instantiation-level>
     </df>
-  </nsd>
-  <nsd>
+  </nsds>
+  <nsds>
     <id>service-chain-2</id>
     <nested-nsd-id>firewall-nsd</nested-nsd-id>
     <vnfd-id>CSR</vnfd-id>
@@ -570,13 +570,13 @@
         </virtual-link-connectivity>
       </ns-profile>
     </df>
-  </nsd>
-  <pnfd>
+  </nsds>
+  <pnfds>
     <id>physical-dpi</id>
     <version>1.0</version>
     <ext-cpd>
       <id>outside</id>
       <layer-protocol>ethernet</layer-protocol>
     </ext-cpd>
-  </pnfd>
+  </pnfds>
 </nfv>
