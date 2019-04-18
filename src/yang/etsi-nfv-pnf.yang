@@ -12,7 +12,7 @@ submodule etsi-nfv-pnf {
   description
     "Models for PNFD according to GS NFV-IFA 014.";
 
-  revision 2019-03-18 {
+  revision 2019-04-25 {
     description
       "Initial revision.
 

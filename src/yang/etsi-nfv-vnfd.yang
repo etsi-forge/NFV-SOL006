@@ -1,7 +1,7 @@
 module etsi-nfv-vnfd {
   yang-version 1.1;
   namespace "urn:etsi:nfv:yang:etsi-nfv-vnfd";
-  prefix pkg;
+  prefix vnfd;
 
   import etsi-nfv-descriptors {
     prefix vnf;

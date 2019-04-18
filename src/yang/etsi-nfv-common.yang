@@ -9,7 +9,7 @@ submodule etsi-nfv-common {
   description
     "Common data types for ETSI data models.";
 
-  revision 2019-03-18 {
+  revision 2019-04-25 {
     description
       "Initial revision
 

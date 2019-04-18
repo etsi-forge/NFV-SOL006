@@ -11,7 +11,7 @@ submodule etsi-nfv-ns {
   description
     "Models for NS according to ETSI GS NFV-IFA 014.";
 
-  revision 2019-03-18 {
+  revision 2019-04-25 {
     description
       "Initial revision
        Common data structure to support NSD according to:
@@ -86,7 +86,7 @@ submodule etsi-nfv-ns {
     leaf-list nested-nsd-id {
       must ". != ../id";
       type leafref {
-        path "../../nsds/id";
+        path "../../nsd/id";
       }
       description
         "References the NSD of a constituent nested NS.";
@@ -97,7 +97,7 @@ submodule etsi-nfv-ns {
 
     leaf-list vnfd-id {
       type leafref {
-        path "../../vnfds/id";
+        path "../../vnfd/id";
       }
       description
         "References the VNFD of a constituent VNF.";
@@ -108,7 +108,7 @@ submodule etsi-nfv-ns {
 
     leaf-list pnfd-id {
       type leafref {
-        path "../../pnfds/id";
+        path "../../pnfd/id";
       }
       description
         "References the PNFD of a constituent PNF.";
@@ -164,7 +164,7 @@ submodule etsi-nfv-ns {
             leaf vnfd-id {
               mandatory true;
               type leafref {
-                path "../../../../nfv:vnfds/nfv:id";
+                path "../../../../vnfd/id";
               }
               must "boolean(../../../vnfd-id[.=current()])";
             }
@@ -172,7 +172,7 @@ submodule etsi-nfv-ns {
             leaf ext-cpd-id {
               mandatory true;
               type leafref {
-                path "deref(../vnfd-id)/../nfv:ext-cpd/nfv:id";
+                path "deref(../vnfd-id)/../ext-cpd/id";
               }
             }
           }
@@ -181,7 +181,7 @@ submodule etsi-nfv-ns {
             leaf pnfd-id {
               mandatory true;
               type leafref {
-                path "../../../../nfv:pnfds/nfv:id";
+                path "../../../../pnfd/id";
               }
               must "boolean(../pnfd-id[.=current()])";
             }
@@ -189,7 +189,7 @@ submodule etsi-nfv-ns {
             leaf ext-cpd-id {
               mandatory true;
               type leafref {
-                path "deref(../pnfd-id)/../nfv:ext-cpd/nfv:id";
+                path "deref(../pnfd-id)/../ext-cpd/id";
               }
             }
           }
@@ -197,7 +197,7 @@ submodule etsi-nfv-ns {
             leaf nsd-id {
               mandatory true;
               type leafref {
-                path "../../../../nfv:nsds/nfv:id";
+                path "../../../../nsd/id";
               }
               must "boolean(../nsd-id[.=current()])";
             }
@@ -205,7 +205,7 @@ submodule etsi-nfv-ns {
             leaf ext-cpd-id {
               mandatory true;
               type leafref {
-                path "deref(../nsd-id)/../nfv:sapd/nfv:id";
+                path "deref(../nsd-id)/../sapd/id";
               }
             }
           }
@@ -437,7 +437,7 @@ submodule etsi-nfv-ns {
               must ". = deref(../../vnfd-profile-id)" {
               }
               type leafref {
-                path "/nfv/nsds/df/vnf-profile/id";
+                path "../../../../../nsd/df/vnf-profile/id";
               }
             }
           }
@@ -446,7 +446,7 @@ submodule etsi-nfv-ns {
               must ". = deref(../../pnfd-profile-id)" {
               }
               type leafref {
-                path "/nfv/nsds/df/pnf-profile/id";
+                path "../../../../../nsd/df/pnf-profile/id";
               }
             }
           }
@@ -455,7 +455,7 @@ submodule etsi-nfv-ns {
               must ". = deref(../../ns-profile-id)" {
               }
               type leafref {
-                path "/nfv/nsds/df/ns-profile/id";
+                path "../../../../../nsd/df/ns-profile/id";
               }
             }
           }
@@ -472,12 +472,12 @@ submodule etsi-nfv-ns {
               must ". = deref(../../vnfd-profile-id)/../vnfd-id" {
               }
               type leafref {
-                path "/nfv/vnfds/id";
+                path "../../../../../vnfd/id";
               }
             }
             leaf cpd-id {
               type leafref {
-                path "deref(../vnfd-id)/../nfv:ext-cpd/nfv:id";
+                path "deref(../vnfd-id)/../ext-cpd/id";
               }
             }
           }
@@ -486,12 +486,12 @@ submodule etsi-nfv-ns {
               must ". = deref(../../pnfd-profile-id)/../pnfd-id" {
               }
               type leafref {
-                path "/nfv/pnfds/id";
+                path "../../../../../pnfd/id";
               }
             }
             leaf pnf-cpd-id {
               type leafref {
-                path "deref(../pnfd-id)/../nfv:ext-cpd/nfv:id";
+                path "deref(../pnfd-id)/../ext-cpd/id";
               }
             }
           }
@@ -502,12 +502,12 @@ submodule etsi-nfv-ns {
               }
 
               type leafref {
-                path "/nfv/nsds/id";
+                path "../../../../../nsd/id";
               }
             }
             leaf sap-cpd-id {
               type leafref {
-                path "deref(../nsd-id)/../nfv:sapd/nfv:id";
+                path "deref(../nsd-id)/../sapd/id";
               }
             }
           }
@@ -721,7 +721,7 @@ submodule etsi-nfv-ns {
         leaf vnfd-id {
           mandatory true;
           type leafref {
-            path "/nfv/vnfds/id";
+            path "../../../../vnfd/id";
           }
           description
             "References a VNFD.";
@@ -845,7 +845,7 @@ submodule etsi-nfv-ns {
 
             leaf constituent-cpd-id {
               type leafref {
-                path "deref(../../../vnfd-id)/../nfv:ext-cpd/nfv:id";
+                path "deref(../../../vnfd-id)/../ext-cpd/id";
               }
               description
                 "A reference to the descriptor of a connection point
@@ -879,7 +879,7 @@ submodule etsi-nfv-ns {
 
         leaf pnfd-id {
           type leafref {
-            path "/nfv/pnfds/id";
+            path "../../../../pnfd/id";
           }
           description
             "References a PNFD.";
@@ -935,7 +935,7 @@ submodule etsi-nfv-ns {
 
             leaf constituent-cpd-id {
               type leafref {
-                path "deref(../../../pnfd-id)/../nfv:ext-cpd/nfv:id";
+                path "deref(../../../pnfd-id)/../ext-cpd/id";
               }
               description
                 "A reference to the descriptor of a connection point
@@ -1314,7 +1314,7 @@ submodule etsi-nfv-ns {
         leaf nsd-id {
           mandatory true;
           type leafref {
-            path "/nfv/nsds/id";
+            path "../../../../nsd/id";
           }
           description
             "Identifies the NSD applicable to NS instantiated
@@ -1432,7 +1432,7 @@ submodule etsi-nfv-ns {
 
             leaf constituent-cpd-id {
               type leafref {
-                path "deref(../../../nsd-id)/../nfv:sapd/nfv:id";
+                path "deref(../../../nsd-id)/../sapd/id";
               }
               description
                 "A reference to the descriptor of a connection point
@@ -1506,7 +1506,7 @@ submodule etsi-nfv-ns {
         container vnf-indicator-info {
           leaf vnfd-id {
             type leafref {
-              path "/nfv/vnfds/id";
+              path "../../../../../vnfd/id";
             }
             description
               "Identifies a VNFD.";
