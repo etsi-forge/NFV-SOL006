@@ -37,6 +37,13 @@ module etsi-nfv-nsd {
       key "id";
       max-elements 1;
       uses vnf:nsd;
+      description
+	"The NSD information element is a deployment template whose
+         instances are used by the NFVO for the lifecycle management
+         of NSs.";
+      reference
+        "GS NFV-IFA014: Section 6.2.2, Network Service Descriptor
+         information element";
     }
 
     list pnfd {
