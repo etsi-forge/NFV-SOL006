@@ -1105,7 +1105,7 @@ submodule etsi-nfv-ns {
              information element";
         }
 
-        leaf affinity-type {
+        leaf type {
           mandatory true;
           type affinity-type;
           description
@@ -1116,7 +1116,7 @@ submodule etsi-nfv-ns {
              information element";
         }
 
-        leaf affinity-scope {
+        leaf scope {
           mandatory true;
           type affinity-scope;
           description
