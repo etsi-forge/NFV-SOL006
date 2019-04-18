@@ -1,4 +1,4 @@
-<nfv xmlns="urn:etsi:params:xml:ns:yang:etsi-nfv">
+<nfv xmlns="urn:etsi:nfv:yang:etsi-nfv-descriptors">
   <vnfd>
     <id>ASA</id>
     <provider>My Company</provider>
@@ -11,21 +11,21 @@
       <name>Firewall VDU</name>
       <int-cpd>
         <id>inside</id>
-        <layer-protocol>Ethernet</layer-protocol>
+        <layer-protocol>ethernet</layer-protocol>
       </int-cpd>
       <int-cpd>
         <id>management</id>
-        <layer-protocol>Ethernet</layer-protocol>
+        <layer-protocol>ethernet</layer-protocol>
       </int-cpd>
       <int-cpd>
         <id>outside</id>
-        <layer-protocol>Ethernet</layer-protocol>
+        <layer-protocol>ethernet</layer-protocol>
       </int-cpd>
       <virtual-compute-desc>asa-vcd</virtual-compute-desc>
       <virtual-storage-desc>asa-vsd</virtual-storage-desc>
       <sw-image-desc>asa-image</sw-image-desc>
     </vdu>
-    <virtual-compute-descriptor>
+    <virtual-compute-desc>
       <id>asa-vcd</id>
       <virtual-memory>
         <size>4.0</size>
@@ -33,19 +33,26 @@
       <virtual-cpu>
         <num-virtual-cpu>2</num-virtual-cpu>
       </virtual-cpu>
-    </virtual-compute-descriptor>
+    </virtual-compute-desc>
     <virtual-storage-descriptor>
       <id>asa-vsd</id>
-      <type-of-storage>root</type-of-storage>
+      <type-of-storage>root-storage</type-of-storage>
       <size-of-storage>0</size-of-storage>
     </virtual-storage-descriptor>
     <sw-image-desc>
       <id>asa-image</id>
+      <name>ASA image</name>
+      <version>1.1</version>
+      <checksum>
+	<algorithm>sha-224</algorithm>
+	<hash>deadbeef</hash>
+      </checksum>
       <container-format>bare</container-format>
       <disk-format>qcow2</disk-format>
       <min-disk>1</min-disk>
       <min-ram>2.0</min-ram>
-      <image>http://www.cisco.com/asa.qcow2</image>
+      <size>1</size>
+      <image>http://mycompany.images.com/asa.qcow2</image>
     </sw-image-desc>
     <ext-cpd>
       <id>inside</id>
@@ -53,7 +60,7 @@
 	<vdu-id>firewall</vdu-id>
 	<cpd>inside</cpd>
       </int-cpd>
-      <layer-protocol>Ethernet</layer-protocol>
+      <layer-protocol>ethernet</layer-protocol>
     </ext-cpd>
     <ext-cpd>
       <id>management</id>
@@ -61,7 +68,7 @@
 	<vdu-id>firewall</vdu-id>
 	<cpd>management</cpd>
       </int-cpd>
-      <layer-protocol>Ethernet</layer-protocol>
+      <layer-protocol>ethernet</layer-protocol>
     </ext-cpd>
     <ext-cpd>
       <id>outside</id>
@@ -69,7 +76,7 @@
 	<vdu-id>firewall</vdu-id>
 	<cpd>outside</cpd>
       </int-cpd>
-      <layer-protocol>Ethernet</layer-protocol>
+      <layer-protocol>ethernet</layer-protocol>
     </ext-cpd>
     <df>
       <id>normal</id>
@@ -81,14 +88,14 @@
       <instantiation-level>
         <id>double</id>
         <vdu-level>
-          <id>firewall</id>
+          <vdu-id>firewall</vdu-id>
           <number-of-instances>2</number-of-instances>
         </vdu-level>
       </instantiation-level>
       <instantiation-level>
         <id>single</id>
         <vdu-level>
-          <id>firewall</id>
+          <vdu-id>firewall</vdu-id>
           <number-of-instances>1</number-of-instances>
         </vdu-level>
       </instantiation-level>
@@ -118,21 +125,21 @@
       <name>Router VDU</name>
       <int-cpd>
         <id>left</id>
-        <layer-protocol>Ethernet</layer-protocol>
+        <layer-protocol>ethernet</layer-protocol>
       </int-cpd>
       <int-cpd>
         <id>management</id>
-        <layer-protocol>Ethernet</layer-protocol>
+        <layer-protocol>ethernet</layer-protocol>
       </int-cpd>
       <int-cpd>
         <id>right</id>
-        <layer-protocol>Ethernet</layer-protocol>
+        <layer-protocol>ethernet</layer-protocol>
       </int-cpd>
       <virtual-compute-desc>csr-vcd</virtual-compute-desc>
       <virtual-storage-desc>csr-vsd</virtual-storage-desc>
       <sw-image-desc>csr-image</sw-image-desc>
     </vdu>
-    <virtual-compute-descriptor>
+    <virtual-compute-desc>
       <id>csr-vcd</id>
       <virtual-memory>
         <size>4.0</size>
@@ -140,19 +147,26 @@
       <virtual-cpu>
         <num-virtual-cpu>2</num-virtual-cpu>
       </virtual-cpu>
-    </virtual-compute-descriptor>
+    </virtual-compute-desc>
     <virtual-storage-descriptor>
       <id>csr-vsd</id>
-      <type-of-storage>root</type-of-storage>
+      <type-of-storage>root-storage</type-of-storage>
       <size-of-storage>0</size-of-storage>
     </virtual-storage-descriptor>
     <sw-image-desc>
       <id>csr-image</id>
+      <name>CSR image</name>
+      <version>1.1</version>
+      <checksum>
+	<algorithm>sha-224</algorithm>
+	<hash>deadbeef</hash>
+      </checksum>
       <container-format>bare</container-format>
       <disk-format>qcow2</disk-format>
       <min-disk>1</min-disk>
       <min-ram>2.0</min-ram>
-      <image>http://www.cisco.com/csr.qcow2</image>
+      <size>1</size>
+      <image>http://mycompany.images.com/csr.qcow2</image>
     </sw-image-desc>
     <ext-cpd>
       <id>left</id>
@@ -160,7 +174,7 @@
 	<vdu-id>router</vdu-id>
 	<cpd>left</cpd>
       </int-cpd>
-      <layer-protocol>Ethernet</layer-protocol>
+      <layer-protocol>ethernet</layer-protocol>
     </ext-cpd>
     <ext-cpd>
       <id>management</id>
@@ -168,7 +182,7 @@
 	<vdu-id>router</vdu-id>
 	<cpd>management</cpd>
       </int-cpd>
-      <layer-protocol>Ethernet</layer-protocol>
+      <layer-protocol>ethernet</layer-protocol>
     </ext-cpd>
     <ext-cpd>
       <id>right</id>
@@ -176,7 +190,7 @@
 	<vdu-id>router</vdu-id>
 	<cpd>right</cpd>
       </int-cpd>
-      <layer-protocol>Ethernet</layer-protocol>
+      <layer-protocol>ethernet</layer-protocol>
     </ext-cpd>
     <df>
       <id>normal</id>
@@ -188,14 +202,14 @@
       <instantiation-level>
         <id>double</id>
         <vdu-level>
-          <id>router</id>
+          <vdu-id>router</vdu-id>
           <number-of-instances>2</number-of-instances>
         </vdu-level>
       </instantiation-level>
       <instantiation-level>
         <id>single</id>
         <vdu-level>
-          <id>router</id>
+          <vdu-id>router</vdu-id>
           <number-of-instances>1</number-of-instances>
         </vdu-level>
       </instantiation-level>
@@ -267,7 +281,7 @@
       <id>fw2dpi</id>
       <connectivity-type>
         <layer-protocol>
-	  <protocol>Ethernet</protocol>
+	  <protocol>ethernet</protocol>
 	</layer-protocol>
       </connectivity-type>
       <df>
@@ -282,7 +296,7 @@
       <id>mgmt</id>
       <connectivity-type>
         <layer-protocol>
-	  <protocol>IPv4</protocol>
+	  <protocol>ipv4</protocol>
 	</layer-protocol>
       </connectivity-type>
       <df>
@@ -297,7 +311,7 @@
       <id>r2fw</id>
       <connectivity-type>
         <layer-protocol>
-	  <protocol>Ethernet</protocol>
+	  <protocol>ethernet</protocol>
 	</layer-protocol>
       </connectivity-type>
       <df>
@@ -522,7 +536,7 @@
       <id>r2fw</id>
       <connectivity-type>
         <layer-protocol>
-	  <protocol>Ethernet</protocol>
+	  <protocol>ipv4</protocol>
 	</layer-protocol>
       </connectivity-type>
       <df>
@@ -594,7 +608,7 @@
     <version>1.0</version>
     <ext-cpd>
       <id>outside</id>
-      <layer-protocol>Ethernet</layer-protocol>
+      <layer-protocol>ethernet</layer-protocol>
     </ext-cpd>
   </pnfd>
 </nfv>

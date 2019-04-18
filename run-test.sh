@@ -10,13 +10,15 @@ cd src
 echo "Testing compilation"
 CONFD_OPTS="--fail-on-warnings"
 CONFD_OPTS=""
-confdc -c $CONFD_OPTS -o /opt/confd/etc/confd/etsi-nfv.fxs etsi-nfv.yang
+confdc -c $CONFD_OPTS -o /opt/confd/etc/confd/etsi-nfv-descriptors.fxs etsi-nfv-descriptors.yang
 
 echo "Starting ConfD"
 confd
 
-echo "Loading Data"
+echo "Loading data for the simple example"
 confd_load -l -m nfv.xml
+echo "Loading data for the complex Vnfd example"
+confd_load -l -m complex-vnfd.xml
 
 # Don't do this in the actual test, just waste of cycles
 # echo "Stopping ConfD"

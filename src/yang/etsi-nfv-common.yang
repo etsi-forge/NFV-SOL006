@@ -1,6 +1,6 @@
 submodule etsi-nfv-common {
   yang-version 1.1;
-  belongs-to etsi-nfv {
+  belongs-to etsi-nfv-descriptors {
     prefix nfv;
   }
   description
@@ -20,22 +20,22 @@ submodule etsi-nfv-common {
    */
   identity layer-protocol {
   }
-  identity Ethernet {
+  identity ethernet {
     base layer-protocol;
   }
-  identity MPLS {
+  identity mpls {
     base layer-protocol;
   }
-  identity ODU2 {
+  identity odu2 {
     base layer-protocol;
   }
-  identity IPv4 {
+  identity ipv4 {
     base layer-protocol;
   }
-  identity IPv6 {
+  identity ipv6 {
     base layer-protocol;
   }
-  identity Pseudo-Wire {
+  identity pseudo-wire {
     base layer-protocol;
   }
 
@@ -177,6 +177,69 @@ submodule etsi-nfv-common {
     base cp-role;
   }
 
+  identity checksum-algorithm {
+    description
+      "Identifies the algorithms supported for the purpose of
+       calculating the checksum.";
+    reference
+      "GS NFV IFA011: Section 7.1.6.10 Checksum information element.";
+  }
+
+  identity sha-224 {
+    base checksum-algorithm;
+    description
+      "SHA-224.";
+    reference
+      "GS NFV IFA011: Section 7.1.6.10 Checksum information element.";
+  }
+
+  identity sha-256 {
+    base checksum-algorithm;
+    description
+      "SHA-256.";
+    reference
+      "GS NFV IFA011: Section 7.1.6.10 Checksum information element.";
+  }
+
+  identity sha-384 {
+    base checksum-algorithm;
+    description
+      "SHA-384.";
+    reference
+      "GS NFV IFA011: Section 7.1.6.10 Checksum information element.";
+  }
+
+  identity sha-512 {
+    base checksum-algorithm;
+    description
+      "SHA-512.";
+    reference
+      "GS NFV IFA011: Section 7.1.6.10 Checksum information element.";
+  }
+
+  identity storage-type {
+    description
+      "Base type of storage that identities can derive from.";
+  }
+
+  identity root-storage {
+    base storage-type;
+    description
+      "Root type of storage.";
+  }
+
+  identity swap-storage {
+    base storage-type;
+    description
+      "Swap type of storage.";
+  }
+
+  identity ephemeral-storage {
+    base storage-type;
+    description
+      "Ephemeral type of storage.";
+  }
+  
   /*
    * Typedefs
    */
@@ -257,13 +320,13 @@ submodule etsi-nfv-common {
 	key "protocol";
 
 	leaf protocol {
-	  type identityref {
-	    base layer-protocol;
-	  }
+          type identityref {
+            base layer-protocol;
+          }
 	}
         description
-          "Identifies the protocol this VL gives access to (Ethernet,
-           MPLS, ODU2, IPV4, IPV6, Pseudo-Wire).The top layer
+          "Identifies the protocols that the VL uses (Ethernet,
+           MPLS, ODU2, IPV4, IPV6, Pseudo-Wire). The top layer
            protocol of the VL protocol stack shall always be provided.
            The lower layer protocols may be included when there are
            specific requirements on these layers.";
@@ -392,7 +455,7 @@ submodule etsi-nfv-common {
     }
 
     leaf-list layer-protocol {
-      default Ethernet;
+      default ethernet;
       type identityref {
         base layer-protocol;
       }
