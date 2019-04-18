@@ -545,7 +545,7 @@ submodule etsi-nfv-vnf {
               range "0..max";
             }
             units "GB";
-            default 1;
+            mandatory true;
             description
               "Amount of virtual memory in GB.";
             reference
@@ -741,7 +741,7 @@ submodule etsi-nfv-vnf {
         leaf size-of-storage {
           type uint64;
           units "GB";
-          default 0;
+          mandatory true;
           description
             "Size of virtualised storage resource (e.g. size of
              volume, in GB)";
@@ -959,7 +959,7 @@ submodule etsi-nfv-vnf {
         leaf min-disk {
           type uint64;
           units "GB";
-          default 0;
+          mandatory true;
           description
             "The minimal disk size requirement for this software
              image. The value of the 'size of storage' attribute
@@ -1477,7 +1477,7 @@ submodule etsi-nfv-vnf {
                   enum ipv4;
                   enum ipv6;
                 }
-                default "ipv4";
+                mandatory true;
                 description
                   "Specifies IP version of this L3 protocol.
                    Value:
@@ -1796,7 +1796,7 @@ submodule etsi-nfv-vnf {
 
             leaf arbitrary-target-levels-supported {
               type boolean;
-              default "false";
+              mandatory true;
               description
                 "Signals whether scaling according to the parameter
                  'scaleInfo' is supported by this VNF.";
@@ -1851,7 +1851,7 @@ submodule etsi-nfv-vnf {
 
             leaf min-graceful-termination {
               type yang:timeticks;
-              default "1";
+              mandatory true;
               description
                 "Minimum timeout value for graceful termination of
                  a VNF instance.";
@@ -1903,7 +1903,7 @@ submodule etsi-nfv-vnf {
 
             leaf min-graceful-stop-timeout {
               type yang:timeticks;
-              default "1";
+              mandatory true;
               description
                 "Minimum timeout value for graceful stop of a VNF
                  instance.";

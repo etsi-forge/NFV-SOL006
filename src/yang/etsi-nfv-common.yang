@@ -532,7 +532,7 @@ submodule etsi-nfv-common {
           when "../type='mac-address'";
           leaf mac-address-assignment {
             type boolean;
-            default true;
+            mandatory true;
             description
               "Specify if the MAC address assignment is the
                responsibility of management and orchestration function
@@ -558,7 +558,7 @@ submodule etsi-nfv-common {
           when "../type='ip-address'";
           leaf ip-address-assignment {
             type boolean;
-            default "true";
+            mandatory true;
             description
               "Specify if the address assignment is the responsibility
                of management and orchestration function or not. If it
@@ -571,7 +571,7 @@ submodule etsi-nfv-common {
 
           leaf floating-ip-activated {
             type boolean;
-            default "true";
+            mandatory true;
             description
               "Specify if the floating IP scheme is activated on the CP
                or not.";

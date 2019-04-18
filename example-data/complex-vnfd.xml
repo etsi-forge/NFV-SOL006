@@ -93,6 +93,7 @@
       </checksum>
       <container-format>bare</container-format>
       <disk-format>qcow2</disk-format>
+      <min-disk>1</min-disk>
       <min-ram>2.0</min-ram>
       <size>1</size>
       <image>http://mycompany.images.com/control-plane.qcow2</image>
@@ -107,6 +108,7 @@
       </checksum>
       <container-format>bare</container-format>
       <disk-format>qcow2</disk-format>
+      <min-disk>1</min-disk>
       <min-ram>2.0</min-ram>
       <size>1</size>
       <image>http://mycompany.images.com/data-plane.qcow2</image>
@@ -202,6 +204,17 @@
         </vdu-level>
       </instantiation-level>
       <default-instantiation-level>il-1</default-instantiation-level>
+      <lcm-operations-configuration>
+	<scale-vnf-to-level-op-config>
+	  <arbitrary-target-levels-supported>true</arbitrary-target-levels-supported>
+	</scale-vnf-to-level-op-config>
+	<terminate-vnf-op-config>
+	  <min-graceful-termination>1</min-graceful-termination>
+	</terminate-vnf-op-config>
+	<operate-vnf-op-config>
+	  <min-graceful-stop-timeout>1</min-graceful-stop-timeout>
+	</operate-vnf-op-config>
+      </lcm-operations-configuration>
       <affinity-or-anti-affinity-group>
         <id>control-plane</id>
         <type>anti-affinity</type>
@@ -262,6 +275,17 @@
         </vdu-level>
       </instantiation-level>
       <default-instantiation-level>il-1</default-instantiation-level>
+      <lcm-operations-configuration>
+	<scale-vnf-to-level-op-config>
+	  <arbitrary-target-levels-supported>true</arbitrary-target-levels-supported>
+	</scale-vnf-to-level-op-config>
+	<terminate-vnf-op-config>
+	  <min-graceful-termination>1</min-graceful-termination>
+	</terminate-vnf-op-config>
+	<operate-vnf-op-config>
+	  <min-graceful-stop-timeout>1</min-graceful-stop-timeout>
+	</operate-vnf-op-config>
+      </lcm-operations-configuration>
       <affinity-or-anti-affinity-group>
         <id>control-plane</id>
         <type>anti-affinity</type>

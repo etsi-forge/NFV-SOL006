@@ -1345,6 +1345,7 @@ submodule etsi-nfv-ns {
               "GS NFV IFA014: Section 6.3.11.2 NsProfile information
                element";
           }
+
           leaf min-number-of-instances {
             type uint16;
             default 1;
