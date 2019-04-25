@@ -33,6 +33,8 @@ confd_load -l -m nfv-nsd.xml
 
 echo "Loading Data for descriptors"
 confd_load -l -m nfv.xml
+echo "Loading data for the complex Vnfd example"
+confd_load -l -m complex-vnfd.xml
 
 
 # Don't do this in the actual test, just waste of cycles

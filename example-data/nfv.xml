@@ -49,9 +49,10 @@
       </checksum>
       <container-format>bare</container-format>
       <disk-format>qcow2</disk-format>
+      <min-disk>1</min-disk>
       <min-ram>2.0</min-ram>
       <size>1</size>
-      <image>http://www.cisco.com/asa.qcow2</image>
+      <image>http://mycompany.images.com/asa.qcow2</image>
     </sw-image-desc>
     <ext-cpd>
       <id>inside</id>
@@ -99,6 +100,17 @@
         </vdu-level>
       </instantiation-level>
       <default-instantiation-level>single</default-instantiation-level>
+      <lcm-operations-configuration>
+	<scale-vnf-to-level-op-config>
+	  <arbitrary-target-levels-supported>true</arbitrary-target-levels-supported>
+	</scale-vnf-to-level-op-config>
+	<terminate-vnf-op-config>
+	  <min-graceful-termination>1</min-graceful-termination>
+	</terminate-vnf-op-config>
+	<operate-vnf-op-config>
+	  <min-graceful-stop-timeout>1</min-graceful-stop-timeout>
+	</operate-vnf-op-config>
+      </lcm-operations-configuration>
     </df>
   </vnfd>
   <vnfd>
@@ -151,9 +163,10 @@
       </checksum>
       <container-format>bare</container-format>
       <disk-format>qcow2</disk-format>
+      <min-disk>1</min-disk>
       <min-ram>2.0</min-ram>
       <size>1</size>
-      <image>http://www.cisco.com/csr.qcow2</image>
+      <image>http://mycompany.images.com/csr.qcow2</image>
     </sw-image-desc>
     <ext-cpd>
       <id>left</id>
@@ -201,6 +214,17 @@
         </vdu-level>
       </instantiation-level>
       <default-instantiation-level>single</default-instantiation-level>
+      <lcm-operations-configuration>
+	<scale-vnf-to-level-op-config>
+	  <arbitrary-target-levels-supported>true</arbitrary-target-levels-supported>
+	</scale-vnf-to-level-op-config>
+	<terminate-vnf-op-config>
+	  <min-graceful-termination>1</min-graceful-termination>
+	</terminate-vnf-op-config>
+	<operate-vnf-op-config>
+	  <min-graceful-stop-timeout>1</min-graceful-stop-timeout>
+	</operate-vnf-op-config>
+      </lcm-operations-configuration>
     </df>
   </vnfd>
   <nsd>

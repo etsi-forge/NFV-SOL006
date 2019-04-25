@@ -1004,20 +1004,20 @@ submodule etsi-nfv-vnf {
            the underlying disk image.";
       }
 
-      leaf min-disk {
-        type uint64;
-        units "GB";
-        default 0;
-        description
-          "The minimal disk size requirement for this software
-           image. The value of the 'size of storage' attribute
-           of the VirtualStorageDesc referencing this
-           SwImageDesc shall not be smaller than the value of
-           minDisk.";
-        reference
-          "GS NFV IFA011: Section 7.1.6.5, SwImageDesc
-           information element.";
-      }
+        leaf min-disk {
+          type uint64;
+          units "GB";
+          mandatory true;
+          description
+            "The minimal disk size requirement for this software
+             image. The value of the 'size of storage' attribute
+             of the VirtualStorageDesc referencing this
+             SwImageDesc shall not be smaller than the value of
+             minDisk.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.5, SwImageDesc
+             information element.";
+        }
 
       leaf min-ram {
         type decimal64 {
@@ -2648,6 +2648,17 @@ submodule etsi-nfv-vnf {
 
         leaf key {
           type string;
+          description
+            "Includes a VNF LCM script (e.g. written in a DSL as
+             specified in requirement VNF_PACK.LCM.001) triggered to
+             react to one of the events listed in the event
+             attribute.
+
+             The string value specified here is a path to a file in
+             the VNF package.";
+          reference
+            "GS NFV IFA011: Section 7.1.13 LifeCycleManagementScript
+             information element";
         }
 
         leaf value {
