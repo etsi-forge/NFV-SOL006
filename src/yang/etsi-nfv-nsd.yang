@@ -1,27 +1,25 @@
-module etsi-nfv-descriptors {
+module etsi-nfv-nsd {
   yang-version 1.1;
-  namespace "urn:etsi:nfv:yang:etsi-nfv-descriptors";
-  prefix nfv;
+  namespace "urn:etsi:nfv:yang:etsi-nfv-nsd";
+  prefix nsd;
 
-  include etsi-nfv-common;
-  include etsi-nfv-ns;
-  include etsi-nfv-vnf;
-  include etsi-nfv-pnf;
+  import etsi-nfv-descriptors {
+    prefix vnf;
+  }
 
   organization
     "European Telecommunications Standards Institute (ETSI)";
 
   description
-    "Network Function Virtualization Descriptors";
+    "Network Services Descriptors";
 
   revision 2019-04-25 {
     description
       "Initial revision.
-       NSD and PNFD according to ETSI GS NFV-IFA 014 Ed261v252
-       VNFD according to ETSI GS NFV-IFA 011 Ed261v254";
+       NSD according to ETSI GS NFV-IFA 014 Ed261v252.";
   }
 
-  container nfv {
+  container nsd {
     list vnfd {
       key "id";
       description
@@ -32,21 +30,20 @@ module etsi-nfv-descriptors {
       reference
         "GS NFV-IFA011: Section 7.1.2, VNFD information element";
 
-      uses vnfd;
+      uses vnf:vnfd;
     }
 
     list nsd {
       key "id";
-
+      max-elements 1;
+      uses vnf:nsd;
       description
-        "The NSD information element is a deployment template whose
-         instances are used by the NFVO for the lifecycle
-         management of NSs.";
+	"The NSD information element is a deployment template whose
+         instances are used by the NFVO for the lifecycle management
+         of NSs.";
       reference
         "GS NFV-IFA014: Section 6.2.2, Network Service Descriptor
-         information element.";
-
-      uses nsd;
+         information element";
     }
 
     list pnfd {
@@ -59,7 +56,7 @@ module etsi-nfv-descriptors {
       reference
         "GS NFV-IFA014: Section 6.6.2, Pnfd information element.";
 
-      uses pnfd;
+      uses vnf:pnfd;
     }
   }
 }

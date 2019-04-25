@@ -34,11 +34,11 @@
         <num-virtual-cpu>2</num-virtual-cpu>
       </virtual-cpu>
     </virtual-compute-desc>
-    <virtual-storage-descriptor>
+    <virtual-storage-desc>
       <id>asa-vsd</id>
       <type-of-storage>root-storage</type-of-storage>
       <size-of-storage>0</size-of-storage>
-    </virtual-storage-descriptor>
+    </virtual-storage-desc>
     <sw-image-desc>
       <id>asa-image</id>
       <name>ASA image</name>
@@ -148,11 +148,11 @@
         <num-virtual-cpu>2</num-virtual-cpu>
       </virtual-cpu>
     </virtual-compute-desc>
-    <virtual-storage-descriptor>
+    <virtual-storage-desc>
       <id>csr-vsd</id>
       <type-of-storage>root-storage</type-of-storage>
       <size-of-storage>0</size-of-storage>
-    </virtual-storage-descriptor>
+    </virtual-storage-desc>
     <sw-image-desc>
       <id>csr-image</id>
       <name>CSR image</name>
@@ -280,9 +280,7 @@
     <virtual-link-desc>
       <id>fw2dpi</id>
       <connectivity-type>
-        <layer-protocol>
-	  <protocol>ethernet</protocol>
-	</layer-protocol>
+        <layer-protocol>ethernet</layer-protocol>
       </connectivity-type>
       <df>
         <id>normal</id>
@@ -295,9 +293,7 @@
     <virtual-link-desc>
       <id>mgmt</id>
       <connectivity-type>
-        <layer-protocol>
-	  <protocol>ipv4</protocol>
-	</layer-protocol>
+        <layer-protocol>ipv4</layer-protocol>
       </connectivity-type>
       <df>
         <id>normal</id>
@@ -310,9 +306,7 @@
     <virtual-link-desc>
       <id>r2fw</id>
       <connectivity-type>
-        <layer-protocol>
-	  <protocol>ethernet</protocol>
-	</layer-protocol>
+        <layer-protocol>ethernet</layer-protocol>
       </connectivity-type>
       <df>
         <id>normal</id>
@@ -535,9 +529,7 @@
     <virtual-link-desc>
       <id>r2fw</id>
       <connectivity-type>
-        <layer-protocol>
-	  <protocol>ipv4</protocol>
-	</layer-protocol>
+        <layer-protocol>ipv4</layer-protocol>
       </connectivity-type>
       <df>
         <id>r2fw</id>
