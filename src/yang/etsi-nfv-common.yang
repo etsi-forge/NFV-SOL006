@@ -243,6 +243,43 @@ submodule etsi-nfv-common {
       "Ephemeral type of storage.";
   }
 
+  identity forwarding-behaviour {
+    description
+      "Base identity for forwarding behaviour.";
+  }
+
+  identity all {
+    base forwarding-behaviour;
+    description
+      "Traffic flows shall be forwarded simultaneously to all CP
+       or SAP instances created from the referenced CP profile(s).";
+  }
+
+  identity lb {
+    base forwarding-behaviour;
+    description
+      "Traffic flows shall be forwarded to one CP or SAP instance
+       created from the referenced CP profile(s) selected based on
+       a load-balancing algorithm.";
+  }
+
+  identity vip-function {
+    description
+      "Indicates the function the virtual IP address is used for.";
+  }
+
+  identity high-availability {
+    base vip-function;
+    description
+      "High availability function.";
+  }
+
+  identity load-balancing {
+    base vip-function;
+    description
+      "Load balancing function.";
+  }
+
   /*
    * Typedefs
    */
