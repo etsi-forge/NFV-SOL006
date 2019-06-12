@@ -284,10 +284,10 @@
       </connectivity-type>
       <df>
         <id>normal</id>
-        <qos>
+        <ns-qos>
           <latency>0</latency>
           <packet-delay-variation>0</packet-delay-variation>
-        </qos>
+        </ns-qos>
       </df>
     </virtual-link-desc>
     <virtual-link-desc>
@@ -297,10 +297,10 @@
       </connectivity-type>
       <df>
         <id>normal</id>
-        <qos>
+        <ns-qos>
           <latency>0</latency>
           <packet-delay-variation>0</packet-delay-variation>
-        </qos>
+        </ns-qos>
       </df>
     </virtual-link-desc>
     <virtual-link-desc>
@@ -310,10 +310,10 @@
       </connectivity-type>
       <df>
         <id>normal</id>
-        <qos>
+        <ns-qos>
           <latency>0</latency>
           <packet-delay-variation>0</packet-delay-variation>
-        </qos>
+        </ns-qos>
       </df>
     </virtual-link-desc>
     <df>
@@ -533,10 +533,10 @@
       </connectivity-type>
       <df>
         <id>r2fw</id>
-        <qos>
+        <ns-qos>
           <latency>1000</latency>
           <packet-delay-variation>2</packet-delay-variation>
-        </qos>
+        </ns-qos>
       </df>
     </virtual-link-desc>
     <df>

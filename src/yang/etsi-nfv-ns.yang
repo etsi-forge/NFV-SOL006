@@ -253,7 +253,7 @@ submodule etsi-nfv-ns {
              information element";
         }
 
-        container qos {
+        container ns-qos {
           presence "VL QoS parameters";
           description
             "The QoS information element specifies quality of
