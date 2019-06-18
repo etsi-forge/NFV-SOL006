@@ -273,7 +273,7 @@ submodule etsi-nfv-vnf {
              VirtualNetworkInterfaceRequirements information element";
         }
 
-        leaf-list order {
+        leaf order {
           type uint32;
           description
             "The order of the NIC to be assigned on the compute
@@ -288,6 +288,27 @@ submodule etsi-nfv-vnf {
 
              If the property is not present, it shall be left to the
              VIM to assign a value when creating the instance.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.4, VduCpd information
+             element.";
+        }
+
+        leaf vnic-type {
+	  type identityref {
+	    base vnic-type;
+	  }
+	  description
+	    "Describes the type of the virtual network interface
+             realizing the CPs instantiated from this CPD. This is
+             used to determine which mechanism driver(s) to be used
+             to bind the port. Value:
+             • NORMAL
+             • VIRTIO
+             • DIRECT
+             • BAREMETAL
+             • VIRTIO-FORWARDER
+             • DIRECT-PHYSICAL
+             • SMART-NIC";
           reference
             "GS NFV IFA011: Section 7.1.6.4, VduCpd information
              element.";

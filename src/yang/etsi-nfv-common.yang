@@ -243,6 +243,62 @@ submodule etsi-nfv-common {
       "Ephemeral type of storage.";
   }
 
+  identity vnic-type {
+    description
+      "Describes the type of the virtual network interface realizing
+       the CPs instantiated from this CPD. This is used to determine
+       which mechanism driver(s) to be used to bind the port. Value:
+       • NORMAL
+       • VIRTIO
+       • DIRECT
+       • BAREMETAL
+       • VIRTIO-FORWARDER
+       • DIRECT-PHYSICAL
+       • SMART-NIC";
+  }
+
+  identity normal {
+    base vnic-type;
+    description
+      "Normal NIC.";
+  }
+
+  identity virtio {
+    base vnic-type;
+    description
+      "VirtIO NIC.";
+  }
+
+  identity direct {
+    base vnic-type;
+    description
+      "Direct NIC type.";
+  }
+
+  identity bare-metal {
+    base vnic-type;
+    description
+      "Bare metal NIC type.";
+  }
+
+  identity virtio-forwarder {
+    base vnic-type;
+    description
+      "VirtIO Forwarder NIC type.";
+  }
+
+  identity direct-physical {
+    base vnic-type;
+    description
+      "Direct physical NIC type.";
+  }
+
+  identity smart-nic {
+    base vnic-type;
+    description
+      "SmartNIC or Smart NIC type.";
+  }
+
   /*
    * Typedefs
    */
