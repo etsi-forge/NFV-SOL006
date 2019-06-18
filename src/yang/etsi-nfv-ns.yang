@@ -415,17 +415,125 @@ submodule etsi-nfv-ns {
            element";
       }
 
-      leaf-list nfp-position-element-id {
-        type leafref {
-          path "../nfpd/position-desc/element/id";
+      list nfp-position-element {
+        key "id";
+
+        leaf id {
+          type string;
+          description
+            "Identifier of this NfpPositionElemen information
+             element. It uniquely identifies an
+             NfpPositionElemen.";
+          reference
+            "GS NFV IFA014: Section 6.4.6.2 NfpPositionElement
+                 information element";
+        }
+
+        container desc {
+          choice constituent-base-element-id {
+            mandatory "true";
+            container vnf-profile {
+              leaf vnf-profile-id {
+                must ". = deref(../../vnfd-profile-id)" {
+                }
+                type leafref {
+                  path "../../../../../../nsd/df/vnf-profile/id";
+                }
+              }
+            }
+            container pnf-profile {
+              leaf pnf-profile-id {
+                must ". = deref(../../pnfd-profile-id)" {
+                }
+                type leafref {
+                  path "../../../../../../nsd/df/pnf-profile/id";
+                }
+              }
+            }
+            container ns-profile {
+              leaf ns-profile-id {
+                must ". = deref(../../ns-profile-id)" {
+                }
+                type leafref {
+                  path "../../../../../../nsd/df/ns-profile/id";
+                }
+              }
+            }
+            description
+              "Reference to the profile of an NS constituent.";
+            reference
+              "GS NFV IFA014: Section 6.4.8
+               CpdInConstituentElement information element";
+          }
+
+          choice constituent-cpd-id {
+            container vnf {
+              leaf vnfd-id {
+                must ". = deref(../../vnfd-profile-id)/../vnfd-id" {
+                }
+                type leafref {
+                  path "../../../../../../vnfd/id";
+                }
+              }
+              leaf cpd-id {
+                type leafref {
+                  path "deref(../vnfd-id)/../ext-cpd/id";
+                }
+              }
+            }
+            container pnf {
+              leaf pnfd-id {
+                must ". = deref(../../pnfd-profile-id)/../pnfd-id" {
+                }
+                type leafref {
+                  path "../../../../../../pnfd/id";
+                }
+              }
+              leaf pnf-cpd-id {
+                type leafref {
+                  path "deref(../pnfd-id)/../ext-cpd/id";
+                }
+              }
+            }
+            container ns {
+              leaf nsd-id {
+                must ". = deref(../../nested-ns-profile-id)/" +
+                  "../nsd-id" {
+                }
+
+                type leafref {
+                  path "../../../../../../nsd/id";
+                }
+              }
+              leaf sap-cpd-id {
+                type leafref {
+                  path "deref(../nsd-id)/../sapd/id";
+                }
+              }
+            }
+            description
+              "References the VNF external CPD for a given
+               VnfProfile, or the PNF external CPD for a given
+               PnfProfile, or a NS SAPD for a given NsProfile
+               identified by the constituentBaseElementId.";
+            reference
+              "GS NFV IFA014: Section 6.4.8.2
+               CpdInConstituentElement information element";
+          }
+          description
+            "Identifies a CPD or SAPD in the context of a profile
+             of an NS constituent element.";
+          reference
+            "GS NFV IFA014: Section 6.4.6.2 NfpPositionElement
+             information element";
         }
         description
-          "References NfpPositionElement associated with one of the
-           constituent VNF Profile, PNF Profile or NS Profile of a
-           nested NS.";
+          "One or a pair of CPDs or SAPDs. These descriptors
+           shall be members of the CpdPool associated to the
+           parent VNFFG.";
         reference
-          "GS NFV IFA014: Section 6.4.2.2 Vnffgd information
-           element";
+          "GS NFV IFA014: Section 6.4.5.2 NfpPositionDesc
+           information element";
       }
 
       list nfpd {
@@ -465,125 +573,17 @@ submodule etsi-nfv-ns {
                information element";
           }
 
-          list element {
-            key "id";
-
-            leaf id {
-              type string;
-              description
-                "Identifier of this NfpPositionElemen information
-                 element. It uniquely identifies an
-                 NfpPositionElemen.";
-              reference
-                "GS NFV IFA014: Section 6.4.6.2 NfpPositionElement
-                 information element";
-            }
-
-            container desc {
-              choice constituent-base-element-id {
-                mandatory "true";
-                container vnf-profile {
-                  leaf vnf-profile-id {
-                    must ". = deref(../../vnfd-profile-id)" {
-                    }
-                    type leafref {
-                      path "../../../../../../../../nsd/df/vnf-profile/id";
-                    }
-                  }
-                }
-                container pnf-profile {
-                  leaf pnf-profile-id {
-                    must ". = deref(../../pnfd-profile-id)" {
-                    }
-                    type leafref {
-                      path "../../../../../../../../nsd/df/pnf-profile/id";
-                    }
-                  }
-                }
-                container ns-profile {
-                  leaf ns-profile-id {
-                    must ". = deref(../../ns-profile-id)" {
-                    }
-                    type leafref {
-                      path "../../../../../../../../nsd/df/ns-profile/id";
-                    }
-                  }
-                }
-                description
-                  "Reference to the profile of an NS constituent.";
-                reference
-                  "GS NFV IFA014: Section 6.4.8
-                   CpdInConstituentElement information element";
-              }
-
-              choice constituent-cpd-id {
-                container vnf {
-                  leaf vnfd-id {
-                    must ". = deref(../../vnfd-profile-id)/../vnfd-id" {
-                    }
-                    type leafref {
-                      path "../../../../../../../../vnfd/id";
-                    }
-                  }
-                  leaf cpd-id {
-                    type leafref {
-                      path "deref(../vnfd-id)/../ext-cpd/id";
-                    }
-                  }
-                }
-                container pnf {
-                  leaf pnfd-id {
-                    must ". = deref(../../pnfd-profile-id)/../pnfd-id" {
-                    }
-                    type leafref {
-                      path "../../../../../../../../pnfd/id";
-                    }
-                  }
-                  leaf pnf-cpd-id {
-                    type leafref {
-                      path "deref(../pnfd-id)/../ext-cpd/id";
-                    }
-                  }
-                }
-                container ns {
-                  leaf nsd-id {
-                    must ". = deref(../../nested-ns-profile-id)/" +
-                      "../nsd-id" {
-                    }
-
-                    type leafref {
-                      path "../../../../../../../../nsd/id";
-                    }
-                  }
-                  leaf sap-cpd-id {
-                    type leafref {
-                      path "deref(../nsd-id)/../sapd/id";
-                    }
-                  }
-                }
-                description
-                  "References the VNF external CPD for a given
-                   VnfProfile, or the PNF external CPD for a given
-                   PnfProfile, or a NS SAPD for a given NsProfile
-                   identified by the constituentBaseElementId.";
-                reference
-                  "GS NFV IFA014: Section 6.4.8.2
-                   CpdInConstituentElement information element";
-              }
-              description
-                "Identifies a CPD or SAPD in the context of a profile
-                 of an NS constituent element.";
-              reference
-                "GS NFV IFA014: Section 6.4.6.2 NfpPositionElement
-                 information element";
+          leaf-list nfp-position-element-id {
+            type leafref {
+              path "../../../nfp-position-element/id";
             }
             description
-              "One or a pair of CPDs or SAPDs. These descriptors
-               shall be members of the CpdPool associated to the
-               parent VNFFG.";
+              "References NfpPositionElement associated with one of the
+               constituent VNF Profile, PNF Profile or NS Profile of a
+               nested NS.";
             reference
-              "GS NFV IFA014: Section 6.4.5.2 NfpPositionDesc
-               information element";
+              "GS NFV IFA014: Section 6.4.2.2 Vnffgd information
+               element";
           }
 
           leaf forwarding-behaviour {
