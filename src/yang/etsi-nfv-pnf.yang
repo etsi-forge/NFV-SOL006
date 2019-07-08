@@ -92,18 +92,6 @@ submodule etsi-nfv-pnf {
         "GS NFV-IFA014: Section 6.6.2, Pnfd information element";
     }
 
-    list security {
-      key "signature";
-      uses security-parameters;
-      description
-        "Provides a signature to prevent tampering.
-         Editor's Note: While IFA014 does specify that the PNFD
-         includes a security parameter. SOL001 does not have one.
-         We need to harmonize SOL001 & SOL006 on this point.";
-      reference
-        "GS NFV-IFA014: Section 6.6.2, Pnfd information element";
-    }
-
     leaf geographical-location-info {
       type string;
       description
