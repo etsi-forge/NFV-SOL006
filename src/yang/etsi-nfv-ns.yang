@@ -418,6 +418,8 @@ submodule etsi-nfv-ns {
       list nfp-position-element {
         key "id";
 
+	min-elements 1;
+
         leaf id {
           type string;
           description
@@ -566,6 +568,8 @@ submodule etsi-nfv-ns {
         list position-desc {
           key "id";
 
+	  min-elements 1;
+
           leaf id {
             type string;
             description
@@ -580,12 +584,10 @@ submodule etsi-nfv-ns {
               path "../../../nfp-position-element/id";
             }
             description
-              "References NfpPositionElement associated with one of the
-               constituent VNF Profile, PNF Profile or NS Profile of a
-               nested NS.";
+              "Reference to one or a pair of CPDs or SAPDs.";
             reference
-              "GS NFV IFA014: Section 6.4.2.2 Vnffgd information
-               element";
+              "GS NFV IFA014: Section 6.4.5.2 NfpPositionDesc
+               information element";
           }
 
           leaf forwarding-behaviour {
@@ -1280,6 +1282,71 @@ submodule etsi-nfv-ns {
            there are multiple 'nsIinstantiationLevel' entries.";
         reference
           "GS NFV IFA014: Section 6.3.2.2 NsDf information element";
+      }
+
+      container ns-lcm-additional-params {
+        container instantiate {
+          list params {
+            key "key";
+
+            leaf key {
+              type string;
+            }
+
+            leaf value {
+              type string;
+            }
+	    description
+              "Array of KVP requirements for additional parameters
+               of NS to be passed when invoking the Instantiate Ns
+               operation.";
+            reference
+              "GS NFV IFA014: Section 6.2.10.3
+               InstantiateNsAdditionalParams information element";
+          }
+        }
+
+        container scale {
+          list params {
+            key "key";
+
+            leaf key {
+              type string;
+            }
+
+            leaf value {
+              type string;
+            }
+	    description
+              "Array of KVP requirements for additional parameters
+               of NS to be passed when invoking the Scale Ns
+               operation.";
+            reference
+              "GS NFV IFA014: Section 6.2.10.4
+               ScaleNsAdditionalParams information element";
+          }
+        }
+
+        container heal {
+          list params {
+            key "key";
+
+            leaf key {
+              type string;
+            }
+
+            leaf value {
+              type string;
+            }
+	    description
+              "Array of KVP requirements for additional parameters
+               of NS to be passed when invoking the Heal Ns
+               operation.";
+            reference
+              "GS NFV IFA014: Section 6.2.10.5
+               HealNsAdditionalParams information element";
+          }
+        }
       }
 
       list ns-profile {

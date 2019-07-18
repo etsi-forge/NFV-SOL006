@@ -387,8 +387,8 @@ submodule etsi-nfv-common {
 
   grouping local-affinity-or-anti-affinity-rule {
     list local-affinity-or-anti-affinity-rule {
-      key "affinity-type affinity-scope";
-      leaf affinity-type {
+      key "type scope";
+      leaf type {
         type affinity-type;
         description
           "Specifies whether the rule is an affinity rule or an
@@ -398,7 +398,7 @@ submodule etsi-nfv-common {
            LocalAffinityOrAntiAffinityRule information element.";
       }
 
-      leaf affinity-scope {
+      leaf scope {
         type affinity-scope;
         description
           "Specifies the scope of the rule, possible values are
