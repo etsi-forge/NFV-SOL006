@@ -415,56 +415,56 @@ submodule etsi-nfv-ns {
            element";
       }
 
-      list cpd-pool {
+      list nfp-position-element {
         key "id";
-
-        description
-          "Describes a pool of descriptors of connection points
-           attached to one of the constituent VNFs and PNFs and/or
-           one of the SAPs of the parent NS or of a nested NS.";
-        reference
-          "GS NFV IFA014: Section 6.4.2.2 Vnffgd information
-           element";
 
         leaf id {
           type string;
+          description
+            "Identifier of this NfpPositionElemen information
+             element. It uniquely identifies an
+             NfpPositionElemen.";
+          reference
+            "GS NFV IFA014: Section 6.4.6.2 NfpPositionElement
+                 information element";
         }
 
-        choice constituent-base-element-id {
-          mandatory "true";
-          container vnf-profile {
-            leaf vnf-profile-id {
-              must ". = deref(../../vnfd-profile-id)" {
-              }
-              type leafref {
-                path "../../../../../nsd/df/vnf-profile/id";
-              }
-            }
-          }
-          container pnf-profile {
-            leaf pnf-profile-id {
-              must ". = deref(../../pnfd-profile-id)" {
-              }
-              type leafref {
-                path "../../../../../nsd/df/pnf-profile/id";
+        container desc {
+          choice constituent-base-element-id {
+            mandatory "true";
+            container vnf-profile {
+              leaf vnf-profile-id {
+                must ". = deref(../../vnfd-profile-id)" {
+                }
+                type leafref {
+                  path "../../../../../../nsd/df/vnf-profile/id";
+                }
               }
             }
-          }
-          container ns-profile {
-            leaf ns-profile-id {
-              must ". = deref(../../ns-profile-id)" {
-              }
-              type leafref {
-                path "../../../../../nsd/df/ns-profile/id";
+            container pnf-profile {
+              leaf pnf-profile-id {
+                must ". = deref(../../pnfd-profile-id)" {
+                }
+                type leafref {
+                  path "../../../../../../nsd/df/pnf-profile/id";
+                }
               }
             }
+            container ns-profile {
+              leaf ns-profile-id {
+                must ". = deref(../../ns-profile-id)" {
+                }
+                type leafref {
+                  path "../../../../../../nsd/df/ns-profile/id";
+                }
+              }
+            }
+            description
+              "Reference to the profile of an NS constituent.";
+            reference
+              "GS NFV IFA014: Section 6.4.8
+               CpdInConstituentElement information element";
           }
-          description
-            "Reference to the profile of an NS constituent.";
-          reference
-            "GS NFV IFA014: Section 6.4.8 CpdInConstituentElement
-             information element";
-        }
 
         choice constituent-cpd-id {
           container vnf {
@@ -480,10 +480,13 @@ submodule etsi-nfv-ns {
                 path "deref(../vnfd-id)/../nfv:ext-cpd/nfv:id";
               }
             }
-          }
-          container pnf {
-            leaf pnfd-id {
-              must ". = deref(../../pnfd-profile-id)/../pnfd-id" {
+            container pnf {
+              leaf pnfd-id {
+                must ". = deref(../../pnfd-profile-id)/../pnfd-id" {
+                }
+                type leafref {
+                  path "../../../../../../pnfd/id";
+                }
               }
               type leafref {
                 path "/nfv:nfv/nfv:pnfd/nfv:id";
@@ -494,41 +497,49 @@ submodule etsi-nfv-ns {
                 path "deref(../pnfd-id)/../nfv:ext-cpd/nfv:id";
               }
             }
-          }
-          container ns {
-            leaf nsd-id {
-              must ". = deref(../../nested-ns-profile-id)/" +
-                   "../nsd-id" {
-              }
+            container ns {
+              leaf nsd-id {
+                must ". = deref(../../nested-ns-profile-id)/" +
+                  "../nsd-id" {
+                }
 
-              type leafref {
-                path "../../../../../nsd/id";
+                type leafref {
+                  path "../../../../../../nsd/id";
+                }
+              }
+              leaf sap-cpd-id {
+                type leafref {
+                  path "deref(../nsd-id)/../sapd/id";
+                }
               }
             }
-            leaf sap-cpd-id {
-              type leafref {
-                path "deref(../nsd-id)/../sapd/id";
-              }
-            }
+            description
+              "References the VNF external CPD for a given
+               VnfProfile, or the PNF external CPD for a given
+               PnfProfile, or a NS SAPD for a given NsProfile
+               identified by the constituentBaseElementId.";
+            reference
+              "GS NFV IFA014: Section 6.4.8.2
+               CpdInConstituentElement information element";
           }
           description
-            "A reference to the descriptor of a connection point
-             attached to one of the constituent VNFs and PNFs or to
-             the descriptor of a NS SAP.";
+            "Identifies a CPD or SAPD in the context of a profile
+             of an NS constituent element.";
           reference
-            "GS NFV IFA014: Section 6.4.4.2 CpdPool information
-             element";
+            "GS NFV IFA014: Section 6.4.6.2 NfpPositionElement
+             information element";
         }
+        description
+          "One or a pair of CPDs or SAPDs. These descriptors
+           shall be members of the CpdPool associated to the
+           parent VNFFG.";
+        reference
+          "GS NFV IFA014: Section 6.4.5.2 NfpPositionDesc
+           information element";
       }
 
       list nfpd {
         key "id";
-
-        description
-          "The network forwarding path associated to the VNFFG.";
-        reference
-          "GS NFV IFA014: Section 6.4.2.2 Vnffgd information
-           element";
 
         leaf id {
           type string;
@@ -544,32 +555,16 @@ submodule etsi-nfv-ns {
           type string;
           description
             "Provides an NFP classification and selection rule.
-             The rule may be expressed as a criteria constructed
-             out of atomic assertions linked by Boolean operators
-             AND, OR and NOT.";
+             The rule may be expressed as a criteria constructed out
+             of atomic assertions linked by Boolean operators AND,
+             OR and NOT.";
           reference
             "GS NFV IFA014: Section 6.4.3.2 Nfpd information
              element";
         }
 
-        list position-desc-id {
+        list position-desc {
           key "id";
-
-          description
-            "Describes a position in the NFP in terms of one or
-             more CP profiles and rules for distributing the
-             traffic among CP and SAP instances created from the
-             CPD or SAPD associated to these profiles. This shall
-             be connection point profile, which is either a CPD
-             associated with the VnfProfile of a constituent VNF,
-             or a CPD associated with the PnfProfile of a
-             constituent PNF, or a SAPD associated with the
-             NsProfile of a nested NS. The related VnfProfile,
-             PnfProfile and NsProfile shall be included in the
-             parent VNFFGD.";
-          reference
-            "GS NFV IFA014: Section 6.4.3.2 Nfpd information
-             element";
 
           leaf id {
             type string;
@@ -580,62 +575,64 @@ submodule etsi-nfv-ns {
                information element";
           }
 
-          list cp-profile-id {
-            key "id";
-
+          leaf-list nfp-position-element-id {
+            type leafref {
+              path "../../../nfp-position-element/id";
+            }
             description
-              "References the profile of a connection point to be
-               traversed by the traffic flows matching the criteria.
-               This shall be a connection point attached to one of
-               the constituent VNFs and PNFs of the parent VNFFG,
-               or a SAP of one of the constituent nested NSs of the
-               parent VNFFG.";
+              "References NfpPositionElement associated with one of the
+               constituent VNF Profile, PNF Profile or NS Profile of a
+               nested NS.";
+            reference
+              "GS NFV IFA014: Section 6.4.2.2 Vnffgd information
+               element";
+          }
+
+          leaf forwarding-behaviour {
+            type identityref {
+              base forwarding-behaviour;
+            }
+            description
+              "Identifies a rule to apply to forward traffic to CP or
+               SAP instances corresponding to the referenced CPD(s)
+               and SAPD(s). The minimum list of rules to be supported
+               shall include:
+               • ALL = Traffic flows shall be forwarded simultaneously
+                 to all CP or SAP instances created from the
+                 referenced CP profile(s).
+               • LB = Traffic flows shall be forwarded to one CP or SAP
+                 instance created from the referenced CP profile(s)
+                 selected based on a load-balancing algorithm.";
             reference
               "GS NFV IFA014: Section 6.4.5.2 NfpPositionDesc
                information element";
-
-            leaf id {
-              type string;
-              description
-                "Identifier of this CpProfile information element.
-                 It uniquely identifies a CpProfile.";
-              reference
-                "GS NFV IFA014: Section 6.4.6.2 CpProfile
-                 information element";
-            }
-
-            list constituent-profile-elements {
-              key "id";
-
-              description
-                "Specifies the constituents of the CpProfile.";
-              reference
-                "GS NFV IFA014: Section 6.4.6.2 CpProfile
-                 information element";
-
-              leaf id {
-                type string;
-                description
-                  "Specifies the constituents of the CpProfile.";
-                reference
-                  "GS NFV IFA014: Section 6.4.7.2
-                   ConstituentProfileElements information element";
-              }
-
-              leaf cpd-id {
-                type string;
-                description
-                  "References the VNF external CPD for a given
-                   VnfProfile, or the PNF external CPD for a given
-                   PnfProfile, or a NS SAPD for a give NsProfile
-                   identified by the constituentBasedElementId.";
-                reference
-                  "GS NFV IFA014: Section 6.4.7.2
-                   ConstituentProfileElements information element";
-              }
-            }
           }
+
+          leaf forwarding-behavior-input-parameters {
+            type string;
+            description
+              "Provides input parameters to configure the forwarding
+               behaviour (e.g. identifies a load balancing
+               algorithm).";
+            reference
+              "GS NFV IFA014: Section 6.4.5.2 NfpPositionDesc
+               information element";
+          }
+
+          description
+            "Describes a position in the NFP in terms of one or more
+             CPDs and SAPDs and rules for distributing the traffic
+             among CP and SAP instances created from these CPDs
+             and SAPDs.";
+          reference
+            "GS NFV IFA014: Section 6.4.3.2 Nfpd information
+             element";
         }
+        description
+          "The network forwarding path associated to the VNFFG.";
+        reference
+          "GS NFV IFA014: Section 6.4.2.2 Vnffgd information
+           element";
       }
     }
 
