@@ -97,7 +97,7 @@ submodule etsi-nfv-ns {
 
     leaf-list vnfd-id {
       type leafref {
-        path "../../vnfd/id";
+        path "/nfv:nfv/nfv:vnfd/nfv:id";
       }
       description
         "References the VNFD of a constituent VNF.";
@@ -108,7 +108,7 @@ submodule etsi-nfv-ns {
 
     leaf-list pnfd-id {
       type leafref {
-        path "../../pnfd/id";
+        path "/nfv:nfv/nfv:pnfd/nfv:id";
       }
       description
         "References the PNFD of a constituent PNF.";
@@ -164,7 +164,7 @@ submodule etsi-nfv-ns {
             leaf vnfd-id {
               mandatory true;
               type leafref {
-                path "../../../../vnfd/id";
+                path "/nfv:nfv/nfv:vnfd/nfv:id";
               }
               must "boolean(../../../vnfd-id[.=current()])";
             }
@@ -172,7 +172,7 @@ submodule etsi-nfv-ns {
             leaf ext-cpd-id {
               mandatory true;
               type leafref {
-                path "deref(../vnfd-id)/../ext-cpd/id";
+                path "deref(../vnfd-id)/../nfv:ext-cpd/nfv:id";
               }
             }
           }
@@ -181,7 +181,7 @@ submodule etsi-nfv-ns {
             leaf pnfd-id {
               mandatory true;
               type leafref {
-                path "../../../../pnfd/id";
+                path "/nfv:nfv/nfv:pnfd/nfv:id";
               }
               must "boolean(../pnfd-id[.=current()])";
             }
@@ -189,7 +189,7 @@ submodule etsi-nfv-ns {
             leaf ext-cpd-id {
               mandatory true;
               type leafref {
-                path "deref(../pnfd-id)/../ext-cpd/id";
+                path "deref(../pnfd-id)/../nfv:ext-cpd/nfv:id";
               }
             }
           }
@@ -466,19 +466,18 @@ submodule etsi-nfv-ns {
                CpdInConstituentElement information element";
           }
 
-          choice constituent-cpd-id {
-            container vnf {
-              leaf vnfd-id {
-                must ". = deref(../../vnfd-profile-id)/../vnfd-id" {
-                }
-                type leafref {
-                  path "../../../../../../vnfd/id";
-                }
+        choice constituent-cpd-id {
+          container vnf {
+            leaf vnfd-id {
+              must ". = deref(../../vnfd-profile-id)/../vnfd-id" {
               }
-              leaf cpd-id {
-                type leafref {
-                  path "deref(../vnfd-id)/../ext-cpd/id";
-                }
+              type leafref {
+                path "/nfv:nfv/nfv:vnfd/nfv:id";
+              }
+            }
+            leaf cpd-id {
+              type leafref {
+                path "deref(../vnfd-id)/../nfv:ext-cpd/nfv:id";
               }
             }
             container pnf {
@@ -489,10 +488,13 @@ submodule etsi-nfv-ns {
                   path "../../../../../../pnfd/id";
                 }
               }
-              leaf pnf-cpd-id {
-                type leafref {
-                  path "deref(../pnfd-id)/../ext-cpd/id";
-                }
+              type leafref {
+                path "/nfv:nfv/nfv:pnfd/nfv:id";
+              }
+            }
+            leaf pnf-cpd-id {
+              type leafref {
+                path "deref(../pnfd-id)/../nfv:ext-cpd/nfv:id";
               }
             }
             container ns {
@@ -637,6 +639,7 @@ submodule etsi-nfv-ns {
     leaf-list autoscale-rule {
       type string;
     }
+
     list lifecycle-management-script {
       key "event";
       leaf event {
@@ -716,7 +719,7 @@ submodule etsi-nfv-ns {
         leaf vnfd-id {
           mandatory true;
           type leafref {
-            path "../../../../vnfd/id";
+            path "/nfv:nfv/nfv:vnfd/nfv:id";
           }
           description
             "References a VNFD.";
@@ -728,7 +731,7 @@ submodule etsi-nfv-ns {
         leaf flavour-id {
           mandatory true;
           type leafref {
-            path "deref(../vnfd-id)/../df/id";
+            path "deref(../vnfd-id)/../nfv:df/nfv:id";
           }
           description
             "Identifies a flavour within the VNFD.";
@@ -740,7 +743,8 @@ submodule etsi-nfv-ns {
         leaf instantiation-level {
           mandatory true;
           type leafref {
-            path "deref(../flavour-id)/../instantiation-level/id";
+            path "deref(../flavour-id)/../nfv:instantiation-level/" +
+	         "nfv:id";
           }
           description
             "Identifier of the instantiation level of the VNF DF
@@ -840,7 +844,7 @@ submodule etsi-nfv-ns {
 
             leaf constituent-cpd-id {
               type leafref {
-                path "deref(../../../vnfd-id)/../ext-cpd/id";
+                path "deref(../../../vnfd-id)/../nfv:ext-cpd/nfv:id";
               }
               description
                 "A reference to the descriptor of a connection point
@@ -874,7 +878,7 @@ submodule etsi-nfv-ns {
 
         leaf pnfd-id {
           type leafref {
-            path "../../../../pnfd/id";
+            path "/nfv:nfv/nfv:pnfd/nfv:id";
           }
           description
             "References a PNFD.";
@@ -930,7 +934,7 @@ submodule etsi-nfv-ns {
 
             leaf constituent-cpd-id {
               type leafref {
-                path "deref(../../../pnfd-id)/../ext-cpd/id";
+                path "deref(../../../pnfd-id)/../nfv:ext-cpd/nfv:id";
               }
               description
                 "A reference to the descriptor of a connection point
@@ -1501,7 +1505,7 @@ submodule etsi-nfv-ns {
         container vnf-indicator-info {
           leaf vnfd-id {
             type leafref {
-              path "../../../../../vnfd/id";
+              path "/nfv:nfv/nfv:vnfd/nfv:id";
             }
             description
               "Identifies a VNFD.";
@@ -1513,7 +1517,7 @@ submodule etsi-nfv-ns {
 	  leaf vnf-indicator {
             mandatory true;
             type leafref {
-              path "deref(../vnfd-id)/../indicator/id";
+              path "deref(../vnfd-id)/../nfv:indicator/nfv:id";
             }
             description
               "Identifies a VNF indicator within the VNFD.";
