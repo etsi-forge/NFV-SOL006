@@ -106,7 +106,7 @@
                 "organization": "etsi", 
                 "reference": "https://www.etsi.org/deliver/etsi_gs/NFV-SOL/001_099/006/02.06.01_60/gs_nfv-sol006v020601p.pdf",
                 "module-classification": "network-service",
-                "revision": "2019-04-25", 
+                "revision": "2019-03-18", 
                 "source-file": {
                     "owner": "YangModels", 
                     "path": "standard/etsi/SOL006/src/yang/etsi-nfv-vnf.yang", 
@@ -122,7 +122,7 @@
                 "organization": "etsi", 
                 "reference": "https://www.etsi.org/deliver/etsi_gs/NFV-SOL/001_099/006/02.06.01_60/gs_nfv-sol006v020601p.pdf",
                 "module-classification": "network-service",
-                "revision": "2019-04-25", 
+                "revision": "2019-03-18",
                 "source-file": {
                     "owner": "YangModels", 
                     "path": "standard/etsi/SOL006/src/yang/etsi-nfv-vnfd.yang", 
