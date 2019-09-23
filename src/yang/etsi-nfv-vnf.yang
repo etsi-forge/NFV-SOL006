@@ -2621,6 +2621,41 @@ submodule etsi-nfv-vnf {
            information element";
       }
 
+      leaf vnfm-interface-info {
+	type string;
+	description
+	  "Contains information enabling access to the NFV-MANO
+           interfaces produced by the VNFM (e.g. URIs and
+           credentials).";
+        reference
+          "GS NFV IFA011: Section 7.1.12 VnfConfigurableProperties
+           information element";
+      }
+
+      leaf vnfm-oauth-server-info {
+	type string;
+	description
+	  "Contains information to enable discovery of the
+           authorization server protecting access to
+           VNFM interfaces.";
+        reference
+          "GS NFV IFA011: Section 7.1.12 VnfConfigurableProperties
+           information element";
+      }
+
+      leaf vnf-oauth-server-info {
+	type string;
+	description
+	  "Contains information to enable discovery of the
+           authorization server to validate the access tokens
+           provided by the VNFM when the VNFM accesses the VNF
+           interfaces, if that functionality (token introspection) is
+           supported by the authorization server.";
+        reference
+          "GS NFV IFA011: Section 7.1.12 VnfConfigurableProperties
+           information element";
+      }
+
       list additional-configurable-property {
         key "key";
 
