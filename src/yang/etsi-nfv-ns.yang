@@ -426,7 +426,7 @@ submodule etsi-nfv-ns {
       list nfp-position-element {
         key "id";
 
-	min-elements 1;
+        min-elements 1;
 
         leaf id {
           type string;
@@ -476,18 +476,19 @@ submodule etsi-nfv-ns {
                CpdInConstituentElement information element";
           }
 
-        choice constituent-cpd-id {
-          container vnf {
-            leaf vnfd-id {
-              must ". = deref(../../vnfd-profile-id)/../vnfd-id" {
+          choice constituent-cpd-id {
+            container vnf {
+              leaf vnfd-id {
+                must ". = deref(../../vnfd-profile-id)/../vnfd-id" {
+                }
+                type leafref {
+                  path "/nfv:nfv/nfv:vnfd/nfv:id";
+                }
               }
-              type leafref {
-                path "/nfv:nfv/nfv:vnfd/nfv:id";
-              }
-            }
-            leaf cpd-id {
-              type leafref {
-                path "deref(../vnfd-id)/../nfv:ext-cpd/nfv:id";
+              leaf cpd-id {
+                type leafref {
+                  path "deref(../vnfd-id)/../nfv:ext-cpd/nfv:id";
+                }
               }
             }
             container pnf {
@@ -495,16 +496,13 @@ submodule etsi-nfv-ns {
                 must ". = deref(../../pnfd-profile-id)/../pnfd-id" {
                 }
                 type leafref {
-                  path "../../../../../../pnfd/id";
+                  path "/nfv:nfv/nfv:pnfd/nfv:id";
                 }
               }
-              type leafref {
-                path "/nfv:nfv/nfv:pnfd/nfv:id";
-              }
-            }
-            leaf pnf-cpd-id {
-              type leafref {
-                path "deref(../pnfd-id)/../nfv:ext-cpd/nfv:id";
+              leaf pnf-cpd-id {
+                type leafref {
+                  path "deref(../pnfd-id)/../nfv:ext-cpd/nfv:id";
+                }
               }
             }
             container ns {
@@ -533,7 +531,7 @@ submodule etsi-nfv-ns {
                CpdInConstituentElement information element";
           }
           description
-            "Identifies a CPD or SAPD in the context of a profile
+            "Specifies a CPD or SAPD in the context of a profile
              of an NS constituent element.";
           reference
             "GS NFV IFA014: Section 6.4.6.2 NfpPositionElement

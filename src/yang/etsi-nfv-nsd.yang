@@ -4,7 +4,7 @@ module etsi-nfv-nsd {
   prefix nsd;
 
   import etsi-nfv-descriptors {
-    prefix vnf;
+    prefix nfv;
   }
 
   organization
@@ -31,7 +31,7 @@ module etsi-nfv-nsd {
     list nsd {
       key "id";
       max-elements 1;
-      uses vnf:nsd;
+      uses nfv:nsd;
       description
 	"The NSD information element is a deployment template whose
          instances are used by the NFVO for the lifecycle management
