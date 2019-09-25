@@ -4,7 +4,7 @@ module etsi-nfv-nsd {
   prefix nsd;
 
   import etsi-nfv-descriptors {
-    prefix vnf;
+    prefix nfv;
   }
 
   organization
@@ -13,6 +13,11 @@ module etsi-nfv-nsd {
   description
     "Network Services Descriptors";
 
+  revision 2019-10-01 {
+    description
+      "Revision 2.7.1.
+       NSD according to ETSI GS NFV-IFA 014 Ed271v264.";
+  }
   revision 2019-04-25 {
     description
       "Initial revision.
@@ -23,7 +28,7 @@ module etsi-nfv-nsd {
     list nsd {
       key "id";
       max-elements 1;
-      uses vnf:nsd;
+      uses nfv:nsd;
       description
 	"The NSD information element is a deployment template whose
          instances are used by the NFVO for the lifecycle management
