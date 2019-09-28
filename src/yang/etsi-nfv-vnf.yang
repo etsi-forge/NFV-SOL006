@@ -2633,7 +2633,7 @@ submodule etsi-nfv-vnf {
         container details {
           container uri-components {
             leaf scheme {
-              type yang:uri;
+              type inet:uri;
               description
                 "Corresponds to the scheme component of a URI, as
                  per IETF RFC 3986.";
@@ -2656,7 +2656,7 @@ submodule etsi-nfv-vnf {
               }
 
               leaf host {
-                type yang:host;
+                type inet:host;
                 description
                   "Corresponds to the host field of the authority
                    component of a URI, as per IETF RFC 3986.";
@@ -2665,7 +2665,7 @@ submodule etsi-nfv-vnf {
               }
 
               leaf port {
-                type yang:port-number;
+                type inet:port-number;
                 description
                   "Corresponds to the port field of the authority
                    component of a URI, as per IETF RFC 3986.";
