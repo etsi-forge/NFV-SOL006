@@ -451,6 +451,7 @@ submodule etsi-nfv-ns {
                 }
               }
             }
+
             container pnf-profile {
               leaf pnf-profile-id {
                 must ". = deref(../../pnfd-profile-id)" {
@@ -460,6 +461,7 @@ submodule etsi-nfv-ns {
                 }
               }
             }
+
             container ns-profile {
               leaf ns-profile-id {
                 must ". = deref(../../ns-profile-id)" {
@@ -491,6 +493,7 @@ submodule etsi-nfv-ns {
                 }
               }
             }
+
             container pnf {
               leaf pnfd-id {
                 must ". = deref(../../pnfd-profile-id)/../pnfd-id" {
@@ -505,10 +508,11 @@ submodule etsi-nfv-ns {
                 }
               }
             }
+
             container ns {
               leaf nsd-id {
                 must ". = deref(../../nested-ns-profile-id)/" +
-                  "../nsd-id" {
+                     "../nsd-id" {
                 }
 
                 type leafref {
