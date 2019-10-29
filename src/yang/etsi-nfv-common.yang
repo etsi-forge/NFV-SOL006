@@ -289,6 +289,28 @@ submodule etsi-nfv-common {
       enum "end-vnf-ext-conn-change";
       enum "start-vnfinfo-modification";
       enum "end-vnfinfo-modification";
+      enum "start-vnf-snapshot-creation";
+      enum "end-vnf-snapshot-creation";
+      enum "start-vnf-snapshot-reverting-to";
+      enum "end-vnf-snapshot-reverting-to";
+      enum "start-change-current-vnf-package";
+      enum "end-change-current-vnf-package";
+    }
+  }
+
+  typedef external-lifecycle-management-script-event {
+    type enumeration {
+      enum "instantiation";
+      enum "scaling";
+      enum "healing";
+      enum "termination";
+      enum "vnf-flavour-change";
+      enum "vnf-operation-change";
+      enum "vnf-ext-conn-change";
+      enum "vnfinfo-modification";
+      enum "vnf-snapshot-creation";
+      enum "vnf-snapshot-reverting-to";
+      enum "change-current-vnf-package";
     }
   }
 
