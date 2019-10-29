@@ -1,4 +1,5 @@
-<nsd xmlns="urn:etsi:nfv:yang:etsi-nfv-nsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<nfv xmlns="urn:etsi:nfv:yang:etsi-nfv-descriptors">
   <vnfd>
     <id>ASA</id>
     <provider>My Company</provider>
@@ -11,15 +12,15 @@
       <name>Firewall VDU</name>
       <int-cpd>
         <id>inside</id>
-      <layer-protocol xmlns:nfv="urn:etsi:nfv:yang:etsi-nfv-descriptors">nfv:ethernet</layer-protocol>
+	<layer-protocol xmlns:nfv="urn:etsi:nfv:yang:etsi-nfv-descriptors">nfv:ethernet</layer-protocol>
       </int-cpd>
       <int-cpd>
         <id>management</id>
-      <layer-protocol xmlns:nfv="urn:etsi:nfv:yang:etsi-nfv-descriptors">nfv:ethernet</layer-protocol>
+	<layer-protocol xmlns:nfv="urn:etsi:nfv:yang:etsi-nfv-descriptors">nfv:ethernet</layer-protocol>
       </int-cpd>
       <int-cpd>
         <id>outside</id>
-      <layer-protocol xmlns:nfv="urn:etsi:nfv:yang:etsi-nfv-descriptors">nfv:ethernet</layer-protocol>
+	<layer-protocol xmlns:nfv="urn:etsi:nfv:yang:etsi-nfv-descriptors">nfv:ethernet</layer-protocol>
       </int-cpd>
       <virtual-compute-desc>asa-vcd</virtual-compute-desc>
       <virtual-storage-desc>asa-vsd</virtual-storage-desc>
@@ -36,7 +37,7 @@
     </virtual-compute-desc>
     <virtual-storage-desc>
       <id>asa-vsd</id>
-    <type-of-storage xmlns:nfv="urn:etsi:nfv:yang:etsi-nfv-descriptors">nfv:root-storage</type-of-storage>
+      <type-of-storage xmlns:nfv="urn:etsi:nfv:yang:etsi-nfv-descriptors">nfv:root-storage</type-of-storage>
       <size-of-storage>0</size-of-storage>
     </virtual-storage-desc>
     <sw-image-desc>
@@ -133,4 +134,4 @@
       </ns-instantiation-level>
     </df>
   </nsd>
-</config>
+</nfv>
