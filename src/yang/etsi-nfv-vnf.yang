@@ -855,9 +855,7 @@ submodule etsi-nfv-vnf {
 
       choice storage {
 	container block-storage-data {
-	  must '../type-of-storage = "nfv:block"' {
-	    error-message "type-of-storage must be set to 'block'";
-	  }
+	  when '../type-of-storage = "nfv:block"';
 	  description
 	    "Specifies the details of block storage. It shall
              be present when the 'typeOfStorage' attribute is set to
@@ -870,9 +868,7 @@ submodule etsi-nfv-vnf {
 	}
 
 	container object-storage-data {
-	  must '../type-of-storage = "nfv:object"' {
-	    error-message "type-of-storage must be set to 'object'";
-	  }
+	  when '../type-of-storage = "nfv:object"';
 	  description
 	    "Specifies the details of object storage. It shall be
              present when the 'typeOfStorage' attribute is set to
@@ -894,9 +890,7 @@ submodule etsi-nfv-vnf {
 	}
 
 	container file-storage-data {
-	  must '../type-of-storage = "nfv:file"' {
-            error-message "type-of-storage must be set to 'file'";
-	  }
+	  when '../type-of-storage = "nfv:file"';
 	  description
 	    "Specifies the details of file storage. It shall be present
              when the 'typeOfStorage' attribute is set to 'FILE'. It
