@@ -16,6 +16,14 @@ submodule etsi-nfv-vnf {
   description
     "Models for VNFD according to GS NFV-IFA 011.";
 
+  revision 2019-10-01 {
+    description
+      "Version 2.7.1.
+
+       Common data structures to support VNFD and NSD according to:
+       ETSI GS NFV-IFA 014 Ed271v264
+       ETSI GS NFV-IFA 011 Ed271v264";
+  }
   revision 2019-03-18 {
     description
       "Initial revision.
@@ -56,6 +64,7 @@ submodule etsi-nfv-vnf {
       }
 
       leaf support-mandatory {
+	status "deprecated";
         default "false";
         type boolean;
         description
@@ -236,7 +245,7 @@ submodule etsi-nfv-vnf {
 
         leaf int-virtual-link-desc {
           type leafref {
-            path "../../../int-virtual-link-desc/id";
+            path "/nfv:nfv/nfv:vnfd/nfv:int-virtual-link-desc/nfv:id";
           }
           description
             "Reference of the internal VLD which this internal CPD
@@ -259,7 +268,7 @@ submodule etsi-nfv-vnf {
 
         leaf nicio-requirements {
           type leafref {
-            path "../../../virtual-compute-desc/id";
+            path "/nfv:nfv/nfv:vnfd/nfv:virtual-compute-desc/nfv:id";
           }
           description
             "This references (couples) the CPD with any logical node I/O
@@ -273,7 +282,7 @@ submodule etsi-nfv-vnf {
              VirtualNetworkInterfaceRequirements information element";
         }
 
-        leaf-list order {
+        leaf order {
           type uint32;
           description
             "The order of the NIC to be assigned on the compute
@@ -288,6 +297,27 @@ submodule etsi-nfv-vnf {
 
              If the property is not present, it shall be left to the
              VIM to assign a value when creating the instance.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.4, VduCpd information
+             element.";
+        }
+
+        leaf vnic-type {
+	  type identityref {
+	    base vnic-type;
+	  }
+	  description
+	    "Describes the type of the virtual network interface
+             realizing the CPs instantiated from this CPD. This is
+             used to determine which mechanism driver(s) to be used
+             to bind the port. Value:
+             • NORMAL
+             • VIRTIO
+             • DIRECT
+             • BAREMETAL
+             • VIRTIO-FORWARDER
+             • DIRECT-PHYSICAL
+             • SMART-NIC";
           reference
             "GS NFV IFA011: Section 7.1.6.4, VduCpd information
              element.";
@@ -871,6 +901,17 @@ submodule etsi-nfv-vnf {
            information element.";
       }
 
+      leaf provider {
+        type string;
+        description
+          "The provider of this software image. If not present the
+           provider of the software image is assumed to be same as
+           the VNF provider.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.5 SwImageDesc
+           information element.";
+      }
+
       container checksum {
 
         leaf algorithm {
@@ -1221,7 +1262,7 @@ submodule etsi-nfv-vnf {
              Descriptor (CPD) connect. Either intVirtualLinkDesc or
              intCpd shall be present.";
           type leafref {
-            path "../../int-virtual-link-desc/id";
+            path "/nfv:nfv/nfv:vnfd/nfv:int-virtual-link-desc/nfv:id";
           }
         }
 
@@ -1238,12 +1279,28 @@ submodule etsi-nfv-vnf {
             }
           }
         }
+
+        leaf vip-cpd {
+          type leafref {
+            path "../../vip-cpd/id";
+          }
+          description
+            "Reference to the VIP CPD which is used to instantiate CPs
+             to hold virtual IP addresses. These CPs are, in turn,
+             exposed as external CPs defined by this external CPD.
+             One and only one of the following attributes shall be
+             present: intVirtualLinkDesc or intCpd or vipCpd .";
+          reference
+            "GS NFV-IFA011: Section 7.1.3.2, VnfExtCpd information
+             element";
+        }
       }
+
       uses virtual-network-interface-requirements;
 
       leaf nicio-requirements {
         type leafref {
-          path "../../virtual-compute-desc/id";
+          path "/nfv:nfv/nfv:vnfd/nfv:virtual-compute-desc/nfv:id";
         }
         description
           "This references (couples) the CPD with any logical node I/O
@@ -1268,6 +1325,55 @@ submodule etsi-nfv-vnf {
         reference
           "GS NFV IFA011: Section 7.1.6.3 Cpd information element";
       }
+    }
+
+    list vip-cpd {
+      key "id";
+
+      leaf-list int-cpd {
+        type leafref {
+          path "../../vdu/int-cpd/int-virtual-link-desc";
+        }
+        description
+          "Reference to the internal VDU CPD which is used to
+           instantiate internal CPs. These internal CPs share the
+           virtual IP addresses allocated when a VipCp instance
+           is created from the VipCpd.";
+        reference
+          "GS NFV IFA011: Section 7.1.x, VipCpd information element.";
+      }
+
+      leaf-list vnf-ext-cpd {
+        type leafref {
+          path "../../ext-cpd/id";
+        }
+        description
+          "Reference to the VNF external CPD which is used to
+           instantiate external CPs. These external CPs share the
+           virtual IP addresses allocated when a VipCp instance is
+           created from the VipCpd.";
+        reference
+          "GS NFV IFA011: Section 7.1.x, VipCpd information element.";
+      }
+
+      leaf vip-function {
+        type identityref {
+          base vip-function;
+        }
+        description
+          "It indicates the function the virtual IP address is used
+           for. Permitted values: high availability, load balancing.";
+        reference
+          "GS NFV IFA011: Section 7.1.x, VipCpd information element.";
+      }
+
+      uses cpd;
+
+      description
+        "Describes virtual IP addresses to be shared among instances
+         of connection points. See clause 7.1.x.";
+      reference
+        "GS NFV IFA011: Section 7.1.2, VNFD information element.";
     }
 
     list df {
@@ -1374,7 +1480,7 @@ submodule etsi-nfv-vnf {
 
         leaf id {
           type leafref {
-            path "../../../int-virtual-link-desc/id";
+            path "/nfv:nfv/nfv:vnfd/nfv:int-virtual-link-desc/nfv:id";
           }
           description
             "Uniquely identifies a Vnf VLD.";
@@ -1386,7 +1492,7 @@ submodule etsi-nfv-vnf {
         leaf flavour {
           type leafref {
             path "deref(../../../ext-cpd/int-virtual-link-desc)" +
-                 "/../flavour/id";
+                 "/../nfv:flavour/nfv:id";
           }
           description
             "Identifies a flavour within the VnfVirtualLinkDesc.";
@@ -1535,6 +1641,19 @@ submodule etsi-nfv-vnf {
                 "GS NFV IFA011: Section 7.1.8.14,
                  L2ProtocolData information element.";
             }
+
+	    leaf segmentation-id {
+	      type string;
+	      description
+                "If present, specifies a specific virtualised network
+                 segment, which depends on the network type. For e.g.,
+                 VLAN ID for VLAN network type and tunnel ID for
+                 GRE/VXLAN network types.";
+	      reference
+                "GS NFV IFA011: Section 7.1.8.14,
+                 L2ProtocolData information element.";
+	    }
+
             description
               "Specifies the L2 protocol data for this virtual link.
                Shall be present when the associatedLayerProtocol
@@ -2510,6 +2629,143 @@ submodule etsi-nfv-vnf {
            information element";
       }
 
+      container vnfm-interface-info {
+        leaf interface-name {
+          type string {
+            pattern 'vnf-[lcm|pm|fm]';
+          }
+          description
+            "Identifies an interface produced by the VNFM.";
+        }
+
+        container details {
+          container uri-components {
+            leaf scheme {
+              type inet:uri;
+              description
+                "Corresponds to the scheme component of a URI, as
+                 per IETF RFC 3986.";
+              reference
+                "RFC 3986: URI Generic Syntax.";
+            }
+
+            container authority {
+              leaf userinfo {
+                type string;
+                description
+                  "Corresponds to the userinfo field of the authority
+                   component of a URI, as per IETF RFC 3986.
+
+                   For HTTP and HTTPS URIs, the provisions in
+                   sections 2.7.1 and 2.7.2 of IETF RFC 7230 apply,
+                   respectively.";
+                reference
+                  "RFC 3986: URI Generic Syntax.";
+              }
+
+              leaf host {
+                type inet:host;
+                description
+                  "Corresponds to the host field of the authority
+                   component of a URI, as per IETF RFC 3986.";
+                reference
+                  "RFC 3986: URI Generic Syntax.";
+              }
+
+              leaf port {
+                type inet:port-number;
+                description
+                  "Corresponds to the port field of the authority
+                   component of a URI, as per IETF RFC 3986.";
+                reference
+                  "RFC 3986: URI Generic Syntax.";
+              }
+              description
+                "Corresponds to the authority component of a URI,
+                 as per IETF RFC 3986.";
+              reference
+                "RFC 3986: URI Generic Syntax.";
+            }
+
+            leaf path {
+              type string;
+              description
+                "Corresponds to the path component of a URI, as per
+                 IETF RFC 3986.";
+              reference
+                "RFC 3986: URI Generic Syntax.";
+            }
+
+            leaf query {
+              type string;
+              description
+                "Corresponds to the query component of a URI, as per
+                 IETF RFC 3986.";
+              reference
+                "RFC 3986: URI Generic Syntax.";
+            }
+
+            leaf fragment {
+              type string;
+              description
+                "Corresponds to the fragment component of a URI, as per
+                 IETF RFC 3986.";
+              reference
+                "RFC 3986: URI Generic Syntax.";
+            }
+            description
+              "Provides components to build a Uniform Resource
+               Identifier (URI) where to access the interface end
+               point.";
+          }
+
+          leaf-list interface-specific-data {
+            type string;
+            description
+              "Provides additional details that are specific to the
+               type of interface considered.";
+          }
+          description
+            "Provide additional data to access the interface
+             endpoint (e.g. API URI prefix).";
+        }
+
+        leaf credentials {
+          type string;
+          description
+            "Provides credential enabling access to the interface.";
+        }
+        description
+          "Contains information enabling access to the NFV-MANO
+           interfaces produced by the VNFM (e.g. URIs and
+           credentials).";
+        reference
+          "GS NFV IFA011: Section 7.1.12 VnfConfigurableProperties
+           information element";
+      }
+
+      container vnfm-oauth-server-info {
+        description
+          "Contains information to enable discovery of the
+           authorization server protecting access to
+           VNFM interfaces.";
+        reference
+          "GS NFV IFA011: Section 7.1.12 VnfConfigurableProperties
+           information element";
+      }
+
+      container vnf-oauth-server-info {
+        description
+          "Contains information to enable discovery of the
+           authorization server to validate the access tokens
+           provided by the VNFM when the VNFM accesses the VNF
+           interfaces, if that functionality (token introspection) is
+           supported by the authorization server.";
+        reference
+          "GS NFV IFA011: Section 7.1.12 VnfConfigurableProperties
+           information element";
+      }
+
       list additional-configurable-property {
         key "key";
 
@@ -2713,7 +2969,7 @@ submodule etsi-nfv-vnf {
 
       leaf-list virtual-link-desc {
         type leafref {
-          path "../../int-virtual-link-desc/id";
+          path "/nfv:nfv/nfv:vnfd/nfv:int-virtual-link-desc/nfv:id";
         }
         description
           "References to VnfVirtualLinkDesc that are part of this
