@@ -78,11 +78,15 @@
         <num-virtual-cpu>16</num-virtual-cpu>
       </virtual-cpu>
     </virtual-compute-desc>
-    <virtual-storage-descriptor>
+    <virtual-storage-desc>
       <id>root</id>
-      <type-of-storage>root-storage</type-of-storage>
-      <size-of-storage>10</size-of-storage>
-    </virtual-storage-descriptor>
+      <type-of-storage>block</type-of-storage>
+      <block-storage-data>
+	<size-of-storage>10</size-of-storage>
+	<rdma-enabled>true</rdma-enabled>
+	<sw-image-desc>CP</sw-image-desc>
+      </block-storage-data>
+    </virtual-storage-desc>
     <sw-image-desc>
       <id>CP</id>
       <name>CP</name>
@@ -116,17 +120,13 @@
     <int-virtual-link-desc>
       <id>internal-vl</id>
       <connectivity-type>
-        <layer-protocol>
-          <protocol>ipv4</protocol>
-        </layer-protocol>
+        <layer-protocol>ipv4</layer-protocol>
       </connectivity-type>
     </int-virtual-link-desc>
     <int-virtual-link-desc>
       <id>mgmt</id>
       <connectivity-type>
-        <layer-protocol>
-          <protocol>ipv4</protocol>
-        </layer-protocol>
+        <layer-protocol>ipv4</layer-protocol>
       </connectivity-type>
     </int-virtual-link-desc>
     <ext-cpd>
