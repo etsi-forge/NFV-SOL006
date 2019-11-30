@@ -770,6 +770,22 @@ submodule etsi-nfv-vnf {
               "GS NFV IFA011: Section 7.1.9.2.4,
                VirtualCpuPinningData information element.";
           }
+
+	  leaf-list cpu-policy {
+	    type enumeration {
+	      enum "dedicated";
+	      enum "shared";
+	    }
+	    description
+	      "Shows the list of dedicated virtual CPU cores and
+               shared virtual CPU cores in a VM. Dedicated refers to
+               a virtual CPU core occupies one physical CPU core.
+               Shared refers to multi virtual CPU cores shared one
+               physical CPU core.";
+            reference
+              "GS NFV IFA011: Section 7.1.9.2.4,
+               VirtualCpuPinningData information element.";
+	  }
           description
             "The virtual CPU pinning configuration for the
              virtualised compute resource.";
