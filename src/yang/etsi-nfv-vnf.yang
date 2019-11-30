@@ -2214,6 +2214,65 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.5.2
              VnfLcmOperationsConfiguration information element";
         }
+
+	container create-snapshot-vnf-op-config {
+	  list parameter {
+	    key "key";
+	    min-elements 1;
+
+	    leaf key {
+	      type string;
+	    }
+
+	    leaf value {
+	      type string;
+	    }
+	    description
+	      "Array of KVP requirements for VNF-specific parameters
+               to be passed when invoking the
+               CreateSnapshotVnfOpConfig operation.";
+	    reference
+              "GS NFV IFA011: Section 7.1.5.11
+               CreateSnapshotVnfOpConfig information
+               element";
+	  }
+	  description
+	    "Configuration parameters for the Create VNF Snapshot
+             operation.";
+          reference
+            "GS NFV IFA011: Section 7.1.5.2
+             VnfLcmOperationsConfiguration information element";
+	}
+
+	container revert-to-snapshot-vnf-op-config {
+	  description
+	    "Configuration parameters for the Revert-To VNF Snapshot
+             operation.";
+          reference
+            "GS NFV IFA011: Section 7.1.5.2
+             VnfLcmOperationsConfiguration information element";
+
+	  list parameter {
+	    key "key";
+	    min-elements 1;
+
+	    leaf key {
+	      type string;
+	    }
+
+	    leaf value {
+	      type string;
+	    }
+	    description
+	      "Array of KVP requirements for VNF-specific parameters
+               to be passed when invoking the
+               RevertToSnapshotVnfOpConfig operation.";
+	    reference
+              "GS NFV IFA011: Section 7.1.5.12
+               RevertToSnapshotVnfOpConfig information
+               element";
+	  }
+	}
       }
 
       list affinity-or-anti-affinity-group {
