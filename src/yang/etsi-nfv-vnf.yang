@@ -508,6 +508,7 @@ submodule etsi-nfv-vnf {
 
         list requirement-detail {
           key "key";
+          min-elements 1;
 
           leaf key {
             type string;
