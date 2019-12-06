@@ -390,6 +390,8 @@ submodule etsi-nfv-common {
       enum "end-vnf-ext-conn-change";
       enum "start-vnfinfo-modification";
       enum "end-vnfinfo-modification";
+      enum "start-change-current-vnf-package";
+      enum "end-change-current-vnf-package";
     }
   }
 
