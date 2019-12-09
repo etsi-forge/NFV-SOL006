@@ -30,8 +30,10 @@ module etsi-nfv-nsd {
   container nsd {
     list nsd {
       key "id";
+
       max-elements 1;
       uses nfv:nsd;
+
       description
 	"The NSD information element is a deployment template whose
          instances are used by the NFVO for the lifecycle management
