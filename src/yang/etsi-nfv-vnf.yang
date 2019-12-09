@@ -115,6 +115,62 @@ submodule etsi-nfv-vnf {
     }
   }
 
+  grouping block-storage-data {
+    leaf size-of-storage {
+      type uint64;
+      units "GB";
+      default 0;
+      description
+        "Size of virtualized storage resource in GB.";
+      reference
+        "GS NFV IFA011: Section 7.1.9.4.3, BlockStorageData
+             Information element.";
+    }
+
+    list vdu-storage-requirements {
+      key "key";
+
+      leaf key {
+        type string;
+      }
+
+      leaf value {
+        type string;
+      }
+      description
+        "An array of key-value pairs that articulate
+             the storage deployment requirements.";
+      reference
+        "GS NFV IFA011: Section 7.1.9.4.3, BlockStorageData
+             Information element.";
+    }
+
+    leaf rdma-enabled {
+      type boolean;
+      description
+        "Indicate if the storage support RDMA.";
+      reference
+        "GS NFV IFA011: Section 7.1.9.4.3, BlockStorageData
+             Information element.";
+    }
+
+    leaf sw-image-desc {
+      type leafref {
+        path "../../../sw-image-desc/id";
+      }
+      must "../size-of-storage >=" +
+        "../../../sw-image-desc[id=current()]/min-disk" {
+      }
+      description
+        "Software image to be loaded on the VirtualStorage
+             resource created based on this VirtualStorageDesc.
+             Shall be absent when used for virtual disks.";
+      reference
+        "GS NFV IFA011: Section 7.1.9.4.3, BlockStorageData
+             Information element.";
+    }
+  }
+
   grouping vnfd {
     leaf id {
       type string;
@@ -796,6 +852,24 @@ submodule etsi-nfv-vnf {
              VirtualCpuData information element.";
         }
       }
+
+      list virtual-disk {
+	key "id";
+
+        description
+          "The local or ephemeral disk(s) of the virtualised compute.";
+        reference
+          "GS NFV IFA011: Section 7.1.9.2.2, VirtualComputeDesc
+           Information element.";
+
+	leaf id {
+	  type string;
+	  description
+	    "Unique identifier for the list of virtual disks.";
+	}
+
+        uses block-storage-data;
+      }
     }
 
     list virtual-storage-desc {
@@ -815,70 +889,99 @@ submodule etsi-nfv-vnf {
 
       leaf type-of-storage {
         // Needed to be able to onboard images
-        default root-storage;
         type identityref {
           base storage-type;
         }
+        default "nfv:block";
         description
-          "Type of virtualised storage resource (e.g. volume,
-           object).";
+          "Type of virtualised storage resource (BLOCK, OBJECT,
+           FILE).";
         reference
           "GS NFV IFA011: Section 7.1.9.4, Information elements
            related to Virtual Storage.";
       }
 
-      leaf size-of-storage {
-        type uint64;
-        units "GB";
-        default 0;
-        description
-          "Size of virtualised storage resource (e.g. size of
-           volume, in GB)";
-        reference
-          "GS NFV IFA011: Section 7.1.9.4, Information elements
-           related to Virtual Storage.";
-      }
+      choice storage {
+	container block-storage-data {
+	  when '../type-of-storage = "nfv:block"';
+	  description
+	    "Specifies the details of block storage. It shall
+             be present when the 'typeOfStorage' attribute is set to
+             'BLOCK'. It shall be absent otherwise.";
+	  reference
+	    "GS NFV IFA011: Section 7.1.9.4, Information elements
+             related to Virtual Storage.";
 
-      list vdu-storage-requirements {
-        key "key";
+	  uses block-storage-data;
+	}
 
-        leaf key {
-          type string;
-        }
+	container object-storage-data {
+	  when '../type-of-storage = "nfv:object"';
+	  description
+	    "Specifies the details of object storage. It shall be
+             present when the 'typeOfStorage' attribute is set to
+             'OBJECT'. It shall be absent otherwise.";
+	  reference
+	    "GS NFV IFA011: Section 7.1.9.4, Information elements
+             related to Virtual Storage.";
 
-        leaf value {
-          type string;
-        }
-        description
-          "Array of key-value pairs that articulate the storage
-           deployment requirements.";
-        reference
-          "GS NFV IFA011: Section 7.1.9.4.2, VirtualStorageDesc
-           information element.";
-      }
+	  leaf max-size-of-storage {
+	    type uint64;
+	    units "GB";
+	    default 0;
+	    description
+	      "Max size of virtualised storage resource in GB.";
+	    reference
+	      "GS NFV IFA011: Section 7.1.9.4.4, ObjectStorage Information
+               element.";
+	  }
+	}
 
-      leaf rdma-enabled {
-        type boolean;
-        description
-          "Indicate if the storage support RDMA.";
-        reference
-          "GS NFV IFA011: Section 7.1.9.4, Information elements
-           related to Virtual Storage.";
-      }
+	container file-storage-data {
+	  when '../type-of-storage = "nfv:file"';
+	  description
+	    "Specifies the details of file storage. It shall be present
+             when the 'typeOfStorage' attribute is set to 'FILE'. It
+             shall be absent otherwise.";
+	  reference
+	    "GS NFV IFA011: Section 7.1.9.4, Information elements
+             related to Virtual Storage.";
 
-      leaf sw-image-desc {
-        type leafref {
-          path "../../sw-image-desc/id";
-        }
-        must "../size-of-storage >=" +
-          "../../sw-image-desc[id=current()]/min-disk" {
-        }
-        description
-          "Software image to be loaded on the VirtualStorage
-           resource created based on this VirtualStorageDesc.";
-        reference
-          "GS NFV IFA011: Section 7.1.9.4, Information elements
-           related to Virtual Storage.";
+	  leaf size-of-storage {
+	    type uint64;
+	    units "GB";
+	    default 0;
+	    description
+	      "Size of virtualised storage resource in GB.";
+	    reference
+	      "GS NFV IFA011: Section 7.1.9.4.5, FileStorageData
+               Information element.";
+	  }
+
+	  leaf file-system-protocol {
+	    type string;
+	    default "cifs";
+	    description
+	      "The shared file system protocol (e.g. NFS, CIFS).";
+	    reference
+	      "GS NFV IFA011: Section 7.1.9.4.5, FileStorageData
+               Information element.";
+	  }
+
+	  leaf int-virtual-link-desc {
+	    type leafref {
+	      path "../../../sw-image-desc/id";
+	    }
+	    mandatory true;
+	    description
+	      "Reference of the internal VLD which this file storage
+               connects to. The attached VDUs shall connect to the
+               same internal VLD.";
+	    reference
+	      "GS NFV IFA011: Section 7.1.9.4.5, FileStorageData
+               Information element.";
+	  }
+	}
       }
     }
 
