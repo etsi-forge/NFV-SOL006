@@ -58,12 +58,23 @@
       <size>1</size>
       <image>http://mycompany.images.com/asa.qcow2</image>
     </sw-image-desc>
+    <int-virtual-link-desc>
+      <id>inside-vl</id>
+      <flavour>
+	<id>1g</id>
+	<qos>
+	  <latency>1</latency>
+	  <packet-delay-variation>1</packet-delay-variation>
+	  <packet-loss-ratio>0.02</packet-loss-ratio>
+	</qos>
+      </flavour>
+      <connectivity-type>
+	<layer-protocol>ethernet</layer-protocol>
+      </connectivity-type>
+    </int-virtual-link-desc>
     <ext-cpd>
       <id>inside</id>
-      <int-cpd>
-	<vdu-id>firewall</vdu-id>
-	<cpd>inside</cpd>
-      </int-cpd>
+      <int-virtual-link-desc>inside-vl</int-virtual-link-desc>
       <layer-protocol>ethernet</layer-protocol>
     </ext-cpd>
     <ext-cpd>
@@ -89,6 +100,26 @@
         <min-number-of-instances>1</min-number-of-instances>
         <max-number-of-instances>2</max-number-of-instances>
       </vdu-profile>
+      <virtual-link-profile>
+	<id>inside-vl</id>
+	<flavour>1g</flavour>
+	<max-bit-rate-requirements>
+	  <root>10</root>
+	</max-bit-rate-requirements>
+	<min-bit-rate-requirements>
+	  <root>1</root>
+	</min-bit-rate-requirements>
+	<virtual-link-protocol-data>
+	  <associated-layer-protocol>ipv4</associated-layer-protocol>
+	  <l3-protocol-data>
+	    <name>inside-network</name>
+	    <ip-version>ipv4</ip-version>
+	    <cidr>192.138.0.0/8</cidr>
+	    <gateway-ip>192.138.0.1</gateway-ip>
+	    <dhcp-enabled>true</dhcp-enabled>
+	  </l3-protocol-data>
+	</virtual-link-protocol-data>
+      </virtual-link-profile>
       <instantiation-level>
         <id>double</id>
         <vdu-level>

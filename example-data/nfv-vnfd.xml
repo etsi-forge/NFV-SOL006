@@ -54,7 +54,7 @@
     <min-disk>0</min-disk>
     <min-ram>2.0</min-ram>
     <size>1</size>
-    <image>http://www.cisco.com/asa.qcow2</image>
+    <image>http://www.mycompany.com/asa.qcow2</image>
   </sw-image-desc>
   <ext-cpd>
     <id>inside</id>
