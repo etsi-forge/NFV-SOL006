@@ -2931,10 +2931,15 @@ submodule etsi-nfv-vnf {
     }
 
     list element-group {
+      status deprecated;
       key "id";
       description
         "Describes the associated elements of a VNFD for a certain
-         purpose during VNF lifecycle management.";
+         purpose during VNF lifecycle management.
+
+         Reason for deprecating this node - Information about which
+         VDU and VLD are involved in scaling is better defined by
+         ScalingDelta.";
       reference
         "GS NFV IFA011: Section 7.1.2 VNFD information element";
 
