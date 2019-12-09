@@ -2977,10 +2977,25 @@ submodule etsi-nfv-vnf {
       }
 
       leaf-list event {
-        type internal-lifecycle-management-script-event;
+        type union {
+          type internal-lifecycle-management-script-event;
+          type external-lifecycle-management-script-event;
+        }
         description
           "Describes VNF lifecycle event(s) or an external stimulus
-           detected on a VNFM reference point.";
+           detected on a VNFM reference point.
+
+           If the event is of type 
+           internal-lifecycle-management-script-event, then depending
+           on whether the event is of type start-* or end-*, the
+           script associated with the VNF LCM operation needs to be 
+           executed before the event, or after the event,
+           respectively.
+
+           On the other hand, if the event is of type
+           external-lifecycle-management-script-event, then the
+           script associated with the event needs to be executed
+           for the given VNF LCM operation.";
         reference
           "GS NFV IFA011: Section 7.1.13 LifeCycleManagementScript
            information element";
