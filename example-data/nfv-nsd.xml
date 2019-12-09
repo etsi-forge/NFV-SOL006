@@ -1,4 +1,4 @@
-<nsd xmlns="urn:etsi:nfv:yang:etsi-nfv-nsd">
+<nfv xmlns="urn:etsi:nfv:yang:etsi-nfv-descriptors">
   <vnfd>
     <id>ASA</id>
     <provider>My Company</provider>
@@ -133,4 +133,4 @@
       </ns-instantiation-level>
     </df>
   </nsd>
-</config>
+</nfv>
