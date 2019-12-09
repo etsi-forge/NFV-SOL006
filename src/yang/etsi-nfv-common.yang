@@ -9,6 +9,14 @@ submodule etsi-nfv-common {
   description
     "Common data types for ETSI data models.";
 
+  revision 2019-10-01 {
+    description
+      "Version 2.7.1.
+
+       Common data structures to support VNFD and NSD according to:
+       ETSI GS NFV-IFA 014 Ed271v264
+       ETSI GS NFV-IFA 011 Ed271v264";
+  }
   revision 2019-04-25 {
     description
       "Initial revision
@@ -225,22 +233,115 @@ submodule etsi-nfv-common {
       "Base type of storage that identities can derive from.";
   }
 
-  identity root-storage {
+  identity block {
     base storage-type;
     description
-      "Root type of storage.";
+      "Block type of storage.";
   }
 
-  identity swap-storage {
+  identity object {
     base storage-type;
     description
-      "Swap type of storage.";
+      "Object type of storage.";
   }
 
-  identity ephemeral-storage {
+  identity file {
     base storage-type;
     description
-      "Ephemeral type of storage.";
+      "File type of storage.";
+  }
+
+  identity forwarding-behaviour {
+    description
+      "Base identity for forwarding behaviour.";
+  }
+
+  identity all {
+    base forwarding-behaviour;
+    description
+      "Traffic flows shall be forwarded simultaneously to all CP
+       or SAP instances created from the referenced CP profile(s).";
+  }
+
+  identity lb {
+    base forwarding-behaviour;
+    description
+      "Traffic flows shall be forwarded to one CP or SAP instance
+       created from the referenced CP profile(s) selected based on
+       a load-balancing algorithm.";
+  }
+
+  identity vip-function {
+    description
+      "Indicates the function the virtual IP address is used for.";
+  }
+
+  identity high-availability {
+    base vip-function;
+    description
+      "High availability function.";
+  }
+
+  identity load-balancing {
+    base vip-function;
+    description
+      "Load balancing function.";
+  }
+
+  identity vnic-type {
+    description
+      "Describes the type of the virtual network interface realizing
+       the CPs instantiated from this CPD. This is used to determine
+       which mechanism driver(s) to be used to bind the port. Value:
+       • NORMAL
+       • VIRTIO
+       • DIRECT
+       • BAREMETAL
+       • VIRTIO-FORWARDER
+       • DIRECT-PHYSICAL
+       • SMART-NIC";
+  }
+
+  identity normal {
+    base vnic-type;
+    description
+      "Normal NIC.";
+  }
+
+  identity virtio {
+    base vnic-type;
+    description
+      "VirtIO NIC.";
+  }
+
+  identity direct {
+    base vnic-type;
+    description
+      "Direct NIC type.";
+  }
+
+  identity bare-metal {
+    base vnic-type;
+    description
+      "Bare metal NIC type.";
+  }
+
+  identity virtio-forwarder {
+    base vnic-type;
+    description
+      "VirtIO Forwarder NIC type.";
+  }
+
+  identity direct-physical {
+    base vnic-type;
+    description
+      "Direct physical NIC type.";
+  }
+
+  identity smart-nic {
+    base vnic-type;
+    description
+      "SmartNIC or Smart NIC type.";
   }
 
   /*
@@ -307,8 +408,8 @@ submodule etsi-nfv-common {
 
   grouping local-affinity-or-anti-affinity-rule {
     list local-affinity-or-anti-affinity-rule {
-      key "affinity-type affinity-scope";
-      leaf affinity-type {
+      key "type scope";
+      leaf type {
         type affinity-type;
         description
           "Specifies whether the rule is an affinity rule or an
@@ -318,7 +419,7 @@ submodule etsi-nfv-common {
            LocalAffinityOrAntiAffinityRule information element.";
       }
 
-      leaf affinity-scope {
+      leaf scope {
         type affinity-scope;
         description
           "Specifies the scope of the rule, possible values are

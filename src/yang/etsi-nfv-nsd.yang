@@ -4,7 +4,7 @@ module etsi-nfv-nsd {
   prefix nsd;
 
   import etsi-nfv-descriptors {
-    prefix vnf;
+    prefix nfv;
   }
 
   organization
@@ -13,6 +13,14 @@ module etsi-nfv-nsd {
   description
     "Network Services Descriptors";
 
+  revision 2019-10-01 {
+    description
+      "Version 2.7.1.
+
+       Common data structures to support VNFD and NSD according to:
+       ETSI GS NFV-IFA 014 Ed271v264
+       ETSI GS NFV-IFA 011 Ed271v264";
+  }
   revision 2019-04-25 {
     description
       "Initial revision.
@@ -20,23 +28,12 @@ module etsi-nfv-nsd {
   }
 
   container nsd {
-    list vnfd {
-      key "id";
-      description
-        "A VNF Descriptor (VNFD) is a deployment template which
-         describes a VNF in terms of deployment and operational
-         behaviour requirements. It also contains connectivity,
-         interface and virtualised resource requirements";
-      reference
-        "GS NFV-IFA011: Section 7.1.2, VNFD information element";
-
-      uses vnf:vnfd;
-    }
-
     list nsd {
       key "id";
+
       max-elements 1;
-      uses vnf:nsd;
+      uses nfv:nsd;
+
       description
 	"The NSD information element is a deployment template whose
          instances are used by the NFVO for the lifecycle management
@@ -44,19 +41,6 @@ module etsi-nfv-nsd {
       reference
         "GS NFV-IFA014: Section 6.2.2, Network Service Descriptor
          information element";
-    }
-
-    list pnfd {
-      key "id";
-
-      description
-	"The Pnfd information element is a deployment template
-         enabling on-boarding PNFs and referencing them from an
-         NSD. It focuses on connectivity aspects only.";
-      reference
-        "GS NFV-IFA014: Section 6.6.2, Pnfd information element.";
-
-      uses vnf:pnfd;
     }
   }
 }

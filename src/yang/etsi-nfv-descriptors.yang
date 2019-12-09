@@ -14,6 +14,13 @@ module etsi-nfv-descriptors {
   description
     "Network Function Virtualization Descriptors";
 
+  revision 2019-10-01 {
+    description
+      "Version 2.7.1.
+
+       NSD and PNFD according to ETSI GS NFV-IFA 014 Ed271v264
+       VNFD according to ETSI GS NFV-IFA 011 Ed271v264.";
+  }
   revision 2019-04-25 {
     description
       "Initial revision.
@@ -24,6 +31,7 @@ module etsi-nfv-descriptors {
   container nfv {
     list vnfd {
       key "id";
+
       description
         "A VNF Descriptor (VNFD) is a deployment template which
          describes a VNF in terms of deployment and operational

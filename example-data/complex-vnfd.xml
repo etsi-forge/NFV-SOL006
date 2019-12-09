@@ -80,8 +80,12 @@
     </virtual-compute-desc>
     <virtual-storage-desc>
       <id>root</id>
-      <type-of-storage>root-storage</type-of-storage>
-      <size-of-storage>10</size-of-storage>
+      <type-of-storage>block</type-of-storage>
+      <block-storage-data>
+	<size-of-storage>10</size-of-storage>
+	<rdma-enabled>true</rdma-enabled>
+	<sw-image-desc>CP</sw-image-desc>
+      </block-storage-data>
     </virtual-storage-desc>
     <sw-image-desc>
       <id>CP</id>
