@@ -2,4 +2,4 @@ This repository consists of YANG models for representing Network Functions Virtu
 
 The example-data folder consists of instance data files that serve as examples for the model. 
 
-A more detailed explanation of the models and the examples can be found in ETSI GS NFV SOL006.
+A more detailed explanation of the models and the examples can be found in ETSI GS NFV-SOL 006.
