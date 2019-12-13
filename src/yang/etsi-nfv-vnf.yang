@@ -3077,6 +3077,11 @@ submodule etsi-nfv-vnf {
     }
 
     list vnf-package-change-info {
+      // IFA011ed332 defines the key as VersionSelector, which is
+      // nothing but a combination of src-vnfd-id, dst-vnfd-id and
+      // src-flavour-id. YANG cannot use a composite as a key, and
+      // therefore the model breaks it out as three elements that
+      // form the key.
       key "src-vnfd-id dst-vnfd-id src-flavour-id";
 
       leaf src-vnfd-id {
@@ -3153,6 +3158,18 @@ submodule etsi-nfv-vnf {
            specify additional values and provide such values to
            qualify further the change between the two versions such
            as VNF_UPGRADE, VNF_UPDATE, VNF_DOWNGRADE, etc.";
+        reference
+          "GS NFV IFA011: Section 7.1.15.2 VnfPackageChangeInfo
+           information element";
+      }
+
+      leaf-list additional-modification-description {
+	type string;
+	description
+	  "A VNF provider may define additional information to
+           qualify further the change between the two versions,
+           such as 'VNF upgrade', 'VNF update', 'VNF downgrade',
+           etc.";
         reference
           "GS NFV IFA011: Section 7.1.15.2 VnfPackageChangeInfo
            information element";
