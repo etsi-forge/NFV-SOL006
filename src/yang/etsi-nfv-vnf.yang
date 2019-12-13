@@ -2412,12 +2412,14 @@ submodule etsi-nfv-vnf {
           type enumeration {
             enum vnf-configuration;
             enum vnf-indicator;
+            enum vnf-lcm-coordination;
           }
           description
             "Identifies an interface produced by the VNF. Valid
              values:
              - VNF_CONFIGURATION
-             - VNF_INDICATOR";
+             - VNF_INDICATOR
+             - VNF_LCM_COORDINATION";
           reference
             "GS NFV IFA011: Section 7.1.8.16 VnfInterfaceDetails
              information element";
