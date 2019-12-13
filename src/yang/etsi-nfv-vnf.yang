@@ -64,7 +64,7 @@ submodule etsi-nfv-vnf {
       }
 
       leaf support-mandatory {
-	status "deprecated";
+        status "deprecated";
         default "false";
         type boolean;
         description
@@ -303,11 +303,11 @@ submodule etsi-nfv-vnf {
         }
 
         leaf vnic-type {
-	  type identityref {
-	    base vnic-type;
-	  }
-	  description
-	    "Describes the type of the virtual network interface
+          type identityref {
+            base vnic-type;
+          }
+          description
+            "Describes the type of the virtual network interface
              realizing the CPs instantiated from this CPD. This is
              used to determine which mechanism driver(s) to be used
              to bind the port. Value:
@@ -771,13 +771,13 @@ submodule etsi-nfv-vnf {
                VirtualCpuPinningData information element.";
           }
 
-	  leaf-list cpu-policy {
-	    type enumeration {
-	      enum "dedicated";
-	      enum "shared";
-	    }
-	    description
-	      "Shows the list of dedicated virtual CPU cores and
+          leaf-list cpu-policy {
+            type enumeration {
+              enum "dedicated";
+              enum "shared";
+            }
+            description
+              "Shows the list of dedicated virtual CPU cores and
                shared virtual CPU cores in a VM. Dedicated refers to
                a virtual CPU core occupies one physical CPU core.
                Shared refers to multi virtual CPU cores shared one
@@ -785,7 +785,7 @@ submodule etsi-nfv-vnf {
             reference
               "GS NFV IFA011: Section 7.1.9.2.4,
                VirtualCpuPinningData information element.";
-	  }
+          }
           description
             "The virtual CPU pinning configuration for the
              virtualised compute resource.";
@@ -1658,17 +1658,17 @@ submodule etsi-nfv-vnf {
                  L2ProtocolData information element.";
             }
 
-	    leaf segmentation-id {
-	      type string;
-	      description
+            leaf segmentation-id {
+              type string;
+              description
                 "If present, specifies a specific virtualised network
                  segment, which depends on the network type. For e.g.,
                  VLAN ID for VLAN network type and tunnel ID for
                  GRE/VXLAN network types.";
-	      reference
+              reference
                 "GS NFV IFA011: Section 7.1.8.14,
                  L2ProtocolData information element.";
-	    }
+            }
 
             description
               "Specifies the L2 protocol data for this virtual link.
@@ -2231,64 +2231,64 @@ submodule etsi-nfv-vnf {
              VnfLcmOperationsConfiguration information element";
         }
 
-	container create-snapshot-vnf-op-config {
-	  list parameter {
-	    key "key";
-	    min-elements 1;
+        container create-snapshot-vnf-op-config {
+          list parameter {
+            key "key";
+            min-elements 1;
 
-	    leaf key {
-	      type string;
-	    }
+            leaf key {
+              type string;
+            }
 
-	    leaf value {
-	      type string;
-	    }
-	    description
-	      "Array of KVP requirements for VNF-specific parameters
+            leaf value {
+              type string;
+            }
+            description
+              "Array of KVP requirements for VNF-specific parameters
                to be passed when invoking the
                CreateSnapshotVnfOpConfig operation.";
-	    reference
+            reference
               "GS NFV IFA011: Section 7.1.5.11
                CreateSnapshotVnfOpConfig information
                element";
-	  }
-	  description
-	    "Configuration parameters for the Create VNF Snapshot
+          }
+          description
+            "Configuration parameters for the Create VNF Snapshot
              operation.";
           reference
             "GS NFV IFA011: Section 7.1.5.2
              VnfLcmOperationsConfiguration information element";
-	}
+        }
 
-	container revert-to-snapshot-vnf-op-config {
-	  description
-	    "Configuration parameters for the Revert-To VNF Snapshot
+        container revert-to-snapshot-vnf-op-config {
+          description
+            "Configuration parameters for the Revert-To VNF Snapshot
              operation.";
           reference
             "GS NFV IFA011: Section 7.1.5.2
              VnfLcmOperationsConfiguration information element";
 
-	  list parameter {
-	    key "key";
-	    min-elements 1;
+          list parameter {
+            key "key";
+            min-elements 1;
 
-	    leaf key {
-	      type string;
-	    }
+            leaf key {
+              type string;
+            }
 
-	    leaf value {
-	      type string;
-	    }
-	    description
-	      "Array of KVP requirements for VNF-specific parameters
+            leaf value {
+              type string;
+            }
+            description
+              "Array of KVP requirements for VNF-specific parameters
                to be passed when invoking the
                RevertToSnapshotVnfOpConfig operation.";
-	    reference
+            reference
               "GS NFV IFA011: Section 7.1.5.12
                RevertToSnapshotVnfOpConfig information
                element";
-	  }
-	}
+          }
+        }
       }
 
       list affinity-or-anti-affinity-group {
