@@ -1655,6 +1655,22 @@ submodule etsi-nfv-ns {
           }
         }
       }
+
+      leaf priority {
+        type uint32;
+        description
+          "Specifies the priority for the NS instance.
+
+           The allowed range will be reasonably high. The 'zero'
+           value will express the highest priority and the fact
+           that the NS instance based on this DF cannot be
+           pre-empted during resource allocation.
+
+           Examples for the usage of priority include conflict
+           resolution in case of resource shortage.";
+        reference
+          "GS NFV IFA014: Section 6.3.2.2 NsDf information element";
+      }
     }
     uses security-parameters;
   }
