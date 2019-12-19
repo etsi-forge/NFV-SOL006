@@ -394,6 +394,8 @@ submodule etsi-nfv-common {
       enum "end-vnf-snapshot-creation";
       enum "start-vnf-snapshot-reverting-to";
       enum "end-vnf-snapshot-reverting-to";
+      enum "start-change-current-vnf-package";
+      enum "end-change-current-vnf-package";
     }
   }
 
