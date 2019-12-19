@@ -399,6 +399,14 @@ submodule etsi-nfv-common {
     }
   }
 
+  typedef external-lifecycle-management-script-event {
+    type enumeration {
+      enum "vnf-snapshot-creation";
+      enum "vnf-snapshot-reverting-to";
+      enum "change-current-vnf-package";
+    }
+  }
+
   grouping local-affinity-or-anti-affinity-rule {
     list local-affinity-or-anti-affinity-rule {
       key "type scope";
