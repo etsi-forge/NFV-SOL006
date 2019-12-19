@@ -1256,6 +1256,17 @@ submodule etsi-nfv-vnf {
         }
         uses monitoring-parameter;
       }
+
+      uses nfvi-maintenance-info {
+	description
+	  "When present, provides information on the rules to be
+           observed when an instance based on this
+           VnfVirtualLinkDesc is impacted during NFVI operation and
+           maintenance (e.g. NFVI resource upgrades).";
+        reference
+          "GS NFV IFA011: Section 7.1.7.2, VnfVirtualLinkDesc
+           information element.";
+      }
     }
 
     uses security-group-rule;
@@ -1470,6 +1481,7 @@ submodule etsi-nfv-vnf {
           reference
             "GS NFV IFA011: Section 7.1.8.3, VduProfile information
              element.";
+
           leaf id {
             type leafref {
               path "../../../" +
@@ -1483,6 +1495,17 @@ submodule etsi-nfv-vnf {
                information element.";
           }
         }
+
+	uses nfvi-maintenance-info {
+	  description
+	    "When present, provides information on the impact
+             tolerance and rules to be observed when instance(s) of
+             the VDU are impacted during NFVI operation and
+             maintenance (e.g. NFVI resource upgrades).";
+          reference
+            "GS NFV IFA011: Section 7.1.8.3, VduProfile information
+             element.";
+	}
       }
 
       list virtual-link-profile {
