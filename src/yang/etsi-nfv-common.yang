@@ -437,6 +437,7 @@ submodule etsi-nfv-common {
         type identityref {
           base layer-protocol;
         }
+	min-elements 1;
         description
           "Identifies the protocols that the VL uses (Ethernet,
            MPLS, ODU2, IPV4, IPV6, Pseudo-Wire). The top layer
