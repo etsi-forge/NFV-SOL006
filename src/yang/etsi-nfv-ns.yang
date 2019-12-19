@@ -578,7 +578,7 @@ submodule etsi-nfv-ns {
         list position-desc {
           key "id";
 
-	  min-elements 1;
+          min-elements 1;
 
           leaf id {
             type string;
@@ -756,7 +756,7 @@ submodule etsi-nfv-ns {
           mandatory true;
           type leafref {
             path "deref(../flavour-id)/../nfv:instantiation-level/" +
-	         "nfv:id";
+                 "nfv:id";
           }
           description
             "Identifier of the instantiation level of the VNF DF
@@ -1268,7 +1268,7 @@ submodule etsi-nfv-ns {
              "count(virtual-link-to-level-mapping) + " +
              "count(ns-to-level-mapping)) > 0" {
           error-message
-	    "At least one attribute between " +
+            "At least one attribute between " +
             "vnf-to-level-mapping, " +
             "virtual-link-to-level-mapping and " +
             "ns-to-level-mapping shall be present.";
@@ -1306,7 +1306,7 @@ submodule etsi-nfv-ns {
             leaf value {
               type string;
             }
-	    description
+            description
               "Array of KVP requirements for additional parameters
                of NS to be passed when invoking the Instantiate Ns
                operation.";
@@ -1327,7 +1327,7 @@ submodule etsi-nfv-ns {
             leaf value {
               type string;
             }
-	    description
+            description
               "Array of KVP requirements for additional parameters
                of NS to be passed when invoking the Scale Ns
                operation.";
@@ -1348,7 +1348,7 @@ submodule etsi-nfv-ns {
             leaf value {
               type string;
             }
-	    description
+            description
               "Array of KVP requirements for additional parameters
                of NS to be passed when invoking the Heal Ns
                operation.";
@@ -1367,7 +1367,7 @@ submodule etsi-nfv-ns {
         }
         must "boolean(../../nested-nsd-id[.=current()/nsd-id])" {
           error-message
-	    "PNFDs in the profile has to be listed as a " +
+            "PNFDs in the profile has to be listed as a " +
             "dependency of the network service " +
             "descriptor.";
         }
@@ -1400,7 +1400,7 @@ submodule etsi-nfv-ns {
              element";
         }
 
-	leaf ns-df-id {
+        leaf ns-df-id {
           mandatory true;
           type leafref {
             path "deref(../nsd-id)/../df/id";
@@ -1413,7 +1413,7 @@ submodule etsi-nfv-ns {
              element";
         }
 
-	leaf instantiation-level-id {
+        leaf instantiation-level-id {
           mandatory true;
           type leafref {
             path "deref(../ns-df-id)/../ns-instantiation-level/id";
@@ -1428,7 +1428,7 @@ submodule etsi-nfv-ns {
              element";
         }
 
-	leaf min-number-of-instances {
+        leaf min-number-of-instances {
           type uint16;
           default 1;
           description
@@ -1440,7 +1440,7 @@ submodule etsi-nfv-ns {
              element";
         }
 
-	leaf max-number-of-instances {
+        leaf max-number-of-instances {
           type uint16;
           default 1;
           description
@@ -1553,7 +1553,7 @@ submodule etsi-nfv-ns {
              information element";
         }
 
-	choice secondary-id {
+        choice secondary-id {
           leaf secondary-vnf-profile {
             type leafref {
               path "../../vnf-profile/vnfd-id";
@@ -1591,7 +1591,7 @@ submodule etsi-nfv-ns {
                information element";
           }
 
-	  leaf vnf-indicator {
+          leaf vnf-indicator {
             mandatory true;
             type leafref {
               path "deref(../vnfd-id)/../nfv:indicator/nfv:id";

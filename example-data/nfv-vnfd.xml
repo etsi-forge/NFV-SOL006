@@ -87,5 +87,19 @@
       </vdu-level>
     </instantiation-level>
     <default-instantiation-level>single</default-instantiation-level>
+    <lcm-operations-configuration>
+      <create-snapshot-vnf-op-config>
+	<parameter>
+	  <key>1</key>
+	  <value>1</value>
+	</parameter>
+      </create-snapshot-vnf-op-config>
+      <revert-to-snapshot-vnf-op-config>
+	<parameter>
+	  <key>1</key>
+	  <value>1</value>
+	</parameter>
+      </revert-to-snapshot-vnf-op-config>
+    </lcm-operations-configuration>
   </df>
 </vnfd>

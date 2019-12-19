@@ -770,6 +770,22 @@ submodule etsi-nfv-vnf {
               "GS NFV IFA011: Section 7.1.9.2.4,
                VirtualCpuPinningData information element.";
           }
+
+          leaf-list cpu-policy {
+            type enumeration {
+              enum "dedicated";
+              enum "shared";
+            }
+            description
+              "Shows the list of dedicated virtual CPU cores and
+               shared virtual CPU cores in a VM. Dedicated refers to
+               a virtual CPU core occupies one physical CPU core.
+               Shared refers to multi virtual CPU cores shared one
+               physical CPU core.";
+            reference
+              "GS NFV IFA011: Section 7.1.9.2.4,
+               VirtualCpuPinningData information element.";
+          }
           description
             "The virtual CPU pinning configuration for the
              virtualised compute resource.";
@@ -2215,18 +2231,86 @@ submodule etsi-nfv-vnf {
              VnfLcmOperationsConfiguration information element";
         }
 
+        container create-snapshot-vnf-op-config {
+          description
+            "Configuration parameters for the Create VNF Snapshot
+             operation.";
+          reference
+            "GS NFV IFA011: Section 7.1.5.2
+             VnfLcmOperationsConfiguration information element";
+
+          list parameter {
+            key "key";
+            min-elements 1;
+
+            leaf key {
+              type string;
+            }
+
+            leaf value {
+              type string;
+            }
+            description
+              "Array of KVP requirements for VNF-specific parameters
+               to be passed when invoking the
+               CreateSnapshotVnfOpConfig operation.";
+            reference
+              "GS NFV IFA011: Section 7.1.5.11
+               CreateSnapshotVnfOpConfig information
+               element";
+          }
+        }
+
+        container revert-to-snapshot-vnf-op-config {
+          description
+            "Configuration parameters for the Revert-To VNF Snapshot
+             operation.";
+          reference
+            "GS NFV IFA011: Section 7.1.5.2
+             VnfLcmOperationsConfiguration information element";
+
+          list parameter {
+            key "key";
+            min-elements 1;
+
+            leaf key {
+              type string;
+            }
+
+            leaf value {
+              type string;
+            }
+            description
+              "Array of KVP requirements for VNF-specific parameters
+               to be passed when invoking the
+               RevertToSnapshotVnfOpConfig operation.";
+            reference
+              "GS NFV IFA011: Section 7.1.5.12
+               RevertToSnapshotVnfOpConfig information
+               element";
+          }
+        }
+
         container change-current-vnf-package-op-config {
+          description
+            "Configuration parameters for the
+             ChangeCurrentVnfPackageOpConfig operation.";
+          reference
+            "GS NFV IFA011: Section 7.1.5.2
+             VnfLcmOperationsConfiguration information element";
+
           list parameter {
             key "key";
 
             leaf key {
               type string;
             }
+
             leaf value {
               type string;
             }
             description
-              "Array of KVP requirements for VNF-specific parameters
+              "Array of KVP  requirements for VNF-specific parameters
                to be passed when invoking the change current VNF
                Package operation.";
             reference
@@ -2234,12 +2318,6 @@ submodule etsi-nfv-vnf {
                ChangeCurrentVnfPackageOpConfig information
                element";
           }
-          description
-            "Configuration parameters for the ModifyVnfSoftware
-             operation.";
-          reference
-            "GS NFV IFA011: Section 7.1.5.2
-             VnfLcmOperationsConfiguration information element";
         }
       }
 
@@ -3124,7 +3202,7 @@ submodule etsi-nfv-vnf {
       leaf additional-params-id {
         type leafref {
           path "../../df/lcm-operations-configuration/" +
-	       "change-current-vnf-package-op-config/parameter/key";
+               "change-current-vnf-package-op-config/parameter/key";
         }
         description
           "References the ChangeCurrentVnfPackageOpConfig information
@@ -3164,9 +3242,9 @@ submodule etsi-nfv-vnf {
       }
 
       leaf-list additional-modification-description {
-	type string;
-	description
-	  "A VNF provider may define additional information to
+        type string;
+        description
+          "A VNF provider may define additional information to
            qualify further the change between the two versions,
            such as 'VNF upgrade', 'VNF update', 'VNF downgrade',
            etc.";
@@ -3229,11 +3307,11 @@ submodule etsi-nfv-vnf {
       }
 
       leaf lcm-script-id {
-	type leafref {
-	  path "../../lifecycle-management-script/id";
-	}
-	description
-	  "Reference to a lifecycle management script that is executed
+        type leafref {
+          path "../../lifecycle-management-script/id";
+        }
+        description
+          "Reference to a lifecycle management script that is executed
            as part of this 'change current VNF Package' process.";
         reference
           "GS NFV IFA011: Section 7.1.15.2 VnfPackageChangeInfo
@@ -3241,11 +3319,11 @@ submodule etsi-nfv-vnf {
       }
 
       leaf coordination-id {
-	type leafref {
-	  path "../../lcm-operations-coordination/id";
-	}
-	description
-	  "Reference to applicable VNF LCM operation coordination
+        type leafref {
+          path "../../lcm-operations-coordination/id";
+        }
+        description
+          "Reference to applicable VNF LCM operation coordination
            actions.";
         reference
           "GS NFV IFA011: Section 7.1.15.2 VnfPackageChangeInfo
@@ -3253,11 +3331,11 @@ submodule etsi-nfv-vnf {
       }
 
       leaf dst-flavour-id {
-	type leafref {
-	  path "../../df/id";
-	}
-	description
-	  "Identifies the deployment flavour in the destination VNF
+        type leafref {
+          path "../../df/id";
+        }
+        description
+          "Identifies the deployment flavour in the destination VNF
            package for which this change applies. The flavour ID is
            defined in the destination VNF package.";
         reference

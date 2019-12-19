@@ -61,7 +61,7 @@ module etsi-nfv-descriptors {
       key "id";
 
       description
-	"The Pnfd information element is a deployment template
+        "The Pnfd information element is a deployment template
          enabling on-boarding PNFs and referencing them from an
          NSD. It focuses on connectivity aspects only.";
       reference

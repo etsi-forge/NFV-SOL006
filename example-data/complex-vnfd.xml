@@ -210,6 +210,18 @@
 	<operate-vnf-op-config>
 	  <min-graceful-stop-timeout>1</min-graceful-stop-timeout>
 	</operate-vnf-op-config>
+	<create-snapshot-vnf-op-config>
+	  <parameter>
+	    <key>1</key>
+	    <value>1</value>
+	  </parameter>
+	</create-snapshot-vnf-op-config>
+	<revert-to-snapshot-vnf-op-config>
+	  <parameter>
+	    <key>1</key>
+	    <value>1</value>
+	  </parameter>
+	</revert-to-snapshot-vnf-op-config>
       </lcm-operations-configuration>
       <affinity-or-anti-affinity-group>
         <id>control-plane</id>
@@ -281,6 +293,18 @@
 	<operate-vnf-op-config>
 	  <min-graceful-stop-timeout>1</min-graceful-stop-timeout>
 	</operate-vnf-op-config>
+	<create-snapshot-vnf-op-config>
+	  <parameter>
+	    <key>1</key>
+	    <value>1</value>
+	  </parameter>
+	</create-snapshot-vnf-op-config>
+	<revert-to-snapshot-vnf-op-config>
+	  <parameter>
+	    <key>1</key>
+	    <value>1</value>
+	  </parameter>
+	</revert-to-snapshot-vnf-op-config>
       </lcm-operations-configuration>
       <affinity-or-anti-affinity-group>
         <id>control-plane</id>
