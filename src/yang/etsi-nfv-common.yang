@@ -233,22 +233,22 @@ submodule etsi-nfv-common {
       "Base type of storage that identities can derive from.";
   }
 
-  identity root-storage {
+  identity block {
     base storage-type;
     description
-      "Root type of storage.";
+      "Block type of storage.";
   }
 
-  identity swap-storage {
+  identity object {
     base storage-type;
     description
-      "Swap type of storage.";
+      "Object type of storage.";
   }
 
-  identity ephemeral-storage {
+  identity file {
     base storage-type;
     description
-      "Ephemeral type of storage.";
+      "File type of storage.";
   }
 
   identity forwarding-behaviour {
@@ -401,6 +401,14 @@ submodule etsi-nfv-common {
 
   typedef external-lifecycle-management-script-event {
     type enumeration {
+      enum "instantiation";
+      enum "scaling";
+      enum "healing";
+      enum "termination";
+      enum "vnf-flavour-change";
+      enum "vnf-operation-change";
+      enum "vnf-ext-conn-change";
+      enum "vnfinfo-modification";
       enum "vnf-snapshot-creation";
       enum "vnf-snapshot-reverting-to";
       enum "change-current-vnf-package";
@@ -438,6 +446,7 @@ submodule etsi-nfv-common {
         type identityref {
           base layer-protocol;
         }
+	min-elements 1;
         description
           "Identifies the protocols that the VL uses (Ethernet,
            MPLS, ODU2, IPV4, IPV6, Pseudo-Wire). The top layer

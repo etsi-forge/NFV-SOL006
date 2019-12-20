@@ -36,8 +36,12 @@
     </virtual-compute-desc>
     <virtual-storage-desc>
       <id>asa-vsd</id>
-      <type-of-storage>root-storage</type-of-storage>
-      <size-of-storage>0</size-of-storage>
+      <type-of-storage>block</type-of-storage>
+      <block-storage-data>
+	<size-of-storage>1</size-of-storage>
+	<rdma-enabled>true</rdma-enabled>
+	<sw-image-desc>asa-image</sw-image-desc>
+      </block-storage-data>
     </virtual-storage-desc>
     <sw-image-desc>
       <id>asa-image</id>
@@ -193,8 +197,11 @@
     </virtual-compute-desc>
     <virtual-storage-desc>
       <id>csr-vsd</id>
-      <type-of-storage>root-storage</type-of-storage>
-      <size-of-storage>0</size-of-storage>
+      <type-of-storage>file</type-of-storage>
+      <file-storage-data>
+	<size-of-storage>1</size-of-storage>
+	<int-virtual-link-desc>csr-image</int-virtual-link-desc>
+      </file-storage-data>
     </virtual-storage-desc>
     <sw-image-desc>
       <id>csr-image</id>
