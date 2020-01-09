@@ -3,6 +3,13 @@ submodule etsi-nfv-common {
   belongs-to etsi-nfv-descriptors {
     prefix nfv;
   }
+
+  import ietf-yang-types {
+    prefix yang;
+    reference
+      "RFC 6991: Common YANG Data Types.";
+  }
+
   organization
     "European Telecommunications Standards Institute (ETSI)";
 
@@ -415,9 +422,125 @@ submodule etsi-nfv-common {
     }
   }
 
+  grouping nfvi-maintenance-info {
+    container nfvi-maintenance-info {
+
+      leaf impact-notification-lead-time {
+        type yang:timeticks;
+	mandatory true;
+        description
+          "The value specifies the minimum notification lead time
+           requested for upcoming impact of the virtualised resource
+           or their group (i.e. between the notification and the
+           action causing the impact).";
+        reference
+          "GS NFV-IFA011: Section 7.1.8.17, NfviMaintenanceInfo
+           information element";
+      }
+
+      leaf is-impact-mitigation-requested {
+        type boolean;
+        description
+          "When set to True, it is requested that at the time of the
+           notification of an upcoming change that is expected to have
+           an impact on the VNF, virtualised resource(s) of the same
+           characteristics as the impacted ones is/are provided to
+           compensate for the impact. Cardinality 0 corresponds to the
+           value False.";
+        reference
+          "GS NFV-IFA011: Section 7.1.8.17, NfviMaintenanceInfo
+           information element";
+      }
+
+      leaf-list supported-migration-type {
+        type enumeration {
+          enum "no-migration";
+          enum "offline-migration";
+          enum "live-migration";
+        }
+        description
+          "Applicable to VirtualComputeDesc and VirtualStorageDesc.
+           When present, specifies the allowed migration types in the
+           order of preference in case of an impact starting with the
+           most preferred type. Possible values: NO_MIGRATION,
+           OFFLINE_MIGRATION, LIVE_MIGRATION.";
+        reference
+          "GS NFV-IFA011: Section 7.1.8.17, NfviMaintenanceInfo
+           information element";
+      }
+
+      leaf max-undetectable-interruption-time {
+        type yang:timeticks;
+        description
+          "Applicable to VirtualComputeDesc and VirtualStorageDesc.
+           When present, it specifies the maximum interruption time
+           that can go undetected at the VNF level and therefore
+           which will not trigger VNFinternal recovery during live
+           migration.";
+        reference
+          "GS NFV-IFA011: Section 7.1.8.17, NfviMaintenanceInfo
+           information element";
+      }
+
+      leaf min-recovery-time-between-impacts {
+        type yang:timeticks;
+        description
+          "When present, it specifies the time required by the group
+           to recover from an impact, thus, the minimum time
+           requested between consecutive impacts of the group.";
+        reference
+          "GS NFV-IFA011: Section 7.1.8.17, NfviMaintenanceInfo
+           information element";
+      }
+
+      list max-number-of-impacted-instances {
+        key "group-size";
+        ordered-by user;
+        must "./max-number-of-impacted-instances <= ./group-size";
+
+        leaf group-size {
+          type uint32;
+          description
+            "When present, it determines the size of the group for
+             which the maxNumberOfImpactedInstances is specified.
+             Otherwise the size is not limited.
+
+             Each groupSize value specified for a group of virtual
+             resources shall be unique, and it shall be possible
+             to form an ascending ordered list of groupSizes.
+
+             The number of instances in the group for which the
+             maxNumberOfImpactedInstances is specified may be equal
+             to groupSize or less. When the number of instances is
+             less than the groupSize, it shall be at least 1 if this
+             is the first groupSize in the ordered list of groupSizes,
+             or it shall be greater by at least 1 than the previous
+             groupSize in the ordered list of groupSizes.";
+
+          reference
+            "GS NFV-IFA011: Section 7.1.8.17, NfviMaintenanceInfo
+             information element";
+        }
+
+        leaf max-number-of-impacted-instances {
+          type uint32 {
+            range "1 .. max";
+          }
+          description
+            "The maximum number of instances that can be impacted
+             simultaneously within the group of the specified size.";
+          reference
+            "GS NFV-IFA011: Section 7.1.8.17, NfviMaintenanceInfo
+             information element";
+        }
+      }
+    }
+  }
+
   grouping local-affinity-or-anti-affinity-rule {
     list local-affinity-or-anti-affinity-rule {
       key "type scope";
+
       leaf type {
         type affinity-type;
         description
@@ -433,6 +556,17 @@ submodule etsi-nfv-common {
         description
           "Specifies the scope of the rule, possible values are
            'NFVI-PoP', 'Zone', 'ZoneGroup', 'NFVI-node'.";
+        reference
+          "GS NFV IFA011: Section 7.1.8.11,
+           LocalAffinityOrAntiAffinityRule information element.";
+      }
+
+      uses nfvi-maintenance-info {
+        description
+          "When present, provides information on the impact tolerance
+           and rules to be observed when a group of instances based
+           on the same VDU is impacted during NFVI operation and
+           maintenance (e.g. NFVI resource upgrades).";
         reference
           "GS NFV IFA011: Section 7.1.8.11,
            LocalAffinityOrAntiAffinityRule information element.";

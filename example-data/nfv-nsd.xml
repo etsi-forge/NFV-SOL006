@@ -87,6 +87,9 @@
         <id>firewall</id>
         <min-number-of-instances>1</min-number-of-instances>
         <max-number-of-instances>2</max-number-of-instances>
+	<nfvi-maintenance-info>
+	  <impact-notification-lead-time>1</impact-notification-lead-time>
+	</nfvi-maintenance-info>
       </vdu-profile>
       <instantiation-level>
         <id>double</id>
