@@ -355,6 +355,9 @@ submodule etsi-nfv-ns {
           "GS NFV IFA014: Section 6.5.2.2 NsVirtualLinkDesc
            information element";
       }
+      uses security-parameters {
+	status deprecated;
+      }
     }
 
     list vnffgd {
