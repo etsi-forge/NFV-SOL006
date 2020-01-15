@@ -316,17 +316,16 @@ submodule etsi-nfv-ns {
         }
 
         leaf service-availability-level {
-          type enumeration {
-            enum "level-1";
-            enum "level-2";
-            enum "level-3";
-          }
+          type uint32;
           description
-            "Specifies one of the three levels defined in ETSI
-             ETSI GS NFV-REL 001 [i.5]
-               * Level 1.
-               * Level 2.
-               * Level 3.";
+            "If present, specifies the service availability level
+             for the VL instance created from this DF.
+
+             THE FOLLOWING STATEMENT IS SUBJECT TO CHANGE:
+
+             Either the serviceAvailabilityLevel attribute of NS DF
+             or the serviceAvailabilityLevel attribute of the VL DF
+             may be provided, but not both.";
           reference
             "GS NFV IFA014: Section 6.5.4.2 VirtualLinkDf
              information element";
@@ -867,6 +866,21 @@ submodule etsi-nfv-ns {
                  element";
             }
           }
+        }
+
+        leaf service-availability-level {
+          must "not(../../service-availability-level)";
+          type uint32;
+          description
+            "If present, specifies the service availability level for
+             the VNF instance created from this profile.
+
+             Either the serviceAvailabilityLevel attribute of NS DF
+             or the serviceAvailabilityLevel attribute of the
+             VnfProfile may be provided, but not both.";
+          reference
+            "GS NFV IFA014: Section 6.3.3.2 VnfProfile information
+               element";
         }
       }
 
@@ -1668,6 +1682,24 @@ submodule etsi-nfv-ns {
 
            Examples for the usage of priority include conflict
            resolution in case of resource shortage.";
+        reference
+          "GS NFV IFA014: Section 6.3.2.2 NsDf information element";
+      }
+
+      leaf service-availability-level {
+        type uint32;
+        description
+          "If present, specifies the service availability level for
+           the NS instance created from this DF.
+
+           THE FOLLOWING STATEMENT IS SUBJECT TO CHANGE:
+
+           Either the serviceAvailabilityLevel attribute of NS DF or
+           the serviceAvailabilityLevel attribute of the NS
+           constituents of the NS may be provided, but not both.
+           When a SAL information is assigned to an NS, this
+           information does not apply to any constituents of type
+           ‘nested NS’.";
         reference
           "GS NFV IFA014: Section 6.3.2.2 NsDf information element";
       }
