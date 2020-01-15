@@ -537,43 +537,6 @@ submodule etsi-nfv-common {
     }
   }
 
-  grouping local-affinity-or-anti-affinity-rule {
-    list local-affinity-or-anti-affinity-rule {
-      key "type scope";
-
-      leaf type {
-        type affinity-type;
-        description
-          "Specifies whether the rule is an affinity rule or an
-           anti-affinity rule.";
-        reference
-          "GS NFV IFA011: Section 7.1.8.11,
-           LocalAffinityOrAntiAffinityRule information element.";
-      }
-
-      leaf scope {
-        type affinity-scope;
-        description
-          "Specifies the scope of the rule, possible values are
-           'NFVI-PoP', 'Zone', 'ZoneGroup', 'NFVI-node'.";
-        reference
-          "GS NFV IFA011: Section 7.1.8.11,
-           LocalAffinityOrAntiAffinityRule information element.";
-      }
-
-      uses nfvi-maintenance-info {
-        description
-          "When present, provides information on the impact tolerance
-           and rules to be observed when a group of instances based
-           on the same VDU is impacted during NFVI operation and
-           maintenance (e.g. NFVI resource upgrades).";
-        reference
-          "GS NFV IFA011: Section 7.1.8.11,
-           LocalAffinityOrAntiAffinityRule information element.";
-      }
-    }
-  }
-
   grouping connectivity-type {
     container connectivity-type {
       leaf-list layer-protocol {
