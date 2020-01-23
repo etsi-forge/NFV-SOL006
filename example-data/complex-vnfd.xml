@@ -162,9 +162,7 @@
         <id>control-plane-active</id>
         <min-number-of-instances>1</min-number-of-instances>
         <max-number-of-instances>1</max-number-of-instances>
-        <affinity-or-anti-affinity-group>
-          <id>control-plane</id>
-        </affinity-or-anti-affinity-group>
+        <affinity-or-anti-affinity-group-id>control-plane</affinity-or-anti-affinity-group-id>
 	<nfvi-maintenance-info>
 	  <impact-notification-lead-time>1</impact-notification-lead-time>
 	</nfvi-maintenance-info>
@@ -173,9 +171,7 @@
         <id>control-plane-standby</id>
         <min-number-of-instances>1</min-number-of-instances>
         <max-number-of-instances>1</max-number-of-instances>
-        <affinity-or-anti-affinity-group>
-          <id>control-plane</id>
-        </affinity-or-anti-affinity-group>
+        <affinity-or-anti-affinity-group-id>control-plane</affinity-or-anti-affinity-group-id>
 	<nfvi-maintenance-info>
 	  <impact-notification-lead-time>1</impact-notification-lead-time>
 	</nfvi-maintenance-info>
@@ -254,9 +250,7 @@
         <id>control-plane-active</id>
         <min-number-of-instances>1</min-number-of-instances>
         <max-number-of-instances>1</max-number-of-instances>
-        <affinity-or-anti-affinity-group>
-          <id>control-plane</id>
-        </affinity-or-anti-affinity-group>
+        <affinity-or-anti-affinity-group-id>control-plane</affinity-or-anti-affinity-group-id>
 	<nfvi-maintenance-info>
 	  <impact-notification-lead-time>1</impact-notification-lead-time>
 	</nfvi-maintenance-info>
@@ -265,9 +259,7 @@
         <id>control-plane-standby</id>
         <min-number-of-instances>1</min-number-of-instances>
         <max-number-of-instances>1</max-number-of-instances>
-        <affinity-or-anti-affinity-group>
-          <id>control-plane</id>
-        </affinity-or-anti-affinity-group>
+        <affinity-or-anti-affinity-group-id>control-plane</affinity-or-anti-affinity-group-id>
 	<nfvi-maintenance-info>
 	  <impact-notification-lead-time>1</impact-notification-lead-time>
 	</nfvi-maintenance-info>
