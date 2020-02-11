@@ -1566,27 +1566,16 @@ submodule etsi-nfv-vnf {
         }
         uses local-affinity-or-anti-affinity-rule;
 
-        list affinity-or-anti-affinity-group {
-          key "id";
-
+        leaf-list affinity-or-anti-affinity-group-id {
+          type leafref {
+            path "../../affinity-or-anti-affinity-group/id";
+          }
           description
             "Identifier(s) of the affinity or anti-affinity
              group(s) the VDU belongs to.";
           reference
             "GS NFV IFA011: Section 7.1.8.3, VduProfile information
              element.";
-          leaf id {
-            type leafref {
-              path "../../../" +
-                "affinity-or-anti-affinity-group/id";
-            }
-            description
-              "Identifies an affinity or anti-affinity group to
-               which the affinity or anti-affinity rule applies.";
-            reference
-              "GS NFV IFA011: Section 7.1.8.12, AffinityOrAntiAffinity
-               information element.";
-          }
         }
       }
 
@@ -1623,12 +1612,9 @@ submodule etsi-nfv-vnf {
         }
         uses local-affinity-or-anti-affinity-rule;
 
-        list affinity-or-anti-affinity-group {
-          key "id";
-          leaf id {
-            type leafref {
-              path "../../../affinity-or-anti-affinity-group/id";
-            }
+        leaf-list affinity-or-anti-affinity-group-id {
+          type leafref {
+            path "../../affinity-or-anti-affinity-group/id";
           }
           description
             "Identifier(s) of the affinity or anti-affinity

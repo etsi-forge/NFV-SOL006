@@ -792,21 +792,16 @@ submodule etsi-nfv-ns {
 
         uses local-affinity-or-anti-affinity-rule;
 
-        list affinity-or-anti-affinity-group {
-          key "id";
-
+        leaf-list affinity-or-anti-affinity-group-id {
+          type leafref {
+            path "../../affinity-or-anti-affinity-group/id";
+          }
           description
             "Identifier(s) of the affinity or anti-affinity
              group(s) the VnfProfile belongs to.";
           reference
             "GS NFV IFA014: Section 6.3.3.2 VnfProfile information
              element";
-
-          leaf id {
-            type leafref {
-              path "../../../affinity-or-anti-affinity-group/id";
-            }
-          }
         }
 
         list virtual-link-connectivity {
@@ -1004,9 +999,10 @@ submodule etsi-nfv-ns {
 
         uses local-affinity-or-anti-affinity-rule;
 
-        list affinity-or-anti-affinity-group {
-          key "id";
-
+        leaf-list affinity-or-anti-affinity-group-id {
+          type leafref {
+            path "../../affinity-or-anti-affinity-group/id";
+          }
           description
             "Identifies an affinity or anti-affinity group the
              VLs instantiated according to the VlProfile belong
@@ -1014,12 +1010,6 @@ submodule etsi-nfv-ns {
           reference
             "GS NFV IFA014: Section 6.3.4.2 VirtualLinkProfile
              information element";
-
-          leaf id {
-            type leafref {
-              path "../../../affinity-or-anti-affinity-group/id";
-            }
-          }
         }
 
         container max-bitrate-requirements {
@@ -1452,21 +1442,16 @@ submodule etsi-nfv-ns {
              element";
         }
 
-        list affinity-or-anti-affinity-group-id {
-          key "id";
-
+        leaf-list affinity-or-anti-affinity-group-id {
+          type leafref {
+            path "../../affinity-or-anti-affinity-group/id";
+          }
           description
             "Identifies an affinity or anti-affinity group the NSs
              created according to this NsProfile belongs to.";
           reference
             "GS NFV IFA014: Section 6.3.11.2 NsProfile information
              element";
-
-          leaf id {
-            type leafref {
-              path "../../../affinity-or-anti-affinity-group/id";
-            }
-          }
         }
 
         list virtual-link-connectivity {
