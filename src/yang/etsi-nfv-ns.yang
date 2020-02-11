@@ -41,6 +41,31 @@ submodule etsi-nfv-ns {
     }
   }
 
+  grouping ns-local-affinity-or-anti-affinity-rule {
+    list local-affinity-or-anti-affinity-rule {
+      key "type scope";
+
+      leaf type {
+        type affinity-type;
+        description
+          "Specifies whether the rule is an affinity rule or an
+           anti-affinity rule.";
+        reference
+          "GS NFV IFA014: Section 6.3.8.2,
+           LocalAffinityOrAntiAffinityRule information element.";
+      }
+
+      leaf scope {
+        type affinity-scope;
+        description
+          "Specifies the scope of the rule, possible values are
+           'NFVI-PoP', 'Zone', 'ZoneGroup', 'NFVI-node'.";
+        reference
+          "GS NFV IFA014: Section 6.3.8.2,
+           LocalAffinityOrAntiAffinityRule information element.";
+      }
+    }
+  }
 
   grouping nsd {
     leaf id {
@@ -789,7 +814,7 @@ submodule etsi-nfv-ns {
              element";
         }
 
-        uses local-affinity-or-anti-affinity-rule;
+        uses ns-local-affinity-or-anti-affinity-rule;
 
         leaf-list affinity-or-anti-affinity-group-id {
           type leafref {
@@ -996,7 +1021,7 @@ submodule etsi-nfv-ns {
              information element";
         }
 
-        uses local-affinity-or-anti-affinity-rule;
+        uses ns-local-affinity-or-anti-affinity-rule;
 
         leaf-list affinity-or-anti-affinity-group-id {
           type leafref {

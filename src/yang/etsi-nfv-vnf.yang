@@ -171,6 +171,43 @@ submodule etsi-nfv-vnf {
     }
   }
 
+  grouping vnf-local-affinity-or-anti-affinity-rule {
+    list local-affinity-or-anti-affinity-rule {
+      key "type scope";
+
+      leaf type {
+        type affinity-type;
+        description
+          "Specifies whether the rule is an affinity rule or an
+           anti-affinity rule.";
+        reference
+          "GS NFV IFA011: Section 7.1.8.11,
+           LocalAffinityOrAntiAffinityRule information element.";
+      }
+
+      leaf scope {
+        type affinity-scope;
+        description
+          "Specifies the scope of the rule, possible values are
+           'NFVI-PoP', 'Zone', 'ZoneGroup', 'NFVI-node'.";
+        reference
+          "GS NFV IFA011: Section 7.1.8.11,
+           LocalAffinityOrAntiAffinityRule information element.";
+      }
+
+      uses nfvi-maintenance-info {
+        description
+          "When present, provides information on the impact tolerance
+           and rules to be observed when a group of instances based
+           on the same VDU is impacted during NFVI operation and
+           maintenance (e.g. NFVI resource upgrades).";
+        reference
+          "GS NFV IFA011: Section 7.1.8.11,
+           LocalAffinityOrAntiAffinityRule information element.";
+      }
+    }
+  }
+
   grouping vnfd {
     leaf id {
       type string;
@@ -1591,7 +1628,7 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.8.3, VduProfile information
              element.";
         }
-        uses local-affinity-or-anti-affinity-rule;
+        uses vnf-local-affinity-or-anti-affinity-rule;
 
         leaf-list affinity-or-anti-affinity-group-id {
 	  type leafref {
@@ -1648,7 +1685,7 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.8.4, VirtualLinkProfile
              information element.";
         }
-        uses local-affinity-or-anti-affinity-rule;
+        uses vnf-local-affinity-or-anti-affinity-rule;
 
         leaf-list affinity-or-anti-affinity-group-id {
 	  type leafref {
