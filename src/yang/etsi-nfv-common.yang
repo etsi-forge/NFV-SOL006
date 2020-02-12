@@ -386,6 +386,7 @@ submodule etsi-nfv-common {
       enum "zone-group";
       enum "zone";
       enum "nfvi-pop";
+      enum "network-link-and-node";
     }
   }
 
