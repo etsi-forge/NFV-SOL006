@@ -196,8 +196,9 @@ submodule etsi-nfv-vnf {
       leaf scope {
         type affinity-scope;
         description
-          "Specifies the scope of the rule, possible values are
-           'NFVI-PoP', 'Zone', 'ZoneGroup', 'NFVI-node'.";
+          "Specifies the scope of the rule. Possible values are
+           'NFVI-PoP', 'Zone', 'ZoneGroup', 'NFVI-node', and
+           'network-link-and-node'.";
         reference
           "GS NFV IFA011: Section 7.1.8.11,
            LocalAffinityOrAntiAffinityRule information element.";
@@ -2520,8 +2521,8 @@ submodule etsi-nfv-vnf {
         leaf id {
           type string;
           description
-            "Identifies an affinity or anti-affinity group to which
-             the affinity or anti-affinity rule applies.";
+            "Identifier of this AffinityOrAntiAffinityGroup
+             information element.";
           reference
             "GS NFV IFA011: Section 7.1.8.12
              AffinityOrAntiAffinityGroup information element";
@@ -2531,8 +2532,8 @@ submodule etsi-nfv-vnf {
           mandatory true;
           type affinity-type;
           description
-            "Specifies whether the rule is an affinity rule or an
-             anti-affinity rule.";
+            "Specifies the type of relationship that the members of
+             the group have: 'affinity' or 'anti-affinity'.";
           reference
             "GS NFV IFA011: Section 7.1.8.12
              AffinityOrAntiAffinityGroup information element";
@@ -2542,8 +2543,9 @@ submodule etsi-nfv-vnf {
           mandatory true;
           type affinity-scope;
           description
-            "Specifies the scope of the rule, possible values are
-             'NFVI-PoP', 'Zone', 'ZoneGroup', 'NFVI-node'.";
+            "Specifies the scope of the affinity or anti-affinity
+             relationship. Possible values are 'NFVI-PoP', 'Zone',
+             'ZoneGroup', 'NFVI-node' and 'network-link-and-node'.";
           reference
             "GS NFV IFA011: Section 7.1.8.12
              AffinityOrAntiAffinityGroup information element";
