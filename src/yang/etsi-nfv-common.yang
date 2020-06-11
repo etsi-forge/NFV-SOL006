@@ -9,6 +9,15 @@ submodule etsi-nfv-common {
   description
     "Common data types for ETSI data models.";
 
+  revision 2020-06-01 {
+    description
+      "Version 2.8.1.
+
+       Common data structures to support VNFD and NSD according to:
+       ETSI GS NFV-IFA 014 271
+       ETSI GS NFV-IFA 011 271.";
+  }
+
   revision 2019-10-01 {
     description
       "Version 2.7.1.
