@@ -12,12 +12,11 @@ submodule etsi-nfv-pnf {
   description
     "Models for PNFD according to GS NFV-IFA 014.";
 
-  revision 2020-02-11 {
+  revision 2020-06-10 {
     description
-      "Version 3.3.1
+      "Version 3.3.1.
 
-       Common data structures to support PNFD according to:
-       ETSI GS NFV-IFA 014 Ed341v333.";
+       PNFD according to ETSI GS NFV-IFA 014 Release 3.";
   }
 
   revision 2019-10-01 {
