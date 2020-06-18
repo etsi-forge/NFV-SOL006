@@ -14,6 +14,14 @@ module etsi-nfv-descriptors {
   description
     "Network Function Virtualization Descriptors";
 
+  revision 2020-06-01 {
+    description
+      "Version 2.8.1.
+
+       NSD and PNFD according to ETSI GS NFV-IFA 014 271
+       VNFD according to ETSI GS NFV-IFA 011 271.";
+  }
+
   revision 2019-10-01 {
     description
       "Version 2.7.1.
@@ -24,6 +32,7 @@ module etsi-nfv-descriptors {
   revision 2019-04-25 {
     description
       "Initial revision.
+
        NSD and PNFD according to ETSI GS NFV-IFA 014 Ed261v252
        VNFD according to ETSI GS NFV-IFA 011 Ed261v254";
   }

@@ -11,19 +11,25 @@ submodule etsi-nfv-ns {
   description
     "Models for NS according to ETSI GS NFV-IFA 014.";
 
+  revision 2020-06-01 {
+    description
+      "Version 2.8.1.
+
+       NSD according to ETSI GS NFV-IFA 014 271.";
+  }
+
   revision 2019-10-01 {
     description
       "Version 2.7.1.
 
-       Common data structures to support VNFD and NSD according to:
-       ETSI GS NFV-IFA 014 Ed271v264
-       ETSI GS NFV-IFA 011 Ed271v264";
+       NSD according to ETSI GS NFV-IFA 014 Ed271v264.";
   }
+
   revision 2019-04-25 {
     description
       "Initial revision
-       Common data structure to support NSD according to:
-       ETSI GS NFV-IFA 014 Ed261v252";
+
+       NSD according to ETSI GS NFV-IFA 014 Ed261v252.";
 
     reference
       "ETSI GS NFV-IFA 014 Ed261v252";
