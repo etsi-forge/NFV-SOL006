@@ -11,12 +11,11 @@ submodule etsi-nfv-ns {
   description
     "Models for NS according to ETSI GS NFV-IFA 014.";
 
-  revision 2020-02-11 {
+  revision 2020-06-10 {
     description
-      "Version 3.3.1
+      "Version 3.3.1.
 
-       Common data structures to support NSD according to:
-       ETSI GS NFV-IFA 014 Ed341v333.";
+       NSD according to ETSI GS NFV-IFA 014 Release 3.";
   }
 
   revision 2019-10-01 {
@@ -1686,22 +1685,6 @@ submodule etsi-nfv-ns {
                information element";
           }
         }
-      }
-
-      leaf priority {
-        type uint32;
-        description
-          "Specifies the priority for the NS instance.
-
-           The allowed range will be reasonably high. The 'zero'
-           value will express the highest priority and the fact
-           that the NS instance based on this DF cannot be
-           pre-empted during resource allocation.
-
-           Examples for the usage of priority include conflict
-           resolution in case of resource shortage.";
-        reference
-          "GS NFV IFA014: Section 6.3.2.2 NsDf information element";
       }
 
       leaf service-availability-level {
