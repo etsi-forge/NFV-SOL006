@@ -122,12 +122,18 @@
       <connectivity-type>
         <layer-protocol>ipv4</layer-protocol>
       </connectivity-type>
+      <nfvi-maintenance-info>
+	<impact-notification-lead-time>1</impact-notification-lead-time>
+      </nfvi-maintenance-info>
     </int-virtual-link-desc>
     <int-virtual-link-desc>
       <id>mgmt</id>
       <connectivity-type>
         <layer-protocol>ipv4</layer-protocol>
       </connectivity-type>
+      <nfvi-maintenance-info>
+	<impact-notification-lead-time>1</impact-notification-lead-time>
+      </nfvi-maintenance-info>
     </int-virtual-link-desc>
     <ext-cpd>
       <id>in</id>
@@ -157,17 +163,26 @@
         <min-number-of-instances>1</min-number-of-instances>
         <max-number-of-instances>1</max-number-of-instances>
         <affinity-or-anti-affinity-group-id>control-plane</affinity-or-anti-affinity-group-id>
+	<nfvi-maintenance-info>
+	  <impact-notification-lead-time>1</impact-notification-lead-time>
+	</nfvi-maintenance-info>
       </vdu-profile>
       <vdu-profile>
         <id>control-plane-standby</id>
         <min-number-of-instances>1</min-number-of-instances>
         <max-number-of-instances>1</max-number-of-instances>
         <affinity-or-anti-affinity-group-id>control-plane</affinity-or-anti-affinity-group-id>
+	<nfvi-maintenance-info>
+	  <impact-notification-lead-time>1</impact-notification-lead-time>
+	</nfvi-maintenance-info>
       </vdu-profile>
       <vdu-profile>
         <id>data-plane</id>
         <min-number-of-instances>2</min-number-of-instances>
         <max-number-of-instances>8</max-number-of-instances>
+	<nfvi-maintenance-info>
+	  <impact-notification-lead-time>1</impact-notification-lead-time>
+	</nfvi-maintenance-info>
       </vdu-profile>
       <instantiation-level>
         <id>il-1</id>
@@ -210,6 +225,18 @@
 	<operate-vnf-op-config>
 	  <min-graceful-stop-timeout>1</min-graceful-stop-timeout>
 	</operate-vnf-op-config>
+	<create-snapshot-vnf-op-config>
+	  <parameter>
+	    <key>1</key>
+	    <value>1</value>
+	  </parameter>
+	</create-snapshot-vnf-op-config>
+	<revert-to-snapshot-vnf-op-config>
+	  <parameter>
+	    <key>1</key>
+	    <value>1</value>
+	  </parameter>
+	</revert-to-snapshot-vnf-op-config>
       </lcm-operations-configuration>
       <affinity-or-anti-affinity-group>
         <id>control-plane</id>
@@ -224,17 +251,26 @@
         <min-number-of-instances>1</min-number-of-instances>
         <max-number-of-instances>1</max-number-of-instances>
         <affinity-or-anti-affinity-group-id>control-plane</affinity-or-anti-affinity-group-id>
+	<nfvi-maintenance-info>
+	  <impact-notification-lead-time>1</impact-notification-lead-time>
+	</nfvi-maintenance-info>
       </vdu-profile>
       <vdu-profile>
         <id>control-plane-standby</id>
         <min-number-of-instances>1</min-number-of-instances>
         <max-number-of-instances>1</max-number-of-instances>
         <affinity-or-anti-affinity-group-id>control-plane</affinity-or-anti-affinity-group-id>
+	<nfvi-maintenance-info>
+	  <impact-notification-lead-time>1</impact-notification-lead-time>
+	</nfvi-maintenance-info>
       </vdu-profile>
       <vdu-profile>
         <id>data-plane</id>
         <min-number-of-instances>1</min-number-of-instances>
         <max-number-of-instances>4</max-number-of-instances>
+	<nfvi-maintenance-info>
+	  <impact-notification-lead-time>1</impact-notification-lead-time>
+	</nfvi-maintenance-info>
       </vdu-profile>
       <instantiation-level>
         <id>il-1</id>
@@ -277,6 +313,18 @@
 	<operate-vnf-op-config>
 	  <min-graceful-stop-timeout>1</min-graceful-stop-timeout>
 	</operate-vnf-op-config>
+	<create-snapshot-vnf-op-config>
+	  <parameter>
+	    <key>1</key>
+	    <value>1</value>
+	  </parameter>
+	</create-snapshot-vnf-op-config>
+	<revert-to-snapshot-vnf-op-config>
+	  <parameter>
+	    <key>1</key>
+	    <value>1</value>
+	  </parameter>
+	</revert-to-snapshot-vnf-op-config>
       </lcm-operations-configuration>
       <affinity-or-anti-affinity-group>
         <id>control-plane</id>
