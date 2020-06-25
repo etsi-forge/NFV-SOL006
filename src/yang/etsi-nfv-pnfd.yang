@@ -13,16 +13,31 @@ module etsi-nfv-pnfd {
   description
     "Physcial Network Function Descriptor.";
 
+  revision 2020-06-10 {
+    description
+      "Version 3.3.1.
+
+       PNFD according to ETSI GS NFV-IFA 014 Release 3.";
+  }
+
+  revision 2020-06-01 {
+    description
+      "Version 2.8.1.
+
+       PNFD according to ETSI GS NFV-IFA 014 271.";
+  }
+
   revision 2019-10-01 {
     description
       "Version 2.7.1.
 
-       NSD according to ETSI GS NFV-IFA 014 Ed271v264.";
+       PNFD according to ETSI GS NFV-IFA 014 Ed271v264.";
   }
+
   revision 2019-04-25 {
     description
       "Initial revision.
-       NSD according to ETSI GS NFV-IFA 014 Ed261v252.";
+       PNFD according to ETSI GS NFV-IFA 014 Ed261v252.";
   }
 
   container pnfd {

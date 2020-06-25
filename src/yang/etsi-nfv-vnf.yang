@@ -16,20 +16,35 @@ submodule etsi-nfv-vnf {
   description
     "Models for VNFD according to GS NFV-IFA 011.";
 
+  revision 2020-06-10 {
+    description
+      "Version 3.3.1.
+
+       Data structures to support VNFD according to
+       ETSI GS NFV-IFA 011 Release 3.";
+  }
+
+  revision 2020-06-01 {
+    description
+      "Version 2.8.1.
+
+       VNFD according to ETSI GS NFV-IFA 011 271.";
+  }
+
   revision 2019-10-01 {
     description
       "Version 2.7.1.
 
-       Common data structures to support VNFD and NSD according to:
-       ETSI GS NFV-IFA 014 Ed271v264
+       Data structures to support VNFD according to:
        ETSI GS NFV-IFA 011 Ed271v264";
   }
+
   revision 2019-03-18 {
     description
       "Initial revision.
 
-       Common data structure to support VNFD according to:
-       VNFD according to ETSI GS NFV-IFA 011 Ed261v254";
+       Data structure to support VNFD according to:
+       ETSI GS NFV-IFA 011 Ed261v254";
 
     reference
       "ETSI GS NFV-IFA 011 Ed261v254";
@@ -64,7 +79,7 @@ submodule etsi-nfv-vnf {
       }
 
       leaf support-mandatory {
-	status "deprecated";
+        status "deprecated";
         default "false";
         type boolean;
         description
@@ -94,6 +109,117 @@ submodule etsi-nfv-vnf {
         reference
           "GS NFV-IFA011: Section 7.1.6.6,
            VirtualNetworkInterfaceRequirements information element";
+      }
+
+      leaf nic-io-requirements {
+	type leafref {
+          path "/nfv:nfv/nfv:vnfd/nfv:virtual-compute-desc/" +
+	       "nfv:logical-node/nfv:id";
+	}
+	description
+	  "This references (couples) the CPD with any logical node
+           I/O requirements (for network devices) that may have been
+           created. Linking these attributes is necessary so that I/O
+           requirements that need to be articulated at the logical
+           node level can be associated with the network interface
+           requirements associated with the CPD.";
+        reference
+          "GS NFV-IFA011: Section 7.1.6.6,
+           VirtualNetworkInterfaceRequirements information element";
+      }
+    }
+  }
+
+  grouping block-storage-data {
+    leaf size-of-storage {
+      type uint64;
+      units "GB";
+      default 0;
+      description
+        "Size of virtualized storage resource in GB.";
+      reference
+        "GS NFV IFA011: Section 7.1.9.4.3, BlockStorageData
+             Information element.";
+    }
+
+    list vdu-storage-requirements {
+      key "key";
+
+      leaf key {
+        type string;
+      }
+
+      leaf value {
+        type string;
+      }
+      description
+        "An array of key-value pairs that articulate
+             the storage deployment requirements.";
+      reference
+        "GS NFV IFA011: Section 7.1.9.4.3, BlockStorageData
+             Information element.";
+    }
+
+    leaf rdma-enabled {
+      type boolean;
+      description
+        "Indicate if the storage support RDMA.";
+      reference
+        "GS NFV IFA011: Section 7.1.9.4.3, BlockStorageData
+             Information element.";
+    }
+
+    leaf sw-image-desc {
+      type leafref {
+        path "../../../sw-image-desc/id";
+      }
+      must "../size-of-storage >=" +
+        "../../../sw-image-desc[id=current()]/min-disk" {
+      }
+      description
+        "Software image to be loaded on the VirtualStorage
+             resource created based on this VirtualStorageDesc.
+             Shall be absent when used for virtual disks.";
+      reference
+        "GS NFV IFA011: Section 7.1.9.4.3, BlockStorageData
+             Information element.";
+    }
+  }
+
+  grouping vnf-local-affinity-or-anti-affinity-rule {
+    list local-affinity-or-anti-affinity-rule {
+      key "type scope";
+
+      leaf type {
+        type affinity-type;
+        description
+          "Specifies whether the rule is an affinity rule or an
+           anti-affinity rule.";
+        reference
+          "GS NFV IFA011: Section 7.1.8.11,
+           LocalAffinityOrAntiAffinityRule information element.";
+      }
+
+      leaf scope {
+        type affinity-scope;
+        description
+          "Specifies the scope of the rule. Possible values are
+           'NFVI-PoP', 'Zone', 'ZoneGroup', 'NFVI-node', and
+           'network-link-and-node'.";
+        reference
+          "GS NFV IFA011: Section 7.1.8.11,
+           LocalAffinityOrAntiAffinityRule information element.";
+      }
+
+      uses nfvi-maintenance-info {
+        description
+          "When present, provides information on the impact tolerance
+           and rules to be observed when a group of instances based
+           on the same VDU is impacted during NFVI operation and
+           maintenance (e.g. NFVI resource upgrades).";
+        reference
+          "GS NFV IFA011: Section 7.1.8.11,
+           LocalAffinityOrAntiAffinityRule information element.";
       }
     }
   }
@@ -303,11 +429,11 @@ submodule etsi-nfv-vnf {
         }
 
         leaf vnic-type {
-	  type identityref {
-	    base vnic-type;
-	  }
-	  description
-	    "Describes the type of the virtual network interface
+          type identityref {
+            base vnic-type;
+          }
+          description
+            "Describes the type of the virtual network interface
              realizing the CPs instantiated from this CPD. This is
              used to determine which mechanism driver(s) to be used
              to bind the port. Value:
@@ -491,6 +617,7 @@ submodule etsi-nfv-vnf {
 
         list requirement-detail {
           key "key";
+          min-elements 1;
 
           leaf key {
             type string;
@@ -770,6 +897,22 @@ submodule etsi-nfv-vnf {
               "GS NFV IFA011: Section 7.1.9.2.4,
                VirtualCpuPinningData information element.";
           }
+
+          leaf-list cpu-policy {
+            type enumeration {
+              enum "dedicated";
+              enum "shared";
+            }
+            description
+              "Shows the list of dedicated virtual CPU cores and
+               shared virtual CPU cores in a VM. Dedicated refers to
+               a virtual CPU core occupies one physical CPU core.
+               Shared refers to multi virtual CPU cores shared one
+               physical CPU core.";
+            reference
+              "GS NFV IFA011: Section 7.1.9.2.4,
+               VirtualCpuPinningData information element.";
+          }
           description
             "The virtual CPU pinning configuration for the
              virtualised compute resource.";
@@ -777,6 +920,24 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.9.2.3,
              VirtualCpuData information element.";
         }
+      }
+
+      list virtual-disk {
+	key "id";
+
+        description
+          "The local or ephemeral disk(s) of the virtualised compute.";
+        reference
+          "GS NFV IFA011: Section 7.1.9.2.2, VirtualComputeDesc
+           Information element.";
+
+	leaf id {
+	  type string;
+	  description
+	    "Unique identifier for the list of virtual disks.";
+	}
+
+        uses block-storage-data;
       }
     }
 
@@ -797,70 +958,99 @@ submodule etsi-nfv-vnf {
 
       leaf type-of-storage {
         // Needed to be able to onboard images
-        default root-storage;
         type identityref {
           base storage-type;
         }
+        default "nfv:block";
         description
-          "Type of virtualised storage resource (e.g. volume,
-           object).";
+          "Type of virtualised storage resource (BLOCK, OBJECT,
+           FILE).";
         reference
           "GS NFV IFA011: Section 7.1.9.4, Information elements
            related to Virtual Storage.";
       }
 
-      leaf size-of-storage {
-        type uint64;
-        units "GB";
-        default 0;
-        description
-          "Size of virtualised storage resource (e.g. size of
-           volume, in GB)";
-        reference
-          "GS NFV IFA011: Section 7.1.9.4, Information elements
-           related to Virtual Storage.";
-      }
+      choice storage {
+	container block-storage-data {
+	  when '../type-of-storage = "nfv:block"';
+	  description
+            "Specifies the details of block storage. It shall
+             be present when the 'typeOfStorage' attribute is set to
+             'BLOCK'. It shall be absent otherwise.";
+	  reference
+	    "GS NFV IFA011: Section 7.1.9.4, Information elements
+             related to Virtual Storage.";
 
-      list vdu-storage-requirements {
-        key "key";
+	  uses block-storage-data;
+	}
 
-        leaf key {
-          type string;
-        }
+	container object-storage-data {
+	  when '../type-of-storage = "nfv:object"';
+	  description
+	    "Specifies the details of object storage. It shall be
+             present when the 'typeOfStorage' attribute is set to
+             'OBJECT'. It shall be absent otherwise.";
+	  reference
+	    "GS NFV IFA011: Section 7.1.9.4, Information elements
+             related to Virtual Storage.";
 
-        leaf value {
-          type string;
-        }
-        description
-          "Array of key-value pairs that articulate the storage
-           deployment requirements.";
-        reference
-          "GS NFV IFA011: Section 7.1.9.4.2, VirtualStorageDesc
-           information element.";
-      }
+	  leaf max-size-of-storage {
+	    type uint64;
+	    units "GB";
+	    default 0;
+	    description
+	      "Max size of virtualised storage resource in GB.";
+	    reference
+	      "GS NFV IFA011: Section 7.1.9.4.4, ObjectStorage Information
+               element.";
+	  }
+	}
 
-      leaf rdma-enabled {
-        type boolean;
-        description
-          "Indicate if the storage support RDMA.";
-        reference
-          "GS NFV IFA011: Section 7.1.9.4, Information elements
-           related to Virtual Storage.";
-      }
+	container file-storage-data {
+	  when '../type-of-storage = "nfv:file"';
+	  description
+	    "Specifies the details of file storage. It shall be present
+             when the 'typeOfStorage' attribute is set to 'FILE'. It
+             shall be absent otherwise.";
+	  reference
+	    "GS NFV IFA011: Section 7.1.9.4, Information elements
+             related to Virtual Storage.";
 
-      leaf sw-image-desc {
-        type leafref {
-          path "../../sw-image-desc/id";
-        }
-        must "../size-of-storage >=" +
-          "../../sw-image-desc[id=current()]/min-disk" {
-        }
-        description
-          "Software image to be loaded on the VirtualStorage
-           resource created based on this VirtualStorageDesc.";
-        reference
-          "GS NFV IFA011: Section 7.1.9.4, Information elements
-           related to Virtual Storage.";
+	  leaf size-of-storage {
+	    type uint64;
+	    units "GB";
+	    default 0;
+	    description
+	      "Size of virtualised storage resource in GB.";
+	    reference
+	      "GS NFV IFA011: Section 7.1.9.4.5, FileStorageData
+               Information element.";
+	  }
+
+	  leaf file-system-protocol {
+	    type string;
+	    default "cifs";
+	    description
+	      "The shared file system protocol (e.g. NFS, CIFS).";
+	    reference
+	      "GS NFV IFA011: Section 7.1.9.4.5, FileStorageData
+               Information element.";
+	  }
+
+	  leaf int-virtual-link-desc {
+	    type leafref {
+	      path "../../../sw-image-desc/id";
+	    }
+	    mandatory true;
+	    description
+	      "Reference of the internal VLD which this file storage
+               connects to. The attached VDUs shall connect to the
+               same internal VLD.";
+	    reference
+	      "GS NFV IFA011: Section 7.1.9.4.5, FileStorageData
+               Information element.";
+	  }
+	}
       }
     }
 
@@ -1240,6 +1430,17 @@ submodule etsi-nfv-vnf {
         }
         uses monitoring-parameter;
       }
+
+      uses nfvi-maintenance-info {
+	description
+	  "When present, provides information on the rules to be
+           observed when an instance based on this
+           VnfVirtualLinkDesc is impacted during NFVI operation and
+           maintenance (e.g. NFVI resource upgrades).";
+        reference
+          "GS NFV IFA011: Section 7.1.7.2, VnfVirtualLinkDesc
+           information element.";
+      }
     }
 
     uses security-group-rule;
@@ -1443,30 +1644,30 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.8.3, VduProfile information
              element.";
         }
-        uses local-affinity-or-anti-affinity-rule;
+        uses vnf-local-affinity-or-anti-affinity-rule;
 
-        list affinity-or-anti-affinity-group {
-          key "id";
-
+        leaf-list affinity-or-anti-affinity-group-id {
+	  type leafref {
+	    path "../../affinity-or-anti-affinity-group/id";
+	  }
           description
             "Identifier(s) of the affinity or anti-affinity
              group(s) the VDU belongs to.";
           reference
             "GS NFV IFA011: Section 7.1.8.3, VduProfile information
              element.";
-          leaf id {
-            type leafref {
-              path "../../../" +
-                "affinity-or-anti-affinity-group/id";
-            }
-            description
-              "Identifies an affinity or anti-affinity group to
-               which the affinity or anti-affinity rule applies.";
-            reference
-              "GS NFV IFA011: Section 7.1.8.12, AffinityOrAntiAffinity
-               information element.";
-          }
         }
+
+	uses nfvi-maintenance-info {
+	  description
+	    "When present, provides information on the impact
+             tolerance and rules to be observed when instance(s) of
+             the VDU are impacted during NFVI operation and
+             maintenance (e.g. NFVI resource upgrades).";
+          reference
+            "GS NFV IFA011: Section 7.1.8.3, VduProfile information
+             element.";
+	}
       }
 
       list virtual-link-profile {
@@ -1500,15 +1701,12 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.8.4, VirtualLinkProfile
              information element.";
         }
-        uses local-affinity-or-anti-affinity-rule;
+        uses vnf-local-affinity-or-anti-affinity-rule;
 
-        list affinity-or-anti-affinity-group {
-          key "id";
-          leaf id {
-            type leafref {
-              path "../../../affinity-or-anti-affinity-group/id";
-            }
-          }
+        leaf-list affinity-or-anti-affinity-group-id {
+	  type leafref {
+	    path "../../affinity-or-anti-affinity-group/id";
+	  }
           description
             "Identifier(s) of the affinity or anti-affinity
              group(s) the VnfVirtualLinkDesc belongs to.";
@@ -1642,17 +1840,17 @@ submodule etsi-nfv-vnf {
                  L2ProtocolData information element.";
             }
 
-	    leaf segmentation-id {
-	      type string;
-	      description
+            leaf segmentation-id {
+              type string;
+              description
                 "If present, specifies a specific virtualised network
                  segment, which depends on the network type. For e.g.,
                  VLAN ID for VLAN network type and tunnel ID for
                  GRE/VXLAN network types.";
-	      reference
+              reference
                 "GS NFV IFA011: Section 7.1.8.14,
                  L2ProtocolData information element.";
-	    }
+            }
 
             description
               "Specifies the L2 protocol data for this virtual link.
@@ -2214,6 +2412,95 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.5.2
              VnfLcmOperationsConfiguration information element";
         }
+
+        container create-snapshot-vnf-op-config {
+          description
+            "Configuration parameters for the Create VNF Snapshot
+             operation.";
+          reference
+            "GS NFV IFA011: Section 7.1.5.2
+             VnfLcmOperationsConfiguration information element";
+
+          list parameter {
+            key "key";
+            min-elements 1;
+
+            leaf key {
+              type string;
+            }
+
+            leaf value {
+              type string;
+            }
+            description
+              "Array of KVP requirements for VNF-specific parameters
+               to be passed when invoking the
+               CreateSnapshotVnfOpConfig operation.";
+            reference
+              "GS NFV IFA011: Section 7.1.5.11
+               CreateSnapshotVnfOpConfig information
+               element";
+          }
+        }
+
+        container revert-to-snapshot-vnf-op-config {
+          description
+            "Configuration parameters for the Revert-To VNF Snapshot
+             operation.";
+          reference
+            "GS NFV IFA011: Section 7.1.5.2
+             VnfLcmOperationsConfiguration information element";
+
+          list parameter {
+            key "key";
+            min-elements 1;
+
+            leaf key {
+              type string;
+            }
+
+            leaf value {
+              type string;
+            }
+            description
+              "Array of KVP requirements for VNF-specific parameters
+               to be passed when invoking the
+               RevertToSnapshotVnfOpConfig operation.";
+            reference
+              "GS NFV IFA011: Section 7.1.5.12
+               RevertToSnapshotVnfOpConfig information
+               element";
+          }
+        }
+
+        container change-current-vnf-package-op-config {
+          description
+            "Configuration parameters for the
+             ChangeCurrentVnfPackageOpConfig operation.";
+          reference
+            "GS NFV IFA011: Section 7.1.5.2
+             VnfLcmOperationsConfiguration information element";
+
+          list parameter {
+            key "key";
+
+            leaf key {
+              type string;
+            }
+
+            leaf value {
+              type string;
+            }
+            description
+              "Array of KVP  requirements for VNF-specific parameters
+               to be passed when invoking the change current VNF
+               Package operation.";
+            reference
+              "GS NFV IFA011: Section 7.1.5.13
+               ChangeCurrentVnfPackageOpConfig information
+               element";
+          }
+        }
       }
 
       list affinity-or-anti-affinity-group {
@@ -2241,8 +2528,8 @@ submodule etsi-nfv-vnf {
         leaf id {
           type string;
           description
-            "Identifies an affinity or anti-affinity group to which
-             the affinity or anti-affinity rule applies.";
+            "Identifier of this AffinityOrAntiAffinityGroup
+             information element.";
           reference
             "GS NFV IFA011: Section 7.1.8.12
              AffinityOrAntiAffinityGroup information element";
@@ -2252,8 +2539,8 @@ submodule etsi-nfv-vnf {
           mandatory true;
           type affinity-type;
           description
-            "Specifies whether the rule is an affinity rule or an
-             anti-affinity rule.";
+            "Specifies the type of relationship that the members of
+             the group have: 'affinity' or 'anti-affinity'.";
           reference
             "GS NFV IFA011: Section 7.1.8.12
              AffinityOrAntiAffinityGroup information element";
@@ -2263,8 +2550,9 @@ submodule etsi-nfv-vnf {
           mandatory true;
           type affinity-scope;
           description
-            "Specifies the scope of the rule, possible values are
-             'NFVI-PoP', 'Zone', 'ZoneGroup', 'NFVI-node'.";
+            "Specifies the scope of the affinity or anti-affinity
+             relationship. Possible values are 'NFVI-PoP', 'Zone',
+             'ZoneGroup', 'NFVI-node' and 'network-link-and-node'.";
           reference
             "GS NFV IFA011: Section 7.1.8.12
              AffinityOrAntiAffinityGroup information element";
@@ -2337,12 +2625,14 @@ submodule etsi-nfv-vnf {
           type enumeration {
             enum vnf-configuration;
             enum vnf-indicator;
+            enum vnf-lcm-coordination;
           }
           description
             "Identifies an interface produced by the VNF. Valid
              values:
              - VNF_CONFIGURATION
-             - VNF_INDICATOR";
+             - VNF_INDICATOR
+             - VNF_LCM_COORDINATION";
           reference
             "GS NFV IFA011: Section 7.1.8.16 VnfInterfaceDetails
              information element";
@@ -2843,6 +3133,7 @@ submodule etsi-nfv-vnf {
 
     list lifecycle-management-script {
       key "id";
+
       description
         "Includes a list of events and corresponding management
          scripts performed for the VNF.";
@@ -2856,10 +3147,25 @@ submodule etsi-nfv-vnf {
       }
 
       leaf-list event {
-        type internal-lifecycle-management-script-event;
+        type union {
+          type internal-lifecycle-management-script-event;
+          type external-lifecycle-management-script-event;
+        }
         description
           "Describes VNF lifecycle event(s) or an external stimulus
-           detected on a VNFM reference point.";
+           detected on a VNFM reference point.
+
+           If the event is of type 
+           internal-lifecycle-management-script-event, then depending
+           on whether the event is of type start-* or end-*, the
+           script associated with the VNF LCM operation needs to be 
+           executed before the event, or after the event,
+           respectively.
+
+           On the other hand, if the event is of type
+           external-lifecycle-management-script-event, then the
+           script associated with the event needs to be executed
+           for the given VNF LCM operation.";
         reference
           "GS NFV IFA011: Section 7.1.13 LifeCycleManagementScript
            information element";
@@ -2931,10 +3237,15 @@ submodule etsi-nfv-vnf {
     }
 
     list element-group {
+      status deprecated;
       key "id";
       description
         "Describes the associated elements of a VNFD for a certain
-         purpose during VNF lifecycle management.";
+         purpose during VNF lifecycle management.
+
+         Reason for deprecating this node - Information about which
+         VDU and VLD are involved in scaling is better defined by
+         ScalingDelta.";
       reference
         "GS NFV IFA011: Section 7.1.2 VNFD information element";
 
@@ -3044,6 +3355,270 @@ submodule etsi-nfv-vnf {
          indicator values or VNF indicator value changes or a
          combination of VNF indicator value(s) and monitoring
          parameter(s).";
+      reference
+        "GS NFV IFA011: Section 7.1.2 VNFD information element";
+    }
+
+    list vnf-package-change-info {
+      // IFA011ed332 defines the key as VersionSelector, which is
+      // nothing but a combination of src-vnfd-id, dst-vnfd-id and
+      // src-flavour-id. YANG cannot use a composite as a key, and
+      // therefore the model breaks it out as three elements that
+      // form the key.
+      key "src-vnfd-id dst-vnfd-id src-flavour-id";
+
+      leaf src-vnfd-id {
+        type string;
+        description
+          "Identifier of the source VNFD and the source VNF
+           package. Either the srcVnfdId or the dstVnfdId shall be
+           equal to the vnfdId of the VNFD containing this version
+           selector.";
+        reference
+          "GS NFV IFA011: Section 7.1.15.3 VersionSelector
+           information element";
+      }
+
+      leaf dst-vnfd-id {
+        type string;
+        description
+          "Identifier of the destination VNFD and the destination
+           VNF package. Either the srcVnfdId or the dstVnfdId shall
+           be equal to the vnfdId of the VNFD containing this version
+           selector.";
+        reference
+          "GS NFV IFA011: Section 7.1.15.3 VersionSelector
+           information element";
+      }
+
+      leaf src-flavour-id {
+        type string;
+        description
+          "Identifier of the deployment flavour in the source VNF
+           package for which this modification applies. It is up to
+           protocol design stage to decide whether there is further
+           optimization potential to apply one modification for
+           multiple srcFlavourIds.";
+        reference
+          "GS NFV IFA011: Section 7.1.15.3 VersionSelector
+           information element";
+      }
+
+      leaf additional-params-id {
+        type leafref {
+          path "../../df/lcm-operations-configuration/" +
+               "change-current-vnf-package-op-config/parameter/key";
+        }
+        description
+          "References the ChangeCurrentVnfPackageOpConfig information
+           element that defines the valid additional parameters for
+           the change.";
+        reference
+          "GS NFV IFA011: Section 7.1.15.2 VnfPackageChangeInfo
+           information element";
+      }
+
+      leaf-list modification-qualifier {
+        type enumeration {
+          enum "up";
+          enum "down";
+          enum "vnf-upgrade";
+          enum "vnf-update";
+          enum "vnf-downgrade";
+        }
+        description
+          "When present, it specifies the type of modification
+           resulting from transitioning from srcVnfdId to dstVnfdId.
+           The possible values include at least:
+
+           UP - indicating that the destination VNF version is newer
+                than the source version,
+           DOWN - indicating that the destination VNF version is
+                  older than the source version.
+
+           When provided, UP and DOWN values shall always be
+           supported as the first value. In addition, a vendor may
+           specify additional values and provide such values to
+           qualify further the change between the two versions such
+           as VNF_UPGRADE, VNF_UPDATE, VNF_DOWNGRADE, etc.";
+        reference
+          "GS NFV IFA011: Section 7.1.15.2 VnfPackageChangeInfo
+           information element";
+      }
+
+      leaf-list additional-modification-description {
+        type string;
+        description
+          "A VNF provider may define additional information to
+           qualify further the change between the two versions,
+           such as 'VNF upgrade', 'VNF update', 'VNF downgrade',
+           etc.";
+        reference
+          "GS NFV IFA011: Section 7.1.15.2 VnfPackageChangeInfo
+           information element";
+      }
+
+      list component-mapping {
+        key "type";
+
+        leaf type {
+          type string;
+          description
+            "The type of component or property. Possible values
+             differentiate whether changes concern to some VNF
+             component (e.g., VDU, internal VLD, etc.) or property
+             (e.g., a Scaling Aspect, etc.).";
+          reference
+            "GS NFV IFA011: Section 7.1.15.4 ComponentMapping
+             information element";
+        }
+
+        leaf source-desc-id {
+          type string;
+          description
+            "Identifier of the component or property in the source
+             VNFD.";
+          reference
+            "GS NFV IFA011: Section 7.1.15.4 ComponentMapping
+             information element";
+        }
+
+        leaf dst-desc-id {
+          type string;
+          description
+            "Identifier of the component or property in the
+             destination VNFD.";
+          reference
+            "GS NFV IFA011: Section 7.1.15.4 ComponentMapping
+             information element";
+        }
+
+        leaf description {
+          type string;
+          description
+            "Human readable description of the component changes.";
+          reference
+            "GS NFV IFA011: Section 7.1.15.4 ComponentMapping
+             information element";
+        }
+
+        description
+          "Mapping information related to identifiers of components in
+           source VNFD and destination VNFD that concern to the change
+           process.";
+        reference
+          "GS NFV IFA011: Section 7.1.15.2 VnfPackageChangeInfo
+           information element";
+      }
+
+      leaf lcm-script-id {
+        type leafref {
+          path "../../lifecycle-management-script/id";
+        }
+        description
+          "Reference to a lifecycle management script that is executed
+           as part of this 'change current VNF Package' process.";
+        reference
+          "GS NFV IFA011: Section 7.1.15.2 VnfPackageChangeInfo
+           information element";
+      }
+
+      leaf coordination-id {
+        type leafref {
+          path "../../lcm-operations-coordination/id";
+        }
+        description
+          "Reference to applicable VNF LCM operation coordination
+           actions.";
+        reference
+          "GS NFV IFA011: Section 7.1.15.2 VnfPackageChangeInfo
+           information element";
+      }
+
+      leaf dst-flavour-id {
+        type leafref {
+          path "../../df/id";
+        }
+        description
+          "Identifies the deployment flavour in the destination VNF
+           package for which this change applies. The flavour ID is
+           defined in the destination VNF package.";
+        reference
+          "GS NFV IFA011: Section 7.1.15.2 VnfPackageChangeInfo
+           information element";
+      }
+      description
+        "Information used for performing the change of the current
+         VNF Package. More than one VNF Package Change Info construct
+         is possible to cater the possibility that changes of the
+         current VNF Package can be performed for different source
+         VNFDs.";
+      reference
+        "GS NFV IFA011: Section 7.1.2 VNFD information element";
+    }
+
+    list lcm-operations-coordination {
+      key "id";
+
+      leaf id {
+        type string;
+        description
+          "Identifies the specific VNF LCM operation coordination
+           action.";
+        reference
+          "GS NFV IFA011: Section 7.1.16.2 VnfLcmOperationCoordination
+           information element";
+      }
+
+      leaf description {
+        type string;
+        description
+          "Human readable description of the coordination action.";
+        reference
+          "GS NFV IFA011: Section 7.1.16.2 VnfLcmOperationCoordination
+           information element";
+      }
+
+      leaf endpoint-type {
+        type enumeration {
+          enum "mgmt";
+          enum "vnf";
+        }
+        description
+          "Specifies the type of the endpoint exposing the LCM
+           operation coordination such as other operations supporting
+           or management systems (e.g. an EM) or the VNF instance.
+           Allowed values:
+           • MGMT: coordination with other operation supporting
+                   management systems.
+           • VNF: coordination with the VNF instance.";
+        reference
+          "GS NFV IFA011: Section 7.1.16.2 VnfLcmOperationCoordination
+           information element";
+      }
+
+      leaf coordination-stage {
+        type string;
+        description
+          "Indicates the coordination stage during the VNF LCM
+           operation.";
+        reference
+          "GS NFV IFA011: Section 7.1.16.2 VnfLcmOperationCoordination
+           information element";
+      }
+
+      leaf coordination-params {
+        type string;
+        description
+          "Input information needed by the external coordinating
+           entity.";
+        reference
+          "GS NFV IFA011: Section 7.1.16.2 VnfLcmOperationCoordination
+           information element";
+      }
+      description
+        "Provides information used for the coordination in VNF LCM
+         operations.";
       reference
         "GS NFV IFA011: Section 7.1.2 VNFD information element";
     }

@@ -11,19 +11,33 @@ submodule etsi-nfv-ns {
   description
     "Models for NS according to ETSI GS NFV-IFA 014.";
 
+  revision 2020-06-10 {
+    description
+      "Version 3.3.1.
+
+       NSD according to ETSI GS NFV-IFA 014 Release 3.";
+  }
+
+  revision 2020-06-01 {
+    description
+      "Version 2.8.1.
+
+       NSD according to ETSI GS NFV-IFA 014 271.";
+  }
+
   revision 2019-10-01 {
     description
       "Version 2.7.1.
 
-       Common data structures to support VNFD and NSD according to:
-       ETSI GS NFV-IFA 014 Ed271v264
-       ETSI GS NFV-IFA 011 Ed271v264";
+       Common data structures to support NSD according to:
+       ETSI GS NFV-IFA 014 Ed271v264.";
   }
+
   revision 2019-04-25 {
     description
       "Initial revision
-       Common data structure to support NSD according to:
-       ETSI GS NFV-IFA 014 Ed261v252";
+
+       NSD according to ETSI GS NFV-IFA 014 Ed261v252.";
 
     reference
       "ETSI GS NFV-IFA 014 Ed261v252";
@@ -41,6 +55,31 @@ submodule etsi-nfv-ns {
     }
   }
 
+  grouping ns-local-affinity-or-anti-affinity-rule {
+    list local-affinity-or-anti-affinity-rule {
+      key "type scope";
+
+      leaf type {
+        type affinity-type;
+        description
+          "Specifies whether the rule is an affinity rule or an
+           anti-affinity rule.";
+        reference
+          "GS NFV IFA014: Section 6.3.8.2,
+           LocalAffinityOrAntiAffinityRule information element.";
+      }
+
+      leaf scope {
+        type affinity-scope;
+        description
+          "Specifies the scope of the rule, possible values are
+           'NFVI-PoP', 'NFVI-node' network-link-and-node etc.";
+        reference
+          "GS NFV IFA014: Section 6.3.8.2,
+           LocalAffinityOrAntiAffinityRule information element.";
+      }
+    }
+  }
 
   grouping nsd {
     leaf id {
@@ -316,17 +355,16 @@ submodule etsi-nfv-ns {
         }
 
         leaf service-availability-level {
-          type enumeration {
-            enum "level-1";
-            enum "level-2";
-            enum "level-3";
-          }
+          type uint32;
           description
-            "Specifies one of the three levels defined in ETSI
-             ETSI GS NFV-REL 001 [i.5]
-               * Level 1.
-               * Level 2.
-               * Level 3.";
+            "If present, specifies the service availability level
+             for the VL instance created from this DF.
+
+             THE FOLLOWING STATEMENT IS SUBJECT TO CHANGE:
+
+             Either the serviceAvailabilityLevel attribute of NS DF
+             or the serviceAvailabilityLevel attribute of the VL DF
+             may be provided, but not both.";
           reference
             "GS NFV IFA014: Section 6.5.4.2 VirtualLinkDf
              information element";
@@ -355,7 +393,6 @@ submodule etsi-nfv-ns {
           "GS NFV IFA014: Section 6.5.2.2 NsVirtualLinkDesc
            information element";
       }
-      uses security-parameters;
     }
 
     list vnffgd {
@@ -578,7 +615,7 @@ submodule etsi-nfv-ns {
         list position-desc {
           key "id";
 
-	  min-elements 1;
+          min-elements 1;
 
           leaf id {
             type string;
@@ -756,7 +793,7 @@ submodule etsi-nfv-ns {
           mandatory true;
           type leafref {
             path "deref(../flavour-id)/../nfv:instantiation-level/" +
-	         "nfv:id";
+                 "nfv:id";
           }
           description
             "Identifier of the instantiation level of the VNF DF
@@ -790,23 +827,18 @@ submodule etsi-nfv-ns {
              element";
         }
 
-        uses local-affinity-or-anti-affinity-rule;
+        uses ns-local-affinity-or-anti-affinity-rule;
 
-        list affinity-or-anti-affinity-group {
-          key "id";
-
+        leaf-list affinity-or-anti-affinity-group-id {
+          type leafref {
+            path "../../affinity-or-anti-affinity-group/id";
+          }
           description
             "Identifier(s) of the affinity or anti-affinity
              group(s) the VnfProfile belongs to.";
           reference
             "GS NFV IFA014: Section 6.3.3.2 VnfProfile information
              element";
-
-          leaf id {
-            type leafref {
-              path "../../../affinity-or-anti-affinity-group/id";
-            }
-          }
         }
 
         list virtual-link-connectivity {
@@ -867,6 +899,21 @@ submodule etsi-nfv-ns {
                  element";
             }
           }
+        }
+
+        leaf service-availability-level {
+          must "not(../../service-availability-level)";
+          type uint32;
+          description
+            "If present, specifies the service availability level for
+             the VNF instance created from this profile.
+
+             Either the serviceAvailabilityLevel attribute of NS DF
+             or the serviceAvailabilityLevel attribute of the
+             VnfProfile may be provided, but not both.";
+          reference
+            "GS NFV IFA014: Section 6.3.3.2 VnfProfile information
+               element";
         }
       }
 
@@ -1002,11 +1049,12 @@ submodule etsi-nfv-ns {
              information element";
         }
 
-        uses local-affinity-or-anti-affinity-rule;
+        uses ns-local-affinity-or-anti-affinity-rule;
 
-        list affinity-or-anti-affinity-group {
-          key "id";
-
+        leaf-list affinity-or-anti-affinity-group-id {
+          type leafref {
+            path "../../affinity-or-anti-affinity-group/id";
+          }
           description
             "Identifies an affinity or anti-affinity group the
              VLs instantiated according to the VlProfile belong
@@ -1014,12 +1062,6 @@ submodule etsi-nfv-ns {
           reference
             "GS NFV IFA014: Section 6.3.4.2 VirtualLinkProfile
              information element";
-
-          leaf id {
-            type leafref {
-              path "../../../affinity-or-anti-affinity-group/id";
-            }
-          }
         }
 
         container max-bitrate-requirements {
@@ -1132,7 +1174,8 @@ submodule etsi-nfv-ns {
           type affinity-scope;
           description
             "Specifies the scope of the affinity or anti-affinity
-             relationship e.g. a NFVI node, an NFVI PoP, etc.";
+             relationship e.g. a NFVI node, an NFVI PoP,
+             network-link-and-node etc.";
           reference
             "GS NFV IFA014: Section 6.3.5.2 AffinityOrAntiAffinity
              information element";
@@ -1268,7 +1311,7 @@ submodule etsi-nfv-ns {
              "count(virtual-link-to-level-mapping) + " +
              "count(ns-to-level-mapping)) > 0" {
           error-message
-	    "At least one attribute between " +
+            "At least one attribute between " +
             "vnf-to-level-mapping, " +
             "virtual-link-to-level-mapping and " +
             "ns-to-level-mapping shall be present.";
@@ -1306,7 +1349,7 @@ submodule etsi-nfv-ns {
             leaf value {
               type string;
             }
-	    description
+            description
               "Array of KVP requirements for additional parameters
                of NS to be passed when invoking the Instantiate Ns
                operation.";
@@ -1327,7 +1370,7 @@ submodule etsi-nfv-ns {
             leaf value {
               type string;
             }
-	    description
+            description
               "Array of KVP requirements for additional parameters
                of NS to be passed when invoking the Scale Ns
                operation.";
@@ -1348,7 +1391,7 @@ submodule etsi-nfv-ns {
             leaf value {
               type string;
             }
-	    description
+            description
               "Array of KVP requirements for additional parameters
                of NS to be passed when invoking the Heal Ns
                operation.";
@@ -1367,7 +1410,7 @@ submodule etsi-nfv-ns {
         }
         must "boolean(../../nested-nsd-id[.=current()/nsd-id])" {
           error-message
-	    "PNFDs in the profile has to be listed as a " +
+            "PNFDs in the profile has to be listed as a " +
             "dependency of the network service " +
             "descriptor.";
         }
@@ -1400,7 +1443,7 @@ submodule etsi-nfv-ns {
              element";
         }
 
-	leaf ns-df-id {
+        leaf ns-df-id {
           mandatory true;
           type leafref {
             path "deref(../nsd-id)/../df/id";
@@ -1413,7 +1456,7 @@ submodule etsi-nfv-ns {
              element";
         }
 
-	leaf instantiation-level-id {
+        leaf instantiation-level-id {
           mandatory true;
           type leafref {
             path "deref(../ns-df-id)/../ns-instantiation-level/id";
@@ -1428,7 +1471,7 @@ submodule etsi-nfv-ns {
              element";
         }
 
-	leaf min-number-of-instances {
+        leaf min-number-of-instances {
           type uint16;
           default 1;
           description
@@ -1440,7 +1483,7 @@ submodule etsi-nfv-ns {
              element";
         }
 
-	leaf max-number-of-instances {
+        leaf max-number-of-instances {
           type uint16;
           default 1;
           description
@@ -1452,21 +1495,16 @@ submodule etsi-nfv-ns {
              element";
         }
 
-        list affinity-or-anti-affinity-group-id {
-          key "id";
-
+        leaf-list affinity-or-anti-affinity-group-id {
+          type leafref {
+            path "../../affinity-or-anti-affinity-group/id";
+          }
           description
             "Identifies an affinity or anti-affinity group the NSs
              created according to this NsProfile belongs to.";
           reference
             "GS NFV IFA014: Section 6.3.11.2 NsProfile information
              element";
-
-          leaf id {
-            type leafref {
-              path "../../../affinity-or-anti-affinity-group/id";
-            }
-          }
         }
 
         list virtual-link-connectivity {
@@ -1553,7 +1591,7 @@ submodule etsi-nfv-ns {
              information element";
         }
 
-	choice secondary-id {
+        choice secondary-id {
           leaf secondary-vnf-profile {
             type leafref {
               path "../../vnf-profile/vnfd-id";
@@ -1591,7 +1629,7 @@ submodule etsi-nfv-ns {
                information element";
           }
 
-	  leaf vnf-indicator {
+          leaf vnf-indicator {
             mandatory true;
             type leafref {
               path "deref(../vnfd-id)/../nfv:indicator/nfv:id";
@@ -1654,6 +1692,24 @@ submodule etsi-nfv-ns {
                information element";
           }
         }
+      }
+
+      leaf service-availability-level {
+        type uint32;
+        description
+          "If present, specifies the service availability level for
+           the NS instance created from this DF.
+
+           THE FOLLOWING STATEMENT IS SUBJECT TO CHANGE:
+
+           Either the serviceAvailabilityLevel attribute of NS DF or
+           the serviceAvailabilityLevel attribute of the NS
+           constituents of the NS may be provided, but not both.
+           When a SAL information is assigned to an NS, this
+           information does not apply to any constituents of type
+           ‘nested NS’.";
+        reference
+          "GS NFV IFA014: Section 6.3.2.2 NsDf information element";
       }
     }
     uses security-parameters;

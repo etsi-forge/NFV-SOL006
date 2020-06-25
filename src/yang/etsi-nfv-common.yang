@@ -3,11 +3,36 @@ submodule etsi-nfv-common {
   belongs-to etsi-nfv-descriptors {
     prefix nfv;
   }
+
+  import ietf-yang-types {
+    prefix yang;
+    reference
+      "RFC 6991: Common YANG Data Types.";
+  }
+
   organization
     "European Telecommunications Standards Institute (ETSI)";
 
   description
     "Common data types for ETSI data models.";
+
+  revision 2020-06-10 {
+    description
+      "Version 3.3.1.
+
+       Common data structures to support VNFD and NSD according to:
+       ETSI GS NFV-IFA 014 Release 3
+       ETSI GS NFV-IFA 011 Release 3.";
+  }
+
+  revision 2020-06-01 {
+    description
+      "Version 2.8.1.
+
+       Common data structures to support VNFD and NSD according to:
+       ETSI GS NFV-IFA 014 271
+       ETSI GS NFV-IFA 011 271.";
+  }
 
   revision 2019-10-01 {
     description
@@ -17,6 +42,7 @@ submodule etsi-nfv-common {
        ETSI GS NFV-IFA 014 Ed271v264
        ETSI GS NFV-IFA 011 Ed271v264";
   }
+
   revision 2019-04-25 {
     description
       "Initial revision
@@ -233,22 +259,22 @@ submodule etsi-nfv-common {
       "Base type of storage that identities can derive from.";
   }
 
-  identity root-storage {
+  identity block {
     base storage-type;
     description
-      "Root type of storage.";
+      "Block type of storage.";
   }
 
-  identity swap-storage {
+  identity object {
     base storage-type;
     description
-      "Swap type of storage.";
+      "Object type of storage.";
   }
 
-  identity ephemeral-storage {
+  identity file {
     base storage-type;
     description
-      "Ephemeral type of storage.";
+      "File type of storage.";
   }
 
   identity forwarding-behaviour {
@@ -369,6 +395,7 @@ submodule etsi-nfv-common {
       enum "zone-group";
       enum "zone";
       enum "nfvi-pop";
+      enum "network-link-and-node";
     }
   }
 
@@ -390,30 +417,142 @@ submodule etsi-nfv-common {
       enum "end-vnf-ext-conn-change";
       enum "start-vnfinfo-modification";
       enum "end-vnfinfo-modification";
+      enum "start-vnf-snapshot-creation";
+      enum "end-vnf-snapshot-creation";
+      enum "start-vnf-snapshot-reverting-to";
+      enum "end-vnf-snapshot-reverting-to";
+      enum "start-change-current-vnf-package";
+      enum "end-change-current-vnf-package";
     }
   }
 
-  grouping local-affinity-or-anti-affinity-rule {
-    list local-affinity-or-anti-affinity-rule {
-      key "type scope";
-      leaf type {
-        type affinity-type;
+  typedef external-lifecycle-management-script-event {
+    type enumeration {
+      enum "instantiation";
+      enum "scaling";
+      enum "healing";
+      enum "termination";
+      enum "vnf-flavour-change";
+      enum "vnf-operation-change";
+      enum "vnf-ext-conn-change";
+      enum "vnfinfo-modification";
+      enum "vnf-snapshot-creation";
+      enum "vnf-snapshot-reverting-to";
+      enum "change-current-vnf-package";
+    }
+  }
+
+  grouping nfvi-maintenance-info {
+    container nfvi-maintenance-info {
+
+      leaf impact-notification-lead-time {
+        type yang:timeticks;
+	mandatory true;
         description
-          "Specifies whether the rule is an affinity rule or an
-           anti-affinity rule.";
+          "The value specifies the minimum notification lead time
+           requested for upcoming impact of the virtualised resource
+           or their group (i.e. between the notification and the
+           action causing the impact).";
         reference
-          "GS NFV IFA011: Section 7.1.8.11,
-           LocalAffinityOrAntiAffinityRule information element.";
+          "GS NFV-IFA011: Section 7.1.8.17, NfviMaintenanceInfo
+           information element";
       }
 
-      leaf scope {
-        type affinity-scope;
+      leaf is-impact-mitigation-requested {
+        type boolean;
         description
-          "Specifies the scope of the rule, possible values are
-           'NFVI-PoP', 'Zone', 'ZoneGroup', 'NFVI-node'.";
+          "When set to True, it is requested that at the time of the
+           notification of an upcoming change that is expected to have
+           an impact on the VNF, virtualised resource(s) of the same
+           characteristics as the impacted ones is/are provided to
+           compensate for the impact. Cardinality 0 corresponds to the
+           value False.";
         reference
-          "GS NFV IFA011: Section 7.1.8.11,
-           LocalAffinityOrAntiAffinityRule information element.";
+          "GS NFV-IFA011: Section 7.1.8.17, NfviMaintenanceInfo
+           information element";
+      }
+
+      leaf-list supported-migration-type {
+        type enumeration {
+          enum "no-migration";
+          enum "offline-migration";
+          enum "live-migration";
+        }
+        description
+          "Applicable to VirtualComputeDesc and VirtualStorageDesc.
+           When present, specifies the allowed migration types in the
+           order of preference in case of an impact starting with the
+           most preferred type. Possible values: NO_MIGRATION,
+           OFFLINE_MIGRATION, LIVE_MIGRATION.";
+        reference
+          "GS NFV-IFA011: Section 7.1.8.17, NfviMaintenanceInfo
+           information element";
+      }
+
+      leaf max-undetectable-interruption-time {
+        type yang:timeticks;
+        description
+          "Applicable to VirtualComputeDesc and VirtualStorageDesc.
+           When present, it specifies the maximum interruption time
+           that can go undetected at the VNF level and therefore
+           which will not trigger VNFinternal recovery during live
+           migration.";
+        reference
+          "GS NFV-IFA011: Section 7.1.8.17, NfviMaintenanceInfo
+           information element";
+      }
+
+      leaf min-recovery-time-between-impacts {
+        type yang:timeticks;
+        description
+          "When present, it specifies the time required by the group
+           to recover from an impact, thus, the minimum time
+           requested between consecutive impacts of the group.";
+        reference
+          "GS NFV-IFA011: Section 7.1.8.17, NfviMaintenanceInfo
+           information element";
+      }
+
+      list max-number-of-impacted-instances {
+        key "group-size";
+        ordered-by user;
+        must "./max-number-of-impacted-instances <= ./group-size";
+
+        leaf group-size {
+          type uint32;
+          description
+            "When present, it determines the size of the group for
+             which the maxNumberOfImpactedInstances is specified.
+             Otherwise the size is not limited.
+
+             Each groupSize value specified for a group of virtual
+             resources shall be unique, and it shall be possible
+             to form an ascending ordered list of groupSizes.
+
+             The number of instances in the group for which the
+             maxNumberOfImpactedInstances is specified may be equal
+             to groupSize or less. When the number of instances is
+             less than the groupSize, it shall be at least 1 if this
+             is the first groupSize in the ordered list of groupSizes,
+             or it shall be greater by at least 1 than the previous
+             groupSize in the ordered list of groupSizes.";
+
+          reference
+            "GS NFV-IFA011: Section 7.1.8.17, NfviMaintenanceInfo
+             information element";
+        }
+
+        leaf max-number-of-impacted-instances {
+          type uint32 {
+            range "1 .. max";
+          }
+          description
+            "The maximum number of instances that can be impacted
+             simultaneously within the group of the specified size.";
+          reference
+            "GS NFV-IFA011: Section 7.1.8.17, NfviMaintenanceInfo
+             information element";
+        }
       }
     }
   }
@@ -424,6 +563,7 @@ submodule etsi-nfv-common {
         type identityref {
           base layer-protocol;
         }
+	min-elements 1;
         description
           "Identifies the protocols that the VL uses (Ethernet,
            MPLS, ODU2, IPV4, IPV6, Pseudo-Wire). The top layer
