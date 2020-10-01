@@ -16,6 +16,11 @@ submodule etsi-nfv-vnf {
   description
     "Models for VNFD according to GS NFV-IFA 011.";
 
+  revision 2020-10-01 {
+    description
+      "dev version 3.4.1.";
+  }
+
   revision 2020-06-10 {
     description
       "Version 3.3.1.
