@@ -2473,13 +2473,24 @@ submodule etsi-nfv-vnf {
           }
         }
 
-        container change-current-vnf-package-op-config {
+        list change-current-vnf-package-op-config {
+          key "id";
           description
             "Configuration parameters for the
              ChangeCurrentVnfPackageOpConfig operation.";
           reference
             "GS NFV IFA011: Section 7.1.5.2
              VnfLcmOperationsConfiguration information element";
+
+          leaf id {
+            type string;
+            description
+              "Identifier of this parameter set for later referencing.";
+            reference
+              "GS NFV IFA011: Section 7.1.5.13
+               ChangeCurrentVnfPackageOpConfig information
+               element";
+          }
 
           list parameter {
             key "key";
@@ -3407,7 +3418,7 @@ submodule etsi-nfv-vnf {
       leaf additional-params-id {
         type leafref {
           path "../../df/lcm-operations-configuration/" +
-               "change-current-vnf-package-op-config/parameter/key";
+               "change-current-vnf-package-op-config/id";
         }
         description
           "References the ChangeCurrentVnfPackageOpConfig information
