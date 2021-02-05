@@ -62,8 +62,10 @@ submodule etsi-nfv-ns {
       leaf type {
         type affinity-type;
         description
-          "Specifies whether the rule is an affinity rule or an
-           anti-affinity rule.";
+          "Specifies the rule.
+           Values:
+             • AFFINITY
+             • ANTI_AFFINITY.";
         reference
           "GS NFV IFA014: Section 6.3.8.2,
            LocalAffinityOrAntiAffinityRule information element.";
@@ -72,8 +74,13 @@ submodule etsi-nfv-ns {
       leaf scope {
         type affinity-scope;
         description
-          "Specifies the scope of the rule, possible values are
-           'NFVI-PoP', 'NFVI-node' network-link-and-node etc.";
+          "Specifies the scope of the rule.
+           Values:
+             • NFVI_POP
+             • ZONE
+             • ZONE_GROUP
+             • NFVI_NODE
+             • etc.";
         reference
           "GS NFV IFA014: Section 6.3.8.2,
            LocalAffinityOrAntiAffinityRule information element.";
@@ -631,7 +638,7 @@ submodule etsi-nfv-ns {
               path "../../../nfp-position-element/id";
             }
             description
-              "Reference to one or a pair of CPDs or SAPDs.";
+              "References one or a pair of CPDs or SAPDs.";
             reference
               "GS NFV IFA014: Section 6.4.5.2 NfpPositionDesc
                information element";
@@ -642,16 +649,20 @@ submodule etsi-nfv-ns {
               base forwarding-behaviour;
             }
             description
-              "Identifies a rule to apply to forward traffic to CP or
-               SAP instances corresponding to the referenced CPD(s)
-               and SAPD(s). The minimum list of rules to be supported
+              "Specifies a rule to apply to forward traffic to CP or
+               SAP instances corresponding to the referenced CP
+               profiles(s). The minimum list of rules to be supported
                shall include:
                • ALL = Traffic flows shall be forwarded simultaneously
                  to all CP or SAP instances created from the
                  referenced CP profile(s).
                • LB = Traffic flows shall be forwarded to one CP or SAP
                  instance created from the referenced CP profile(s)
-                 selected based on a load-balancing algorithm.";
+                 selected based on a load-balancing algorithm
+               Values:
+                 • ALL
+                 • LB
+                 • etc.";
             reference
               "GS NFV IFA014: Section 6.4.5.2 NfpPositionDesc
                information element";
@@ -1417,7 +1428,7 @@ submodule etsi-nfv-ns {
         key "id";
 
         description
-          "Specifies a NS Profile supported by this NS DF.";
+          "Specifies nested NS Profile to be used for this NS DF.";
         reference
           "GS NFV IFA014: Section 6.3.2.2 NsDf information element";
 
