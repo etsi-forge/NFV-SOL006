@@ -240,7 +240,7 @@
       </lcm-operations-configuration>
       <affinity-or-anti-affinity-group>
         <id>control-plane</id>
-        <type>anti-affinity</type>
+        <affinityorAntiaffinity>anti-affinity</affinityorAntiaffinity>
         <scope>nfvi-node</scope>
       </affinity-or-anti-affinity-group>
     </df>
@@ -328,7 +328,7 @@
       </lcm-operations-configuration>
       <affinity-or-anti-affinity-group>
         <id>control-plane</id>
-        <type>anti-affinity</type>
+        <affinityorAntiaffinity>anti-affinity</affinityorAntiaffinity>
         <scope>nfvi-node</scope>
       </affinity-or-anti-affinity-group>
     </df>
