@@ -2672,6 +2672,68 @@ submodule etsi-nfv-vnf {
              element";
       }
 
+      list supported-coordination-actions {
+        key "vnf-lcm-operation";
+
+        description
+          "References applicable LCM coordination actions
+           that can be invoked during each of the listed
+           VNF LCM operations.";
+        reference
+          "GS NFV IFA011: Section 7.1.8.2 VnfDf information
+           element";
+
+        leaf vnf-lcm-operation {
+          type enumeration {
+            enum "instantiate";
+            enum "scale";
+            enum "scale_to_level";
+            enum "change_flavour";
+            enum "terminate";
+            enum "heal";
+            enum "operate";
+            enum "change_ext_conn";
+            enum "modify_info";
+            enum "create_snapshot";
+            enum "revert_to_snapshot";
+          }
+          description
+            "Identifies the specific VNF LCM operation.
+             Values:
+             • INSTANTIATE
+             • SCALE
+             • SCALE_TO_LEVEL
+             • CHANGE_FLAVOUR
+             • TERMINATE
+             • HEAL
+             • OPERATE
+             • CHANGE_EXT_CONN
+             • MODIFY_INFO
+             • CREATE_SNAPSHOT
+             • REVERT_TO_SNAPSHOT.";
+          reference
+            "GS NFV IFA011: Section 7.1.16.3 LcmCoordinationActionMapping
+             information element";
+        }
+        leaf coordination-action-name {
+          type leafref {
+            path "../../../lcm-operations-coordination/coordination-action-name";
+          }
+          description
+            "References to the names of coordination actions that can be
+             invoked during the LCM operation indicated by the
+             'vnfLcmOperation' attribute.
+
+             The related coordination actions shall either be declared
+             in the VnfLcmOperationCoordination information element
+             in the same VNFD, or shall be well-known standardized
+             coordination action name identifiers.";
+          reference
+            "GS NFV IFA011: Section 7.1.16.3 LcmCoordinationActionMapping
+             information element";
+        }
+      }
+
       list monitoring-parameter {
         key "id";
 
@@ -3523,13 +3585,14 @@ submodule etsi-nfv-vnf {
            information element";
       }
 
-      leaf coordination-id {
+      leaf coordination-action-name {
         type leafref {
-          path "../../lcm-operations-coordination/id";
+          path "../../lcm-operations-coordination/coordination-action-name";
         }
         description
-          "Reference to applicable VNF LCM operation coordination
-           actions.";
+          "Reference to applicable VNF LCM operation coordination actions
+           that can be invoked during a VNF package change as defined by
+           the 'selector' attribute.";
         reference
           "GS NFV IFA011: Section 7.1.15.2 VnfPackageChangeInfo
            information element";
@@ -3558,13 +3621,13 @@ submodule etsi-nfv-vnf {
     }
 
     list lcm-operations-coordination {
-      key "id";
+      key "coordination-action-name";
 
-      leaf id {
+      leaf coordination-action-name {
         type string;
         description
           "Identifies the specific VNF LCM operation coordination
-           action.";
+           action.Shall be unique within the scope of VNFD";
         reference
           "GS NFV IFA011: Section 7.1.16.2 VnfLcmOperationCoordination
            information element";
@@ -3586,36 +3649,81 @@ submodule etsi-nfv-vnf {
         }
         description
           "Specifies the type of the endpoint exposing the LCM
-           operation coordination such as other operations supporting
-           or management systems (e.g. an EM) or the VNF instance.
+           operation coordination such as operations supporting
+           management systems (e.g. EM) or the VNF instance.
            Allowed values:
-           • MGMT: coordination with other operation supporting
+           • MGMT: coordination with operation supporting
                    management systems.
-           • VNF: coordination with the VNF instance.";
+           • VNF: coordination with the VNF instance.
+
+           If this attribute is omitted, the endpoint that provides
+           the interface will be determined at deployment time.
+
+           If the VNF produces the LCM coordination interface, this
+           attribute may be omitted or may have the value 'VNF', and
+           a VnfInterfaceDetails entry with the 'interfaceName'
+           attribute set to 'VNF_LCM_COORDINATION' shall be specified
+           in the related deployment flavour to signal where this
+           interface is exposed by the VNF.
+
+           If the VNF does not produce the LCM coordination interface
+           but coordination via this interface is needed, it is expected
+           that a management entity such as the EM exposes the coordination
+           interface, and consequently, this attribute shall have the
+           value 'MGMT'.";
         reference
           "GS NFV IFA011: Section 7.1.16.2 VnfLcmOperationCoordination
            information element";
       }
 
       leaf coordination-stage {
-        type string;
+        type enumeration {
+          enum "start";
+          enum "end";
+        }
         description
-          "Indicates the coordination stage during the VNF LCM
-           operation.";
+          "Indicates whether the coordination action is invoked before
+           or after all other changes performed by the VNF LCM
+           operation.
+           Values:
+           • START:the coordination action is invoked after receiving
+                   the grant and before the LCM operation performs any
+                   other changes.
+           • END:the coordination action is invoked after the LCM
+                 operation has performed all other changes.
+
+           This attribute shall be omitted if the coordination action
+           is intended to be invoked at an intermediate stage of the
+           LCM operation, i.e. neither at the start nor at the end.
+           In this case, the actual instant during the LCM operation
+           when invoking the coordination is determined by means outside
+           the scope of the present document such as VNFM-internal logic
+           or LCM script.";
         reference
           "GS NFV IFA011: Section 7.1.16.2 VnfLcmOperationCoordination
            information element";
       }
 
-      leaf coordination-params {
+      leaf input-parameter {
         type string;
         description
-          "Input information needed by the external coordinating
+          "Input parameter needed by the external coordinating
            entity.";
         reference
           "GS NFV IFA011: Section 7.1.16.2 VnfLcmOperationCoordination
            information element";
       }
+
+      leaf output-parameter {
+        type string;
+        description
+          "Output parameter provided by the external coordinating
+           entity.";
+        reference
+          "GS NFV IFA011: Section 7.1.16.2 VnfLcmOperationCoordination
+           information element";
+      }
+
       description
         "Provides information used for the coordination in VNF LCM
          operations.";
