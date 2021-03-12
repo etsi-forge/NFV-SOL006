@@ -3704,8 +3704,15 @@ submodule etsi-nfv-vnf {
            information element";
       }
 
-      leaf input-parameter {
-        type string;
+      list input-parameter {
+        key "key";
+
+        leaf key {
+          type string;
+        }
+        leaf value {
+          type string;
+        }
         description
           "Input parameter needed by the external coordinating
            entity.";
@@ -3714,8 +3721,15 @@ submodule etsi-nfv-vnf {
            information element";
       }
 
-      leaf output-parameter {
-        type string;
+      list output-parameter {
+        key "key";
+
+        leaf key {
+          type string;
+        }
+        leaf value {
+          type string;
+        }
         description
           "Output parameter provided by the external coordinating
            entity.";
