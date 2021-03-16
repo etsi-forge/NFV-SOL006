@@ -586,6 +586,85 @@ submodule etsi-nfv-vnf {
           "GS NFV IFA011: Section 7.1.6.7,
            VnfcConfigurableProperties Information element.";
       }
+
+      list trunk-port {
+        key "parent-port-cpd";
+        description
+          "Specifies the logical topology between an intCpd in
+           trunk mode, used to describe a trunk port, and other
+           intCpds used to describe subports of the same trunk.
+
+           Cardinality 0 is used when there is no intCpd with
+           trunkmode = True, or when no individual intCpds to
+           describe the subports are included in the Vdu.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.2, Vdu information element";
+
+        leaf parent-port-cpd {
+          type leafref {
+            path "../int-cpd/id";
+          }
+          description
+            "Reference of the internal VDU CPD which is used to
+             instantiate the parent port in a logical trunk model.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.11, Information elements
+             related to TrunkPort Topology.";
+        }
+        leaf segmentation-type {
+          default "vlan";
+          type enumeration {
+            enum "vlan";
+            enum "inherit";
+          }
+          description
+            "Specifies the encapsulation type for the traffics
+             coming in and out of the trunk subport.
+             Values:
+             •  VLAN: the subport uses VLAN as encapsulation type.
+             •  INHERIT: the subport gets its segmentation type
+                from the network it’s connected to.
+
+             Cardinality 0 means default value VLAN is used.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.11, Information elements
+             related to TrunkPort Topology.";
+        }
+
+        list sub-port-list {
+          key "sub-port-cpd";
+          description
+            "Provides information used for the subport.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.11, Information elements
+             related to subport of a trunk parent port.";
+
+          leaf sub-port-cpd{
+            type leafref {
+              path "../../int-cpd/id";
+            }
+          description
+            "Reference of the internal VDU CPD which is used
+             to instantiate the subport in a logical trunk model.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.12, Information elements
+             related to subport of a trunk parent port.";
+          }
+          leaf segmentation-id {
+            type unit32;
+            description
+              "Specifies the segmentation ID for the subport, which is
+               used to differentiate the traffics on different networks
+               coming in and out of the trunk port. If a value is provided
+               here it may be overridden by a value provided at run time
+               when the infrastructure doesn’t support mapping of
+               segmentation IDs.";
+            reference
+              "GS NFV IFA011: Section 7.1.6.12, Information elements
+               related to subport of a trunk parent port.";
+          }
+        }
+      }
     }
 
     list virtual-compute-desc {
