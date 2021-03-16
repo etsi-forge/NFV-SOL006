@@ -866,7 +866,8 @@ submodule etsi-nfv-vnf {
               enum "dynamic";
             }
             description
-              "The policy can take values of 'static' or 'dynamic'.
+              "Indicates the policy for CPU pinning.
+               The policy can take values of 'static' or 'dynamic'.
                In case of 'static' the virtual CPU cores are
                requested to be allocated to logical CPU cores
                according to the rules defined in
@@ -890,25 +891,9 @@ submodule etsi-nfv-vnf {
               type string;
             }
             description
-              "A list of rules that should be considered during the
+              "List of rules that should be considered during the
                allocation of the virtual CPUs to logical CPUs in case
                of 'static' virtualCpuPinningPolicy.";
-            reference
-              "GS NFV IFA011: Section 7.1.9.2.4,
-               VirtualCpuPinningData information element.";
-          }
-
-          leaf-list cpu-policy {
-            type enumeration {
-              enum "dedicated";
-              enum "shared";
-            }
-            description
-              "Shows the list of dedicated virtual CPU cores and
-               shared virtual CPU cores in a VM. Dedicated refers to
-               a virtual CPU core occupies one physical CPU core.
-               Shared refers to multi virtual CPU cores shared one
-               physical CPU core.";
             reference
               "GS NFV IFA011: Section 7.1.9.2.4,
                VirtualCpuPinningData information element.";
@@ -1541,7 +1526,7 @@ submodule etsi-nfv-vnf {
            virtual IP addresses allocated when a VipCp instance
            is created from the VipCpd.";
         reference
-          "GS NFV IFA011: Section 7.1.x, VipCpd information element.";
+          "GS NFV IFA011: Section 7.1.17.2, VipCpd information element.";
       }
 
       leaf-list vnf-ext-cpd {
@@ -1554,7 +1539,7 @@ submodule etsi-nfv-vnf {
            virtual IP addresses allocated when a VipCp instance is
            created from the VipCpd.";
         reference
-          "GS NFV IFA011: Section 7.1.x, VipCpd information element.";
+          "GS NFV IFA011: Section 7.1.17.2, VipCpd information element.";
       }
 
       leaf vip-function {
@@ -1565,7 +1550,7 @@ submodule etsi-nfv-vnf {
           "It indicates the function the virtual IP address is used
            for. Permitted values: high availability, load balancing.";
         reference
-          "GS NFV IFA011: Section 7.1.x, VipCpd information element.";
+          "GS NFV IFA011: Section 7.1.17.2, VipCpd information element.";
       }
 
       uses cpd;
@@ -1651,7 +1636,7 @@ submodule etsi-nfv-vnf {
 	    path "../../affinity-or-anti-affinity-group/id";
 	  }
           description
-            "Identifier(s) of the affinity or anti-affinity
+            "References of the affinity or anti-affinity
              group(s) the VDU belongs to.";
           reference
             "GS NFV IFA011: Section 7.1.8.3, VduProfile information
@@ -1708,7 +1693,7 @@ submodule etsi-nfv-vnf {
 	    path "../../affinity-or-anti-affinity-group/id";
 	  }
           description
-            "Identifier(s) of the affinity or anti-affinity
+            "References of the affinity or anti-affinity
              group(s) the VnfVirtualLinkDesc belongs to.";
           reference
             "GS NFV IFA011: Section 7.1.8.4, VirtualLinkProfile
@@ -2085,10 +2070,10 @@ submodule etsi-nfv-vnf {
           path "../instantiation-level/id";
         }
         description
-          "This attribute references the 'instantiationLevel'
-           entry which defines the default instantiation level for
-           this DF. It shall be present if there are multiple
-           'instantiationLevel' entries.";
+          "References the 'instantiationLevel' entry which defines
+           the default instantiation level for this DF. It shall be
+           present if there are multiple 'instantiationLevel'
+           entries.";
         reference
           "GS NFV IFA011: Section 7.1.8.2 VnfDf information
            element";
