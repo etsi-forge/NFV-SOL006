@@ -843,6 +843,16 @@ submodule etsi-nfv-common {
               "GS NFV IFA011: Section 7.1.3.4, L3AddressData
                information element.";
           }
+
+          leaf fixed-ip-address {
+            type string;
+            description
+              "IP address to be assigned to the CP instance.";
+            reference
+              "GS NFV IFA011: Section 7.1.3.4, L3AddressData
+               information element.";
+          }
+
         }
         description
           "Provides information on the addresses to be assigned to the
