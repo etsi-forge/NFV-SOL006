@@ -1082,6 +1082,170 @@ submodule etsi-nfv-ns {
              information element";
           uses link-bitrate-requirements;
         }
+        container virtual-link-protocol-data {
+          leaf associated-layer-protocol {
+            type identityref {
+              base layer-protocol;
+            }
+            description
+              "One of the values of the attribute layerProtocol of
+               the ConnectivityType IE.
+               Values:
+                 • Ethernet
+                 • MPLS
+                 • ODU2
+                 • IPV4
+                 • IPV6
+                 • Pseudo-Wire
+                 • etc.";
+            reference
+              "GS NFV IFA014: Section 6.3.13.2,
+               VirtualLinkProtocolData information element.";
+          }
+
+          container l2-protocol-data {
+            when "(../associated-layer-protocol = 'Ethernet') or " +
+                 "(../associated-layer-protocol = 'MPLS') or " +
+                 "(../associated-layer-protocol = 'ODU2') or " +
+                 "(../associated-layer-protocol = 'Pseudo-Wire')";
+
+            leaf name {
+              type string;
+              description
+                "Network name associated with this L2 protocol.";
+              reference
+                "GS NFV IFA014: Section 6.3.14.2,
+                 L2ProtocolData information element.";
+            }
+
+            leaf network-type {
+              type enumeration {
+                enum flat;
+                enum vlan;
+                enum vxlan;
+                enum gre;
+              }
+              description
+                "Specifies the network type for this L2 protocol.
+                 Values:
+                   • FLAT
+                   • VLAN
+                   • VXLAN
+                   • GRE.";
+              reference
+                "GS NFV IFA014: Section 6.3.14.2,
+                 L2ProtocolData information element.";
+            }
+
+            leaf vlan-transparent {
+              type boolean;
+              description
+                "Specifies whether to support VLAN transparency for
+                 this L2 protocol or not.";
+              reference
+                "GS NFV IFA014: Section 6.3.14.2,
+                 L2ProtocolData information element.";
+            }
+
+            leaf mtu {
+              type uint16;
+              description
+                "Specifies the maximum transmission unit (MTU) value
+                 for this L2 protocol.";
+              reference
+                "GS NFV IFA014: Section 6.3.14.2,
+                 L2ProtocolData information element.";
+            }
+
+            leaf segmentation-id {
+              type string;
+              description
+                "If present, specifies a specific virtualised network
+                 segment, which depends on the network type. For e.g.,
+                 VLAN ID for VLAN network type and tunnel ID for
+                 GRE/VXLAN network types.";
+              reference
+                "GS NFV IFA014: Section 6.3.14.2,
+                 L2ProtocolData information element.";
+            }
+
+            description
+              "Specifies the L2 protocol data for this virtual link.
+               Shall be present when the associatedLayerProtocol
+               attribute indicates a L2 protocol and shall be absent
+               otherwise.";
+            reference
+              "GS NFV IFA014: Section 6.3.13.2,
+               VirtualLinkProtocolData information element.";
+          }
+
+          container l3-protocol-data {
+            when "(../associated-layer-protocol = 'IPv4') or " +
+                 "(../associated-layer-protocol = 'IPv6')";
+
+            leaf name {
+              type string;
+              description
+                "Network name associated with this L3 protocol.";
+              reference
+                "GS NFV IFA014: Section 6.3.15.2,
+                 L3ProtocolData information element.";
+            }
+
+            leaf ip-version {
+              type enumeration {
+                enum ipv4;
+                enum ipv6;
+              }
+              default "ipv4";
+              description
+                "Specifies IP version of this L3 protocol.
+                 Values:
+                 • IPV4.
+                 • IPV6.";
+              reference
+                "GS NFV IFA014: Section 6.3.15.2,
+                 L3ProtocolData information element.";
+            }
+
+            leaf cidr {
+              type string;
+              description
+                "Specifies the CIDR (Classless InterDomain Routing)
+                 of this L3 protocol.
+                 The network address and subnet mask in
+                 cidr format.";
+              reference
+                "GS NFV IFA014: Section 6.3.15.2,
+                 L3ProtocolData information element.";
+            }
+
+            leaf-list ip-allocation-pools {
+              type string;
+              description
+                "Specifies the allocation pools with start and end
+                 IP addresses for this L3 protocol.";
+              reference
+                "GS NFV IFA014: Section 6.3.15.2,
+                 L3ProtocolData information element.";
+            }
+            description
+              "Specifies the L3 protocol data for this virtual link.
+               Shall be present when the associatedLayerProtocol
+               attribute indicates a L3 protocol and shall be absent
+               otherwise.";
+            reference
+              "GS NFV IFA014: Section 6.3.13.2,
+               VirtualLinkProtocolData information element.";
+          }
+          description
+            "Specifies the protocol data for a VL instantiated
+             according to this profile. Cardinality 0 is used when
+             no protocol data needs to be specified.";
+          reference
+            "GS NFV IFA014: Section 6.3.4.2 VirtualLinkProfile
+             information element";
+        }
       }
 
       list scaling-aspect {
