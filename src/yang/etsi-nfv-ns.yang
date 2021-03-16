@@ -758,7 +758,7 @@ submodule etsi-nfv-ns {
         leaf id {
           type string;
           description
-            "Identifier of this vnfProfile information element. It
+            "Identifier of this VnfProfile information element. It
              uniquely identifies a VnfProfile.";
           reference
             "GS NFV IFA014: Section 6.3.3.2 VnfProfile information
@@ -783,7 +783,7 @@ submodule etsi-nfv-ns {
             path "deref(../vnfd-id)/../nfv:df/nfv:id";
           }
           description
-            "Identifies a flavour within the VNFD.";
+            "References a flavour within the VNFD.";
           reference
             "GS NFV IFA014: Section 6.3.3.2 VnfProfile information
              element";
@@ -834,8 +834,8 @@ submodule etsi-nfv-ns {
             path "../../affinity-or-anti-affinity-group/id";
           }
           description
-            "Identifier(s) of the affinity or anti-affinity
-             group(s) the VnfProfile belongs to.";
+            "Reference(s) the affinity or anti-affinity group(s)
+             the VnfProfile belongs to.";
           reference
             "GS NFV IFA014: Section 6.3.3.2 VnfProfile information
              element";
@@ -1043,7 +1043,7 @@ submodule etsi-nfv-ns {
             path "deref(../virtual-link-desc-id)/../df/id";
           }
           description
-            "Identifies a flavour within the VLD.";
+            "Refernces a flavour within the VLD.";
           reference
             "GS NFV IFA014: Section 6.3.2.2 VirtualLinkProfile
              information element";
@@ -1056,9 +1056,9 @@ submodule etsi-nfv-ns {
             path "../../affinity-or-anti-affinity-group/id";
           }
           description
-            "Identifies an affinity or anti-affinity group the
-             VLs instantiated according to the VlProfile belong
-             to.";
+            "Reference(s) the affinity or anti-affinity group(s)
+             the VLs instantiated according to the VlProfile
+             belong to.";
           reference
             "GS NFV IFA014: Section 6.3.4.2 VirtualLinkProfile
              information element";
@@ -1151,8 +1151,8 @@ submodule etsi-nfv-ns {
         leaf id {
           type string;
           description
-            "Identifier of Identifier of this
-             AffinityOrAntiAffinityGroup information element.";
+            "Identifier of this AffinityOrAntiAffinityGroup
+             information element.";
           reference
             "GS NFV IFA014: Section 6.3.5.2 AffinityOrAntiAffinity
              information element";
@@ -1228,7 +1228,7 @@ submodule etsi-nfv-ns {
               path "../../../vnf-profile/id";
             }
             description
-              "Identifies the profile to be used for a VNF
+              "References the profile to be used for a VNF
                involved in an NS level.";
             reference
               "GS NFV IFA014: Section 6.7.4.2 VnfToLevelMapping
@@ -1262,7 +1262,7 @@ submodule etsi-nfv-ns {
               path "../../../virtual-link-profile/id";
             }
             description
-              "Identifies the profile to be used for a VL involved
+              "References the profile to be used for a VL involved
                in an NS level.";
             reference
               "GS NFV IFA014: Section 6.7.5.2
@@ -1288,7 +1288,7 @@ submodule etsi-nfv-ns {
               path "../../../ns-profile/id";
             }
             description
-              "Identifies the profile to be used for a nested NS
+              "References the profile to be used for a nested NS
                involved in the NS level.";
             reference
               "GS NFV IFA014: Section 6.7.6.2 NsToLevel information
@@ -1330,7 +1330,7 @@ submodule etsi-nfv-ns {
           path "../ns-instantiation-level/id";
         }
         description
-          "Identifies the NS level which represents the default NS
+          "References the NS level which represents the default NS
            instantiation level for this DF. It shall be present if
            there are multiple 'nsIinstantiationLevel' entries.";
         reference
@@ -1436,7 +1436,7 @@ submodule etsi-nfv-ns {
             path "../../../../nsd/id";
           }
           description
-            "Identifies the NSD applicable to NS instantiated
+            "References the NSD applicable to NS instantiated
              according to this profile.";
           reference
             "GS NFV IFA014: Section 6.3.11.2 NsProfile information
@@ -1449,7 +1449,7 @@ submodule etsi-nfv-ns {
             path "deref(../nsd-id)/../df/id";
           }
           description
-            "Identifies the applicable network service DF within
+            "References the applicable network service DF within
              the scope of the NSD.";
           reference
             "GS NFV IFA014: Section 6.3.11.2 NsProfile information
@@ -1462,7 +1462,7 @@ submodule etsi-nfv-ns {
             path "deref(../ns-df-id)/../ns-instantiation-level/id";
           }
           description
-            "Identifies the NS level within the referenced NS DF to
+            "References the NS level within the referenced NS DF to
              be used in the context of the parent NS instantiation.
              If not present, the default NS instantiation level as
              declared in the referenced NSD shall be used.";
@@ -1500,8 +1500,8 @@ submodule etsi-nfv-ns {
             path "../../affinity-or-anti-affinity-group/id";
           }
           description
-            "Identifies an affinity or anti-affinity group the NSs
-             created according to this NsProfile belongs to.";
+            "Reference(s) the affinity or anti-affinity group(s) the
+             NSs created according to this NsProfile belongs to.";
           reference
             "GS NFV IFA014: Section 6.3.11.2 NsProfile information
              element";
@@ -1623,7 +1623,7 @@ submodule etsi-nfv-ns {
               path "/nfv:nfv/nfv:vnfd/nfv:id";
             }
             description
-              "Identifies a VNFD.";
+              "References a VNFD.";
             reference
               "GS NFV IFA014: Section 6.2.7.2 VnfIndicatorData
                information element";
@@ -1635,7 +1635,7 @@ submodule etsi-nfv-ns {
               path "deref(../vnfd-id)/../nfv:indicator/nfv:id";
             }
             description
-              "Identifies a VNF indicator within the VNFD.";
+              "References a VNF indicator within the VNFD.";
             reference
               "GS NFV IFA014: Section 6.2.7.2 VnfIndicatorData
                information element";
