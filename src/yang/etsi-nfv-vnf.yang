@@ -2643,12 +2643,15 @@ submodule etsi-nfv-vnf {
              AffinityOrAntiAffinityGroup information element";
         }
 
-        leaf type {
+        leaf affinityorAntiaffinity {
           mandatory true;
           type affinity-type;
           description
             "Specifies the type of relationship that the members of
-             the group have: 'affinity' or 'anti-affinity'.";
+             the group have.
+             Values:
+                • AFFINITY
+                • ANTI-AFFINITY";
           reference
             "GS NFV IFA011: Section 7.1.8.12
              AffinityOrAntiAffinityGroup information element";
@@ -2659,8 +2662,13 @@ submodule etsi-nfv-vnf {
           type affinity-scope;
           description
             "Specifies the scope of the affinity or anti-affinity
-             relationship. Possible values are 'NFVI-PoP', 'Zone',
-             'ZoneGroup', 'NFVI-node' and 'network-link-and-node'.";
+             relationship.
+             Values:
+                • NFVI-PoP
+                • Zone
+                • ZoneGroup
+                • NFVI-node
+                • network-link-and-node";
           reference
             "GS NFV IFA011: Section 7.1.8.12
              AffinityOrAntiAffinityGroup information element";
