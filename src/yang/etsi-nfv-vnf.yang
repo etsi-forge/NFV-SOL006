@@ -194,7 +194,10 @@ submodule etsi-nfv-vnf {
         type affinity-type;
         description
           "Specifies whether the rule is an affinity rule or an
-           anti-affinity rule.";
+           anti-affinity rule
+           Values
+             • affinity
+             • anti-affinity.";
         reference
           "GS NFV IFA011: Section 7.1.8.11,
            LocalAffinityOrAntiAffinityRule information element.";
@@ -203,9 +206,13 @@ submodule etsi-nfv-vnf {
       leaf scope {
         type affinity-scope;
         description
-          "Specifies the scope of the rule. Possible values are
-           'NFVI-PoP', 'Zone', 'ZoneGroup', 'NFVI-node', and
-           'network-link-and-node'.";
+          "Specifies the scope of the rule.
+           Values:
+             • NFVI-PoP
+             • Zone
+             • ZoneGroup
+             • NFVI-node
+             • network-link-and-node.";
         reference
           "GS NFV IFA011: Section 7.1.8.11,
            LocalAffinityOrAntiAffinityRule information element.";
@@ -436,7 +443,8 @@ submodule etsi-nfv-vnf {
             "Describes the type of the virtual network interface
              realizing the CPs instantiated from this CPD. This is
              used to determine which mechanism driver(s) to be used
-             to bind the port. Value:
+             to bind the port.
+             Values:
              • NORMAL
              • VIRTIO
              • DIRECT
@@ -946,7 +954,9 @@ submodule etsi-nfv-vnf {
             }
             description
               "Indicates the policy for CPU pinning.
-               The policy can take values of 'static' or 'dynamic'.
+               Values:
+                 • static
+                 • dynamic
                In case of 'static' the virtual CPU cores are
                requested to be allocated to logical CPU cores
                according to the rules defined in
@@ -1027,8 +1037,11 @@ submodule etsi-nfv-vnf {
         }
         default "nfv:block";
         description
-          "Type of virtualised storage resource (BLOCK, OBJECT,
-           FILE).";
+          "Type of virtualised storage resource
+           Values:
+             • BLOCK
+             • OBJECT
+             • FILE.";
         reference
           "GS NFV IFA011: Section 7.1.9.4, Information elements
            related to Virtual Storage.";
@@ -1627,7 +1640,10 @@ submodule etsi-nfv-vnf {
         }
         description
           "It indicates the function the virtual IP address is used
-           for. Permitted values: high availability, load balancing.";
+           for.
+           Values:
+             • high availability
+             • load balancing.";
         reference
           "GS NFV IFA011: Section 7.1.17.2, VipCpd information element.";
       }
@@ -1848,7 +1864,13 @@ submodule etsi-nfv-vnf {
             }
             description
               "One of the values of the attribute layerProtocol of
-               the ConnectivityType IE.";
+               the ConnectivityType IE
+               Values:
+                 • Ethernet
+                 • MPLS
+                 • ODU2
+                 • Pseudo-Wire
+                 • etc.";
             reference
               "GS NFV IFA011: Section 7.1.8.13,
                VirtualLinkProtocolData information element.";
@@ -1878,7 +1900,11 @@ submodule etsi-nfv-vnf {
               }
               description
                 "Specifies the network type for this L2 protocol.
-                 Possible values: FLAT, VLAN, VXLAN, GRE.";
+                 Values:
+                   • FLAT
+                   • VLAN
+                   • VXLAN
+                   • GRE.";
               reference
                 "GS NFV IFA011: Section 7.1.8.14,
                  L2ProtocolData information element.";
@@ -1947,8 +1973,8 @@ submodule etsi-nfv-vnf {
               default "ipv4";
               description
                 "Specifies IP version of this L3 protocol.
-                 Value:
-                 • IPV4.
+                 Values:
+                 • IPV4
                  • IPV6.";
               reference
                 "GS NFV IFA011: Section 7.1.8.15,
@@ -2005,10 +2031,11 @@ submodule etsi-nfv-vnf {
                 enum dhcpv6-stateless;
               }
               description
-                "Specifies IPv6 address mode. Possible values:
-                 • SLAAC.
-                 • DHCPV6-STATEFUL.
-                 • DHCPV6-STATELESS.
+                "Specifies IPv6 address mode.
+                 Values:
+                   • SLAAC
+                   • DHCPV6-STATEFUL
+                   • DHCPV6-STATELESS
                  May be present when the value of the ipVersion
                  attribute is 'IPV6' and shall be absent otherwise.";
               reference
@@ -2166,7 +2193,13 @@ submodule etsi-nfv-vnf {
           "Indicates which operations are available for this DF via
            the VNF LCM interface. Instantiate VNF, Query VNF and
            Terminate VNF are supported in all DF and therefore
-           need not be included in this list.";
+           need not be included in this list.
+           Values:
+             • Scale VNF
+             • Scale VNF to level
+             • Heal VNF
+             • Operate VNF
+             • etc.";
         reference
           "GS NFV IFA011: Section 7.1.8.2 VnfDf information
            element";
@@ -2672,11 +2705,11 @@ submodule etsi-nfv-vnf {
             enum both;
           }
           description
-            "Describe the source of the indicator. The possible
-             values are:
-             • VNF.
-             • EM.
-             • Both.
+            "Describe the source of the indicator.
+             Values:
+              • VNF
+              • EM
+              • Both
 
              This tells the consumer where to send the subscription
              request.";
@@ -2703,11 +2736,11 @@ submodule etsi-nfv-vnf {
             enum vnf-lcm-coordination;
           }
           description
-            "Identifies an interface produced by the VNF. Valid
-             values:
-             - VNF_CONFIGURATION
-             - VNF_INDICATOR
-             - VNF_LCM_COORDINATION";
+            "Identifies an interface produced by the VNF.
+             Values:
+               • VNF_CONFIGURATION
+               • VNF_INDICATOR
+               • VNF_LCM_COORDINATION";
           reference
             "GS NFV IFA011: Section 7.1.8.16 VnfInterfaceDetails
              information element";
@@ -3504,12 +3537,12 @@ submodule etsi-nfv-vnf {
         description
           "When present, it specifies the type of modification
            resulting from transitioning from srcVnfdId to dstVnfdId.
-           The possible values include at least:
+           Values:
 
-           UP - indicating that the destination VNF version is newer
-                than the source version,
-           DOWN - indicating that the destination VNF version is
-                  older than the source version.
+           • UP:indicating that the destination VNF version is newer
+                  than the source version,
+           • DOWN:indicating that the destination VNF version is
+                    older than the source version.
 
            When provided, UP and DOWN values shall always be
            supported as the first value. In addition, a vendor may
@@ -3663,9 +3696,9 @@ submodule etsi-nfv-vnf {
           "Specifies the type of the endpoint exposing the LCM
            operation coordination such as other operations supporting
            or management systems (e.g. an EM) or the VNF instance.
-           Allowed values:
+           Values:
            • MGMT: coordination with other operation supporting
-                   management systems.
+                   management systems
            • VNF: coordination with the VNF instance.";
         reference
           "GS NFV IFA011: Section 7.1.16.2 VnfLcmOperationCoordination
