@@ -610,7 +610,7 @@ submodule etsi-nfv-vnf {
 
         leaf parent-port-cpd {
           type leafref {
-            path "../int-cpd/id";
+            path "../../int-cpd/id";
           }
           description
             "Reference of the internal VDU CPD which is used to
@@ -649,7 +649,7 @@ submodule etsi-nfv-vnf {
 
           leaf sub-port-cpd{
             type leafref {
-              path "../../int-cpd/id";
+              path "../../../int-cpd/id";
             }
           description
             "Reference of the internal VDU CPD which is used
@@ -659,7 +659,7 @@ submodule etsi-nfv-vnf {
              related to subport of a trunk parent port.";
           }
           leaf segmentation-id {
-            type unit32;
+            type uint32;
             description
               "Specifies the segmentation ID for the subport, which is
                used to differentiate the traffics on different networks
