@@ -214,6 +214,7 @@ submodule etsi-nfv-ns {
         }
 
         choice associated-cpd-id {
+
           container vnf {
             leaf vnfd-id {
               mandatory true;
