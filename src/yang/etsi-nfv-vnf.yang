@@ -619,25 +619,6 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.6.11, Information elements
              related to TrunkPort Topology.";
         }
-        leaf segmentation-type {
-          default "vlan";
-          type enumeration {
-            enum "vlan";
-            enum "inherit";
-          }
-          description
-            "Specifies the encapsulation type for the traffics
-             coming in and out of the trunk subport.
-             Values:
-             •  VLAN: the subport uses VLAN as encapsulation type.
-             •  INHERIT: the subport gets its segmentation type
-                from the network it’s connected to.
-
-             Cardinality 0 means default value VLAN is used.";
-          reference
-            "GS NFV IFA011: Section 7.1.6.11, Information elements
-             related to TrunkPort Topology.";
-        }
 
         list sub-port-list {
           key "sub-port-cpd";
@@ -657,6 +638,25 @@ submodule etsi-nfv-vnf {
           reference
             "GS NFV IFA011: Section 7.1.6.12, Information elements
              related to subport of a trunk parent port.";
+          }
+          leaf segmentation-type {
+            default "vlan";
+            type enumeration {
+              enum "vlan";
+              enum "inherit";
+            }
+            description
+              "Specifies the encapsulation type for the traffics
+               coming in and out of the trunk subport.
+               Values:
+               •  VLAN: the subport uses VLAN as encapsulation type.
+               •  INHERIT: the subport gets its segmentation type
+                  from the network it’s connected to.
+
+               Cardinality 0 means default value VLAN is used.";
+            reference
+              "GS NFV IFA011: Section 7.1.6.12, Information elements
+               related to to subport of a trunk parent port.";
           }
           leaf segmentation-id {
             type uint32;
