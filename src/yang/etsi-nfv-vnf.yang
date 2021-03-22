@@ -2061,6 +2061,52 @@ submodule etsi-nfv-vnf {
         }
       }
 
+      list vip-cp-profile {
+        key "id";
+        description
+          "Defines the minimum and maximum number of VIP CP instances
+           created from each of the VipCpds used in this flavour.
+           Shall be present if the deployment flavour can contain
+           VIP CP instances.";
+        reference
+          "GS NFV IFA011: Section 7.1.8.2, VnfDf information
+           element.";
+
+        leaf id {
+          type leafref {
+            path "../../../vip-cpd/id";
+          }
+          description
+            "Uniquely references a VIP CPD.";
+          reference
+            "GS NFV IFA011: Section 7.1.8.20, VipCpProfile information
+             element.";
+        }
+
+        leaf min-number-of-instances {
+          type uint16;
+          description
+            "Minimum number of instances of the VIP CP based on the
+             referenced VIP CPD that is permitted to exist for this
+             flavour. Shall be zero or greater.";
+          reference
+            "GS NFV IFA011: Section 7.1.8.20, VipCpProfile information
+             element.";
+        }
+
+        leaf max-number-of-instances {
+          type uint16;
+          description
+            "Maximum number of instances of the VIP CP based on the
+             referenced VIP CPD that is permitted to exist for this
+             flavour. Shall be greater than zero and not less than
+             the value of 'minNumberOfInstances'.";
+          reference
+            "GS NFV IFA011: Section 7.1.8.20, VipCpProfile information
+             element.";
+        }
+      }
+
       list instantiation-level {
         key "id";
         min-elements 1;
@@ -2135,6 +2181,45 @@ submodule etsi-nfv-vnf {
             reference
               "GS NFV IFA011: Section 7.1.8.9 VduLevel information
                element";
+          }
+        }
+
+        list vip-cp-level {
+          key "id";
+          description
+            "Indicates the number of VIP CP instances based on
+             a particular VipCpd to be part of this level.
+
+             If a particular VipCpd is defined with
+             minNumberOfInstances= maxNumberOfInstances=1 in the
+             vipCpProfile of the DF, that vipCpd may be omitted
+             from the 'vipCpLevel' attribute, which shall be
+             interpreted that one related VIP CP instance is
+             part of this level.";
+          reference
+            "GS NFV IFA011: Section 7.1.8.7, InstantiationLevel information
+             element.";
+
+          leaf id {
+            type leafref {
+              path "../../../../vip-cpd/id";
+            }
+            description
+              "Uniquely references a VIP CPD.";
+            reference
+              "GS NFV IFA011: Section 7.1.10.6, VipCpLevel information
+               element.";
+          }
+
+          leaf number-of-instances {
+            type uint16;
+            description
+              "Number of VIP CP instances based on the referenced
+               VipCpd to deploy for an instantiation level or for
+               a scaling delta. Shall be zero or greater.";
+            reference
+              "GS NFV IFA011: Section 7.1.10.6, VipCpLevel information
+               element.";
           }
         }
 
@@ -2961,6 +3046,38 @@ submodule etsi-nfv-vnf {
               reference
                 "GS NFV IFA011: Section 7.1.10.4 ScalingDelta
                  information element";
+            }
+
+            list vip-cp-delta {
+              key "id";
+              description
+                "Number of VIP CP instances based on a particular
+                 VipCpd to be created or removed.";
+              reference
+                "GS NFV IFA011: Section 7.1.10.4, ScalingDelta information
+                 element.";
+
+              leaf id {
+                type leafref {
+                  path "../../../../../../vip-cpd/id";
+                }
+                description
+                  "Uniquely references a VIP CPD.";
+                reference
+                  "GS NFV IFA011: Section 7.1.10.6, VipCpLevel information
+                   element.";
+              }
+
+              leaf number-of-instances {
+                type uint16;
+                description
+                  "Number of VIP CP instances based on the referenced
+                   VipCpd to deploy for an instantiation level or for
+                   a scaling delta. Shall be zero or greater.";
+                reference
+                  "GS NFV IFA011: Section 7.1.10.6, VipCpLevel information
+                   element.";
+              }
             }
             description
               "Declares different scaling deltas, each of which is
