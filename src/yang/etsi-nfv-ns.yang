@@ -180,27 +180,6 @@ submodule etsi-nfv-ns {
         "GS NFV IFA014: Section 6.2.2.2 Network Service Descriptor
          information element";
 
-      leaf id {
-        type string;
-        description
-          "Identifier of this Cpd information element.";
-        reference
-          "GS NFV IFA014: Section 6.6.3.1 Cpd information element";
-      }
-
-      leaf address-assignment {
-        type boolean;
-        description
-          "Specify whether the SAP address assignment is under the
-           responsibility of management and orchestration functions
-           or not. If it is set to True, management and
-           orchestration functions are responsible for assigning
-           addresses to the access points instantiated from this
-           SAPD.";
-        reference
-          "GS NFV IFA014: Section 6.2.3.2 Sapd information element";
-      }
-
       choice cpd-or-virtual-link {
         leaf virtual-link-desc {
           type leafref {
@@ -265,7 +244,21 @@ submodule etsi-nfv-ns {
           }
         }
       }
+
+      uses cpd;
+      leaf security-group-rule-id {
+        type leafref {
+          path "../../security-group-rule/id";
+        }
+        description
+          "Reference of the security group rules bound to this
+           CPD.";
+        reference
+          "GS NFV IFA014: Section 6.6.3 Cpd information element";
+      }
     }
+
+    uses security-group-rule;
 
     list virtual-link-desc {
       key "id";
