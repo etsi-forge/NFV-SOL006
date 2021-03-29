@@ -1767,7 +1767,10 @@ submodule etsi-nfv-ns {
             }
           }
           description
-            "References a VnfProfile or NsProfile.";
+            "References a VnfProfile or NsProfile for
+             describing dependencies between VNF and/or
+             nested NS instances in terms of primary
+             entities.";
           reference
             "GS NFV IFA014: Section 6.3.12.2 Dependencies
              information element";
@@ -1785,7 +1788,10 @@ submodule etsi-nfv-ns {
             }
           }
           description
-            "References a VnfProfile or NsProfile.";
+            "References a VnfProfile or NsProfile for
+             describing dependencies between VNF and/or
+             nested NS instances in terms of secondary
+             entities.";
           reference
             "GS NFV IFA014: Section 6.3.12.2 Dependencies
              information element";
