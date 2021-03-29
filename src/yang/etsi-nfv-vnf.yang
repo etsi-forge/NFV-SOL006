@@ -3006,6 +3006,44 @@ submodule etsi-nfv-vnf {
              information element";
         }
       }
+
+      list dependencies {
+        key "id";
+
+        description
+          "Specifies the order in which instances of the VNFCs
+           have to be created.";
+        reference
+          "GS NFV IFA011: Section 7.1.8.2 VnfDf information element";
+
+        leaf id {
+          type string;
+        }
+
+        leaf primary-id {
+          type leafref {
+            path "../../vdu-profile/id";
+          }
+          description
+            "References a VduProfile for describing dependencies
+             between VNFCs in terms of primary entities.";
+          reference
+            "GS NFV IFA011: Section 7.1.8.19 Dependencies
+             information element";
+        }
+
+        leaf secondary-id {
+          type leafref {
+            path "../../vdu-profile/id";
+          }
+          description
+            "References a VduProfile for describing dependencies
+             between VNFCs in terms of secondary entities.";
+          reference
+            "GS NFV IFA011: Section 7.1.8.19 Dependencies
+             information element";
+        }
+      }
     }
 
     container configurable-properties {
