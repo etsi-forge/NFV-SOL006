@@ -1609,8 +1609,9 @@ submodule etsi-nfv-vnf {
       key "id";
 
       leaf-list int-cpd {
+        min-elements 1;
         type leafref {
-          path "../../vdu/int-cpd/int-virtual-link-desc";
+          path "../../vdu/int-cpd/id";
         }
         description
           "Reference to the internal VDU CPD which is used to
@@ -1621,17 +1622,27 @@ submodule etsi-nfv-vnf {
           "GS NFV IFA011: Section 7.1.17.2, VipCpd information element.";
       }
 
-      leaf-list vnf-ext-cpd {
+      leaf int-virtual-link-desc {
         type leafref {
-          path "../../ext-cpd/id";
+          path "../../int-virtual-link-desc/id";
         }
         description
-          "Reference to the VNF external CPD which is used to
-           instantiate external CPs. These external CPs share the
-           virtual IP addresses allocated when a VipCp instance is
-           created from the VipCpd.";
+          "Reference of the internal VLD which this VipCpd
+           connects to";
         reference
-          "GS NFV IFA011: Section 7.1.17.2, VipCpd information element.";
+          "GS NFV IFA011: Section 7.1.17.2 VipCpd information element.";
+      }
+
+      leaf dedicated-ip-address {
+        type boolean;
+        description
+          "If set to true, it indicates that the VIP address
+           shall be different from the addresses allocated to
+           all of the VduCp instances associated to it.
+           If set to false, the VIP address shall be the same
+           as one of the VduCp instances associated to it.";
+        reference
+          "GS NFV IFA011: Section 7.1.17.2 VipCpd information element.";
       }
 
       leaf vip-function {
@@ -1652,7 +1663,7 @@ submodule etsi-nfv-vnf {
 
       description
         "Describes virtual IP addresses to be shared among instances
-         of connection points. See clause 7.1.x.";
+         of connection points. See clause 7.1.17.";
       reference
         "GS NFV IFA011: Section 7.1.2, VNFD information element.";
     }
