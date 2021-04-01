@@ -585,17 +585,17 @@
     <vnfd-id>CSR</vnfd-id>
     <sapd>
       <id>inside</id>
-      <ns>
+      <associated-cpd>
         <nsd-id>firewall-nsd</nsd-id>
-        <ext-cpd-id>inside</ext-cpd-id>
-      </ns>
+        <sapd>inside</sapd>
+      </associated-cpd>
     </sapd>
     <sapd>
       <id>outside</id>
-      <vnf>
+      <associated-cpd>
         <vnfd-id>CSR</vnfd-id>
-        <ext-cpd-id>left</ext-cpd-id>
-      </vnf>
+        <vnf-ext-cpd>left</vnf-ext-cpd>
+      </associated-cpd>
     </sapd>
     <virtual-link-desc>
       <id>r2fw</id>
