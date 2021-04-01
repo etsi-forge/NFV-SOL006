@@ -192,8 +192,8 @@ submodule etsi-nfv-ns {
             "GS NFV IFA014: Section 6.2.3.2 Sapd information element";
         }
 
-        choice associated-cpd-id {
-          container vnf {
+        container associated-cpd {
+          choice constituent-base-element-id {
             leaf vnfd-id {
               mandatory true;
               type leafref {
@@ -201,16 +201,6 @@ submodule etsi-nfv-ns {
               }
               must "boolean(../../../vnfd-id[.=current()])";
             }
-
-            leaf ext-cpd-id {
-              mandatory true;
-              type leafref {
-                path "deref(../vnfd-id)/../nfv:ext-cpd/nfv:id";
-              }
-            }
-          }
-
-          container pnf {
             leaf pnfd-id {
               mandatory true;
               type leafref {
@@ -218,15 +208,6 @@ submodule etsi-nfv-ns {
               }
               must "boolean(../pnfd-id[.=current()])";
             }
-
-            leaf ext-cpd-id {
-              mandatory true;
-              type leafref {
-                path "deref(../pnfd-id)/../nfv:ext-cpd/nfv:id";
-              }
-            }
-          }
-          container ns {
             leaf nsd-id {
               mandatory true;
               type leafref {
@@ -234,14 +215,43 @@ submodule etsi-nfv-ns {
               }
               must "boolean(../nsd-id[.=current()])";
             }
-
-            leaf ext-cpd-id {
+            description
+              "References the profile of an NS constituent.";
+            reference
+              "GS NFV IFA014: Section 6.4.8 CpdInConstituentElement information element";
+          }
+          choice constituent-cpd-id {  
+            leaf vnf-ext-cpd  {
+              mandatory true;
+              type leafref {
+                path "deref(../vnfd-id)/../nfv:ext-cpd/nfv:id";
+              }
+            }
+            leaf pnf-ext-cpd  {
+              mandatory true;
+              type leafref {
+                path "deref(../pnfd-id)/../nfv:ext-cpd/nfv:id";
+              }
+            }
+            leaf sapd {
               mandatory true;
               type leafref {
                 path "deref(../nsd-id)/../sapd/id";
               }
             }
+            description
+              "References the VNF external CPD for a given VnfProfile, or the PNF 
+               external CPD for a given PnfProfile, or an NS SAPD for a given NsProfile
+               identified by the constituentBaseElementId.";
+            reference
+              "GS NFV IFA014: Section 6.4.8 CpdInConstituentElement information element";
           }
+          description
+              "Describes a CPD or SAPD in the context of an NS constituent element, which
+               the SAPs instantiated from this SAPD are mapped to.";
+          reference
+              "GS NFV IFA014: Section 6.2.3	Sapd information element";
+            
         }
       }
 
