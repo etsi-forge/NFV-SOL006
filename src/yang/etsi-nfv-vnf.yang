@@ -194,7 +194,10 @@ submodule etsi-nfv-vnf {
         type affinity-type;
         description
           "Specifies whether the rule is an affinity rule or an
-           anti-affinity rule.";
+           anti-affinity rule
+           Values
+             • affinity
+             • anti-affinity.";
         reference
           "GS NFV IFA011: Section 7.1.8.11,
            LocalAffinityOrAntiAffinityRule information element.";
@@ -203,9 +206,13 @@ submodule etsi-nfv-vnf {
       leaf scope {
         type affinity-scope;
         description
-          "Specifies the scope of the rule. Possible values are
-           'NFVI-PoP', 'Zone', 'ZoneGroup', 'NFVI-node', and
-           'network-link-and-node'.";
+          "Specifies the scope of the rule.
+           Values:
+             • NFVI-PoP
+             • Zone
+             • ZoneGroup
+             • NFVI-node
+             • network-link-and-node.";
         reference
           "GS NFV IFA011: Section 7.1.8.11,
            LocalAffinityOrAntiAffinityRule information element.";
@@ -436,7 +443,8 @@ submodule etsi-nfv-vnf {
             "Describes the type of the virtual network interface
              realizing the CPs instantiated from this CPD. This is
              used to determine which mechanism driver(s) to be used
-             to bind the port. Value:
+             to bind the port.
+             Values:
              • NORMAL
              • VIRTIO
              • DIRECT
@@ -585,6 +593,85 @@ submodule etsi-nfv-vnf {
         reference
           "GS NFV IFA011: Section 7.1.6.7,
            VnfcConfigurableProperties Information element.";
+      }
+
+      list trunk-port {
+        key "parent-port-cpd";
+        description
+          "Specifies the logical topology between an intCpd in
+           trunk mode, used to describe a trunk port, and other
+           intCpds used to describe subports of the same trunk.
+
+           Cardinality 0 is used when there is no intCpd with
+           trunkmode = True, or when no individual intCpds to
+           describe the subports are included in the Vdu.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.2, Vdu information element";
+
+        leaf parent-port-cpd {
+          type leafref {
+            path "../../int-cpd/id";
+          }
+          description
+            "Reference of the internal VDU CPD which is used to
+             instantiate the parent port in a logical trunk model.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.11, Information elements
+             related to TrunkPort Topology.";
+        }
+
+        list sub-port-list {
+          key "sub-port-cpd";
+          description
+            "Provides information used for the subport.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.11, Information elements
+             related to subport of a trunk parent port.";
+
+          leaf sub-port-cpd{
+            type leafref {
+              path "../../../int-cpd/id";
+            }
+          description
+            "Reference of the internal VDU CPD which is used
+             to instantiate the subport in a logical trunk model.";
+          reference
+            "GS NFV IFA011: Section 7.1.6.12, Information elements
+             related to subport of a trunk parent port.";
+          }
+          leaf segmentation-type {
+            default "vlan";
+            type enumeration {
+              enum "vlan";
+              enum "inherit";
+            }
+            description
+              "Specifies the encapsulation type for the traffics
+               coming in and out of the trunk subport.
+               Values:
+               •  VLAN: the subport uses VLAN as encapsulation type.
+               •  INHERIT: the subport gets its segmentation type
+                  from the network it’s connected to.
+
+               Cardinality 0 means default value VLAN is used.";
+            reference
+              "GS NFV IFA011: Section 7.1.6.12, Information elements
+               related to to subport of a trunk parent port.";
+          }
+          leaf segmentation-id {
+            type uint32;
+            description
+              "Specifies the segmentation ID for the subport, which is
+               used to differentiate the traffics on different networks
+               coming in and out of the trunk port. If a value is provided
+               here it may be overridden by a value provided at run time
+               when the infrastructure doesn’t support mapping of
+               segmentation IDs.";
+            reference
+              "GS NFV IFA011: Section 7.1.6.12, Information elements
+               related to subport of a trunk parent port.";
+          }
+        }
       }
     }
 
@@ -866,7 +953,10 @@ submodule etsi-nfv-vnf {
               enum "dynamic";
             }
             description
-              "The policy can take values of 'static' or 'dynamic'.
+              "Indicates the policy for CPU pinning.
+               Values:
+                 • static
+                 • dynamic
                In case of 'static' the virtual CPU cores are
                requested to be allocated to logical CPU cores
                according to the rules defined in
@@ -890,25 +980,9 @@ submodule etsi-nfv-vnf {
               type string;
             }
             description
-              "A list of rules that should be considered during the
+              "List of rules that should be considered during the
                allocation of the virtual CPUs to logical CPUs in case
                of 'static' virtualCpuPinningPolicy.";
-            reference
-              "GS NFV IFA011: Section 7.1.9.2.4,
-               VirtualCpuPinningData information element.";
-          }
-
-          leaf-list cpu-policy {
-            type enumeration {
-              enum "dedicated";
-              enum "shared";
-            }
-            description
-              "Shows the list of dedicated virtual CPU cores and
-               shared virtual CPU cores in a VM. Dedicated refers to
-               a virtual CPU core occupies one physical CPU core.
-               Shared refers to multi virtual CPU cores shared one
-               physical CPU core.";
             reference
               "GS NFV IFA011: Section 7.1.9.2.4,
                VirtualCpuPinningData information element.";
@@ -963,8 +1037,11 @@ submodule etsi-nfv-vnf {
         }
         default "nfv:block";
         description
-          "Type of virtualised storage resource (BLOCK, OBJECT,
-           FILE).";
+          "Type of virtualised storage resource
+           Values:
+             • BLOCK
+             • OBJECT
+             • FILE.";
         reference
           "GS NFV IFA011: Section 7.1.9.4, Information elements
            related to Virtual Storage.";
@@ -1532,8 +1609,9 @@ submodule etsi-nfv-vnf {
       key "id";
 
       leaf-list int-cpd {
+        min-elements 1;
         type leafref {
-          path "../../vdu/int-cpd/int-virtual-link-desc";
+          path "../../vdu/int-cpd/id";
         }
         description
           "Reference to the internal VDU CPD which is used to
@@ -1541,20 +1619,30 @@ submodule etsi-nfv-vnf {
            virtual IP addresses allocated when a VipCp instance
            is created from the VipCpd.";
         reference
-          "GS NFV IFA011: Section 7.1.x, VipCpd information element.";
+          "GS NFV IFA011: Section 7.1.17.2, VipCpd information element.";
       }
 
-      leaf-list vnf-ext-cpd {
+      leaf int-virtual-link-desc {
         type leafref {
-          path "../../ext-cpd/id";
+          path "../../int-virtual-link-desc/id";
         }
         description
-          "Reference to the VNF external CPD which is used to
-           instantiate external CPs. These external CPs share the
-           virtual IP addresses allocated when a VipCp instance is
-           created from the VipCpd.";
+          "Reference of the internal VLD which this VipCpd
+           connects to";
         reference
-          "GS NFV IFA011: Section 7.1.x, VipCpd information element.";
+          "GS NFV IFA011: Section 7.1.17.2 VipCpd information element.";
+      }
+
+      leaf dedicated-ip-address {
+        type boolean;
+        description
+          "If set to true, it indicates that the VIP address
+           shall be different from the addresses allocated to
+           all of the VduCp instances associated to it.
+           If set to false, the VIP address shall be the same
+           as one of the VduCp instances associated to it.";
+        reference
+          "GS NFV IFA011: Section 7.1.17.2 VipCpd information element.";
       }
 
       leaf vip-function {
@@ -1563,16 +1651,19 @@ submodule etsi-nfv-vnf {
         }
         description
           "It indicates the function the virtual IP address is used
-           for. Permitted values: high availability, load balancing.";
+           for.
+           Values:
+             • high availability
+             • load balancing.";
         reference
-          "GS NFV IFA011: Section 7.1.x, VipCpd information element.";
+          "GS NFV IFA011: Section 7.1.17.2, VipCpd information element.";
       }
 
       uses cpd;
 
       description
         "Describes virtual IP addresses to be shared among instances
-         of connection points. See clause 7.1.x.";
+         of connection points. See clause 7.1.17.";
       reference
         "GS NFV IFA011: Section 7.1.2, VNFD information element.";
     }
@@ -1651,7 +1742,7 @@ submodule etsi-nfv-vnf {
 	    path "../../affinity-or-anti-affinity-group/id";
 	  }
           description
-            "Identifier(s) of the affinity or anti-affinity
+            "References of the affinity or anti-affinity
              group(s) the VDU belongs to.";
           reference
             "GS NFV IFA011: Section 7.1.8.3, VduProfile information
@@ -1708,7 +1799,7 @@ submodule etsi-nfv-vnf {
 	    path "../../affinity-or-anti-affinity-group/id";
 	  }
           description
-            "Identifier(s) of the affinity or anti-affinity
+            "References of the affinity or anti-affinity
              group(s) the VnfVirtualLinkDesc belongs to.";
           reference
             "GS NFV IFA011: Section 7.1.8.4, VirtualLinkProfile
@@ -1784,7 +1875,13 @@ submodule etsi-nfv-vnf {
             }
             description
               "One of the values of the attribute layerProtocol of
-               the ConnectivityType IE.";
+               the ConnectivityType IE
+               Values:
+                 • Ethernet
+                 • MPLS
+                 • ODU2
+                 • Pseudo-Wire
+                 • etc.";
             reference
               "GS NFV IFA011: Section 7.1.8.13,
                VirtualLinkProtocolData information element.";
@@ -1814,7 +1911,11 @@ submodule etsi-nfv-vnf {
               }
               description
                 "Specifies the network type for this L2 protocol.
-                 Possible values: FLAT, VLAN, VXLAN, GRE.";
+                 Values:
+                   • FLAT
+                   • VLAN
+                   • VXLAN
+                   • GRE.";
               reference
                 "GS NFV IFA011: Section 7.1.8.14,
                  L2ProtocolData information element.";
@@ -1883,8 +1984,8 @@ submodule etsi-nfv-vnf {
               default "ipv4";
               description
                 "Specifies IP version of this L3 protocol.
-                 Value:
-                 • IPV4.
+                 Values:
+                 • IPV4
                  • IPV6.";
               reference
                 "GS NFV IFA011: Section 7.1.8.15,
@@ -1941,10 +2042,11 @@ submodule etsi-nfv-vnf {
                 enum dhcpv6-stateless;
               }
               description
-                "Specifies IPv6 address mode. Possible values:
-                 • SLAAC.
-                 • DHCPV6-STATEFUL.
-                 • DHCPV6-STATELESS.
+                "Specifies IPv6 address mode.
+                 Values:
+                   • SLAAC
+                   • DHCPV6-STATEFUL
+                   • DHCPV6-STATELESS
                  May be present when the value of the ipVersion
                  attribute is 'IPV6' and shall be absent otherwise.";
               reference
@@ -1967,6 +2069,52 @@ submodule etsi-nfv-vnf {
           reference
             "GS NFV IFA011: Section 7.1.8.4, VirtualLinkProfile
              information element.";
+        }
+      }
+
+      list vip-cp-profile {
+        key "id";
+        description
+          "Defines the minimum and maximum number of VIP CP instances
+           created from each of the VipCpds used in this flavour.
+           Shall be present if the deployment flavour can contain
+           VIP CP instances.";
+        reference
+          "GS NFV IFA011: Section 7.1.8.2, VnfDf information
+           element.";
+
+        leaf id {
+          type leafref {
+            path "../../../vip-cpd/id";
+          }
+          description
+            "Uniquely references a VIP CPD.";
+          reference
+            "GS NFV IFA011: Section 7.1.8.20, VipCpProfile information
+             element.";
+        }
+
+        leaf min-number-of-instances {
+          type uint16;
+          description
+            "Minimum number of instances of the VIP CP based on the
+             referenced VIP CPD that is permitted to exist for this
+             flavour. Shall be zero or greater.";
+          reference
+            "GS NFV IFA011: Section 7.1.8.20, VipCpProfile information
+             element.";
+        }
+
+        leaf max-number-of-instances {
+          type uint16;
+          description
+            "Maximum number of instances of the VIP CP based on the
+             referenced VIP CPD that is permitted to exist for this
+             flavour. Shall be greater than zero and not less than
+             the value of 'minNumberOfInstances'.";
+          reference
+            "GS NFV IFA011: Section 7.1.8.20, VipCpProfile information
+             element.";
         }
       }
 
@@ -2047,6 +2195,45 @@ submodule etsi-nfv-vnf {
           }
         }
 
+        list vip-cp-level {
+          key "id";
+          description
+            "Indicates the number of VIP CP instances based on
+             a particular VipCpd to be part of this level.
+
+             If a particular VipCpd is defined with
+             minNumberOfInstances= maxNumberOfInstances=1 in the
+             vipCpProfile of the DF, that vipCpd may be omitted
+             from the 'vipCpLevel' attribute, which shall be
+             interpreted that one related VIP CP instance is
+             part of this level.";
+          reference
+            "GS NFV IFA011: Section 7.1.8.7, InstantiationLevel information
+             element.";
+
+          leaf id {
+            type leafref {
+              path "../../../../vip-cpd/id";
+            }
+            description
+              "Uniquely references a VIP CPD.";
+            reference
+              "GS NFV IFA011: Section 7.1.10.6, VipCpLevel information
+               element.";
+          }
+
+          leaf number-of-instances {
+            type uint16;
+            description
+              "Number of VIP CP instances based on the referenced
+               VipCpd to deploy for an instantiation level or for
+               a scaling delta. Shall be zero or greater.";
+            reference
+              "GS NFV IFA011: Section 7.1.10.6, VipCpLevel information
+               element.";
+          }
+        }
+
         list scaling-info {
           key "scaling-aspect-id";
           description
@@ -2085,10 +2272,10 @@ submodule etsi-nfv-vnf {
           path "../instantiation-level/id";
         }
         description
-          "This attribute references the 'instantiationLevel'
-           entry which defines the default instantiation level for
-           this DF. It shall be present if there are multiple
-           'instantiationLevel' entries.";
+          "References the 'instantiationLevel' entry which defines
+           the default instantiation level for this DF. It shall be
+           present if there are multiple 'instantiationLevel'
+           entries.";
         reference
           "GS NFV IFA011: Section 7.1.8.2 VnfDf information
            element";
@@ -2102,7 +2289,13 @@ submodule etsi-nfv-vnf {
           "Indicates which operations are available for this DF via
            the VNF LCM interface. Instantiate VNF, Query VNF and
            Terminate VNF are supported in all DF and therefore
-           need not be included in this list.";
+           need not be included in this list.
+           Values:
+             • Scale VNF
+             • Scale VNF to level
+             • Heal VNF
+             • Operate VNF
+             • etc.";
         reference
           "GS NFV IFA011: Section 7.1.8.2 VnfDf information
            element";
@@ -2473,13 +2666,24 @@ submodule etsi-nfv-vnf {
           }
         }
 
-        container change-current-vnf-package-op-config {
+        list change-current-vnf-package-op-config {
+          key "id";
           description
             "Configuration parameters for the
              ChangeCurrentVnfPackageOpConfig operation.";
           reference
             "GS NFV IFA011: Section 7.1.5.2
              VnfLcmOperationsConfiguration information element";
+
+          leaf id {
+            type string;
+            description
+              "Identifier of this parameter set for later referencing.";
+            reference
+              "GS NFV IFA011: Section 7.1.5.13
+               ChangeCurrentVnfPackageOpConfig information
+               element";
+          }
 
           list parameter {
             key "key";
@@ -2535,12 +2739,15 @@ submodule etsi-nfv-vnf {
              AffinityOrAntiAffinityGroup information element";
         }
 
-        leaf type {
+        leaf affinityorAntiaffinity {
           mandatory true;
           type affinity-type;
           description
             "Specifies the type of relationship that the members of
-             the group have: 'affinity' or 'anti-affinity'.";
+             the group have.
+             Values:
+                • AFFINITY
+                • ANTI-AFFINITY";
           reference
             "GS NFV IFA011: Section 7.1.8.12
              AffinityOrAntiAffinityGroup information element";
@@ -2551,8 +2758,13 @@ submodule etsi-nfv-vnf {
           type affinity-scope;
           description
             "Specifies the scope of the affinity or anti-affinity
-             relationship. Possible values are 'NFVI-PoP', 'Zone',
-             'ZoneGroup', 'NFVI-node' and 'network-link-and-node'.";
+             relationship.
+             Values:
+                • NFVI-PoP
+                • Zone
+                • ZoneGroup
+                • NFVI-node
+                • network-link-and-node";
           reference
             "GS NFV IFA011: Section 7.1.8.12
              AffinityOrAntiAffinityGroup information element";
@@ -2597,11 +2809,11 @@ submodule etsi-nfv-vnf {
             enum both;
           }
           description
-            "Describe the source of the indicator. The possible
-             values are:
-             • VNF.
-             • EM.
-             • Both.
+            "Describe the source of the indicator.
+             Values:
+              • VNF
+              • EM
+              • Both
 
              This tells the consumer where to send the subscription
              request.";
@@ -2628,11 +2840,11 @@ submodule etsi-nfv-vnf {
             enum vnf-lcm-coordination;
           }
           description
-            "Identifies an interface produced by the VNF. Valid
-             values:
-             - VNF_CONFIGURATION
-             - VNF_INDICATOR
-             - VNF_LCM_COORDINATION";
+            "Identifies an interface produced by the VNF.
+             Values:
+               • VNF_CONFIGURATION
+               • VNF_INDICATOR
+               • VNF_LCM_COORDINATION";
           reference
             "GS NFV IFA011: Section 7.1.8.16 VnfInterfaceDetails
              information element";
@@ -2670,6 +2882,68 @@ submodule etsi-nfv-vnf {
         reference
           "GS NFV IFA011: Section 7.1.8.2 VnfDf information
              element";
+      }
+
+      list supported-coordination-actions {
+        key "vnf-lcm-operation";
+
+        description
+          "References applicable LCM coordination actions
+           that can be invoked during each of the listed
+           VNF LCM operations.";
+        reference
+          "GS NFV IFA011: Section 7.1.8.2 VnfDf information
+           element";
+
+        leaf vnf-lcm-operation {
+          type enumeration {
+            enum "instantiate";
+            enum "scale";
+            enum "scale_to_level";
+            enum "change_flavour";
+            enum "terminate";
+            enum "heal";
+            enum "operate";
+            enum "change_ext_conn";
+            enum "modify_info";
+            enum "create_snapshot";
+            enum "revert_to_snapshot";
+          }
+          description
+            "Identifies the specific VNF LCM operation.
+             Values:
+             • INSTANTIATE
+             • SCALE
+             • SCALE_TO_LEVEL
+             • CHANGE_FLAVOUR
+             • TERMINATE
+             • HEAL
+             • OPERATE
+             • CHANGE_EXT_CONN
+             • MODIFY_INFO
+             • CREATE_SNAPSHOT
+             • REVERT_TO_SNAPSHOT.";
+          reference
+            "GS NFV IFA011: Section 7.1.16.3 LcmCoordinationActionMapping
+             information element";
+        }
+        leaf coordination-action-name {
+          type leafref {
+            path "../../../lcm-operations-coordination/coordination-action-name";
+          }
+          description
+            "References to the names of coordination actions that can be
+             invoked during the LCM operation indicated by the
+             'vnfLcmOperation' attribute.
+
+             The related coordination actions shall either be declared
+             in the VnfLcmOperationCoordination information element
+             in the same VNFD, or shall be well-known standardized
+             coordination action name identifiers.";
+          reference
+            "GS NFV IFA011: Section 7.1.16.3 LcmCoordinationActionMapping
+             information element";
+        }
       }
 
       list monitoring-parameter {
@@ -2846,6 +3120,38 @@ submodule etsi-nfv-vnf {
                 "GS NFV IFA011: Section 7.1.10.4 ScalingDelta
                  information element";
             }
+
+            list vip-cp-delta {
+              key "id";
+              description
+                "Number of VIP CP instances based on a particular
+                 VipCpd to be created or removed.";
+              reference
+                "GS NFV IFA011: Section 7.1.10.4, ScalingDelta information
+                 element.";
+
+              leaf id {
+                type leafref {
+                  path "../../../../../../vip-cpd/id";
+                }
+                description
+                  "Uniquely references a VIP CPD.";
+                reference
+                  "GS NFV IFA011: Section 7.1.10.6, VipCpLevel information
+                   element.";
+              }
+
+              leaf number-of-instances {
+                type uint16;
+                description
+                  "Number of VIP CP instances based on the referenced
+                   VipCpd to deploy for an instantiation level or for
+                   a scaling delta. Shall be zero or greater.";
+                reference
+                  "GS NFV IFA011: Section 7.1.10.6, VipCpLevel information
+                   element.";
+              }
+            }
             description
               "Declares different scaling deltas, each of which is
                applied for one or more scaling steps of this
@@ -2887,6 +3193,44 @@ submodule etsi-nfv-vnf {
              shall be provided for all scaling aspects.";
           reference
             "GS NFV IFA011: Section 7.1.10.2 ScalingAspect
+             information element";
+        }
+      }
+
+      list dependencies {
+        key "id";
+
+        description
+          "Specifies the order in which instances of the VNFCs
+           have to be created.";
+        reference
+          "GS NFV IFA011: Section 7.1.8.2 VnfDf information element";
+
+        leaf id {
+          type string;
+        }
+
+        leaf primary-id {
+          type leafref {
+            path "../../vdu-profile/id";
+          }
+          description
+            "References a VduProfile for describing dependencies
+             between VNFCs in terms of primary entities.";
+          reference
+            "GS NFV IFA011: Section 7.1.8.19 Dependencies
+             information element";
+        }
+
+        leaf secondary-id {
+          type leafref {
+            path "../../vdu-profile/id";
+          }
+          description
+            "References a VduProfile for describing dependencies
+             between VNFCs in terms of secondary entities.";
+          reference
+            "GS NFV IFA011: Section 7.1.8.19 Dependencies
              information element";
         }
       }
@@ -3407,7 +3751,7 @@ submodule etsi-nfv-vnf {
       leaf additional-params-id {
         type leafref {
           path "../../df/lcm-operations-configuration/" +
-               "change-current-vnf-package-op-config/parameter/key";
+               "change-current-vnf-package-op-config/id";
         }
         description
           "References the ChangeCurrentVnfPackageOpConfig information
@@ -3429,12 +3773,12 @@ submodule etsi-nfv-vnf {
         description
           "When present, it specifies the type of modification
            resulting from transitioning from srcVnfdId to dstVnfdId.
-           The possible values include at least:
+           Values:
 
-           UP - indicating that the destination VNF version is newer
-                than the source version,
-           DOWN - indicating that the destination VNF version is
-                  older than the source version.
+           • UP:indicating that the destination VNF version is newer
+                  than the source version,
+           • DOWN:indicating that the destination VNF version is
+                    older than the source version.
 
            When provided, UP and DOWN values shall always be
            supported as the first value. In addition, a vendor may
@@ -3523,13 +3867,14 @@ submodule etsi-nfv-vnf {
            information element";
       }
 
-      leaf coordination-id {
+      leaf coordination-action-name {
         type leafref {
-          path "../../lcm-operations-coordination/id";
+          path "../../lcm-operations-coordination/coordination-action-name";
         }
         description
-          "Reference to applicable VNF LCM operation coordination
-           actions.";
+          "Reference to applicable VNF LCM operation coordination actions
+           that can be invoked during a VNF package change as defined by
+           the 'selector' attribute.";
         reference
           "GS NFV IFA011: Section 7.1.15.2 VnfPackageChangeInfo
            information element";
@@ -3558,13 +3903,13 @@ submodule etsi-nfv-vnf {
     }
 
     list lcm-operations-coordination {
-      key "id";
+      key "coordination-action-name";
 
-      leaf id {
+      leaf coordination-action-name {
         type string;
         description
           "Identifies the specific VNF LCM operation coordination
-           action.";
+           action.Shall be unique within the scope of VNFD";
         reference
           "GS NFV IFA011: Section 7.1.16.2 VnfLcmOperationCoordination
            information element";
@@ -3588,9 +3933,9 @@ submodule etsi-nfv-vnf {
           "Specifies the type of the endpoint exposing the LCM
            operation coordination such as other operations supporting
            or management systems (e.g. an EM) or the VNF instance.
-           Allowed values:
+           Values:
            • MGMT: coordination with other operation supporting
-                   management systems.
+                   management systems
            • VNF: coordination with the VNF instance.";
         reference
           "GS NFV IFA011: Section 7.1.16.2 VnfLcmOperationCoordination
@@ -3598,24 +3943,67 @@ submodule etsi-nfv-vnf {
       }
 
       leaf coordination-stage {
-        type string;
+        type enumeration {
+          enum "start";
+          enum "end";
+        }
         description
-          "Indicates the coordination stage during the VNF LCM
-           operation.";
+          "Indicates whether the coordination action is invoked before
+           or after all other changes performed by the VNF LCM
+           operation.
+           Values:
+           • START:the coordination action is invoked after receiving
+                   the grant and before the LCM operation performs any
+                   other changes.
+           • END:the coordination action is invoked after the LCM
+                 operation has performed all other changes.
+
+           This attribute shall be omitted if the coordination action
+           is intended to be invoked at an intermediate stage of the
+           LCM operation, i.e. neither at the start nor at the end.
+           In this case, the actual instant during the LCM operation
+           when invoking the coordination is determined by means outside
+           the scope of the present document such as VNFM-internal logic
+           or LCM script.";
         reference
           "GS NFV IFA011: Section 7.1.16.2 VnfLcmOperationCoordination
            information element";
       }
 
-      leaf coordination-params {
-        type string;
+      list input-parameter {
+        key "key";
+
+        leaf key {
+          type string;
+        }
+        leaf value {
+          type string;
+        }
         description
-          "Input information needed by the external coordinating
+          "Input parameter needed by the external coordinating
            entity.";
         reference
           "GS NFV IFA011: Section 7.1.16.2 VnfLcmOperationCoordination
            information element";
       }
+
+      list output-parameter {
+        key "key";
+
+        leaf key {
+          type string;
+        }
+        leaf value {
+          type string;
+        }
+        description
+          "Output parameter provided by the external coordinating
+           entity.";
+        reference
+          "GS NFV IFA011: Section 7.1.16.2 VnfLcmOperationCoordination
+           information element";
+      }
+
       description
         "Provides information used for the coordination in VNF LCM
          operations.";

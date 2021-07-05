@@ -62,8 +62,10 @@ submodule etsi-nfv-ns {
       leaf type {
         type affinity-type;
         description
-          "Specifies whether the rule is an affinity rule or an
-           anti-affinity rule.";
+          "Specifies the rule.
+           Values:
+             • AFFINITY
+             • ANTI_AFFINITY.";
         reference
           "GS NFV IFA014: Section 6.3.8.2,
            LocalAffinityOrAntiAffinityRule information element.";
@@ -72,8 +74,13 @@ submodule etsi-nfv-ns {
       leaf scope {
         type affinity-scope;
         description
-          "Specifies the scope of the rule, possible values are
-           'NFVI-PoP', 'NFVI-node' network-link-and-node etc.";
+          "Specifies the scope of the rule.
+           Values:
+             • NFVI_POP
+             • ZONE
+             • ZONE_GROUP
+             • NFVI_NODE
+             • etc.";
         reference
           "GS NFV IFA014: Section 6.3.8.2,
            LocalAffinityOrAntiAffinityRule information element.";
@@ -173,27 +180,6 @@ submodule etsi-nfv-ns {
         "GS NFV IFA014: Section 6.2.2.2 Network Service Descriptor
          information element";
 
-      leaf id {
-        type string;
-        description
-          "Identifier of this Cpd information element.";
-        reference
-          "GS NFV IFA014: Section 6.6.3.1 Cpd information element";
-      }
-
-      leaf address-assignment {
-        type boolean;
-        description
-          "Specify whether the SAP address assignment is under the
-           responsibility of management and orchestration functions
-           or not. If it is set to True, management and
-           orchestration functions are responsible for assigning
-           addresses to the access points instantiated from this
-           SAPD.";
-        reference
-          "GS NFV IFA014: Section 6.2.3.2 Sapd information element";
-      }
-
       choice cpd-or-virtual-link {
         leaf virtual-link-desc {
           type leafref {
@@ -206,8 +192,8 @@ submodule etsi-nfv-ns {
             "GS NFV IFA014: Section 6.2.3.2 Sapd information element";
         }
 
-        choice associated-cpd-id {
-          container vnf {
+        container associated-cpd {
+          choice constituent-base-element-id {
             leaf vnfd-id {
               mandatory true;
               type leafref {
@@ -215,16 +201,6 @@ submodule etsi-nfv-ns {
               }
               must "boolean(../../../vnfd-id[.=current()])";
             }
-
-            leaf ext-cpd-id {
-              mandatory true;
-              type leafref {
-                path "deref(../vnfd-id)/../nfv:ext-cpd/nfv:id";
-              }
-            }
-          }
-
-          container pnf {
             leaf pnfd-id {
               mandatory true;
               type leafref {
@@ -232,15 +208,6 @@ submodule etsi-nfv-ns {
               }
               must "boolean(../pnfd-id[.=current()])";
             }
-
-            leaf ext-cpd-id {
-              mandatory true;
-              type leafref {
-                path "deref(../pnfd-id)/../nfv:ext-cpd/nfv:id";
-              }
-            }
-          }
-          container ns {
             leaf nsd-id {
               mandatory true;
               type leafref {
@@ -248,17 +215,60 @@ submodule etsi-nfv-ns {
               }
               must "boolean(../nsd-id[.=current()])";
             }
-
-            leaf ext-cpd-id {
+            description
+              "References the profile of an NS constituent.";
+            reference
+              "GS NFV IFA014: Section 6.4.8 CpdInConstituentElement information element";
+          }
+          choice constituent-cpd-id {  
+            leaf vnf-ext-cpd  {
+              mandatory true;
+              type leafref {
+                path "deref(../vnfd-id)/../nfv:ext-cpd/nfv:id";
+              }
+            }
+            leaf pnf-ext-cpd  {
+              mandatory true;
+              type leafref {
+                path "deref(../pnfd-id)/../nfv:ext-cpd/nfv:id";
+              }
+            }
+            leaf sapd {
               mandatory true;
               type leafref {
                 path "deref(../nsd-id)/../sapd/id";
               }
             }
+            description
+              "References the VNF external CPD for a given VnfProfile, or the PNF 
+               external CPD for a given PnfProfile, or an NS SAPD for a given NsProfile
+               identified by the constituentBaseElementId.";
+            reference
+              "GS NFV IFA014: Section 6.4.8 CpdInConstituentElement information element";
           }
+          description
+              "Describes a CPD or SAPD in the context of an NS constituent element, which
+               the SAPs instantiated from this SAPD are mapped to.";
+          reference
+              "GS NFV IFA014: Section 6.2.3	Sapd information element";
+            
         }
       }
+
+      uses cpd;
+      leaf security-group-rule-id {
+        type leafref {
+          path "../../security-group-rule/id";
+        }
+        description
+          "Reference of the security group rules bound to this
+           CPD.";
+        reference
+          "GS NFV IFA014: Section 6.6.3 Cpd information element";
+      }
     }
+
+    uses security-group-rule;
 
     list virtual-link-desc {
       key "id";
@@ -631,7 +641,7 @@ submodule etsi-nfv-ns {
               path "../../../nfp-position-element/id";
             }
             description
-              "Reference to one or a pair of CPDs or SAPDs.";
+              "References one or a pair of CPDs or SAPDs.";
             reference
               "GS NFV IFA014: Section 6.4.5.2 NfpPositionDesc
                information element";
@@ -642,16 +652,20 @@ submodule etsi-nfv-ns {
               base forwarding-behaviour;
             }
             description
-              "Identifies a rule to apply to forward traffic to CP or
-               SAP instances corresponding to the referenced CPD(s)
-               and SAPD(s). The minimum list of rules to be supported
+              "Specifies a rule to apply to forward traffic to CP or
+               SAP instances corresponding to the referenced CP
+               profiles(s). The minimum list of rules to be supported
                shall include:
                • ALL = Traffic flows shall be forwarded simultaneously
                  to all CP or SAP instances created from the
                  referenced CP profile(s).
                • LB = Traffic flows shall be forwarded to one CP or SAP
                  instance created from the referenced CP profile(s)
-                 selected based on a load-balancing algorithm.";
+                 selected based on a load-balancing algorithm
+               Values:
+                 • ALL
+                 • LB
+                 • etc.";
             reference
               "GS NFV IFA014: Section 6.4.5.2 NfpPositionDesc
                information element";
@@ -758,7 +772,7 @@ submodule etsi-nfv-ns {
         leaf id {
           type string;
           description
-            "Identifier of this vnfProfile information element. It
+            "Identifier of this VnfProfile information element. It
              uniquely identifies a VnfProfile.";
           reference
             "GS NFV IFA014: Section 6.3.3.2 VnfProfile information
@@ -783,7 +797,7 @@ submodule etsi-nfv-ns {
             path "deref(../vnfd-id)/../nfv:df/nfv:id";
           }
           description
-            "Identifies a flavour within the VNFD.";
+            "References a flavour within the VNFD.";
           reference
             "GS NFV IFA014: Section 6.3.3.2 VnfProfile information
              element";
@@ -834,8 +848,8 @@ submodule etsi-nfv-ns {
             path "../../affinity-or-anti-affinity-group/id";
           }
           description
-            "Identifier(s) of the affinity or anti-affinity
-             group(s) the VnfProfile belongs to.";
+            "Reference(s) the affinity or anti-affinity group(s)
+             the VnfProfile belongs to.";
           reference
             "GS NFV IFA014: Section 6.3.3.2 VnfProfile information
              element";
@@ -1043,7 +1057,7 @@ submodule etsi-nfv-ns {
             path "deref(../virtual-link-desc-id)/../df/id";
           }
           description
-            "Identifies a flavour within the VLD.";
+            "Refernces a flavour within the VLD.";
           reference
             "GS NFV IFA014: Section 6.3.2.2 VirtualLinkProfile
              information element";
@@ -1056,9 +1070,9 @@ submodule etsi-nfv-ns {
             path "../../affinity-or-anti-affinity-group/id";
           }
           description
-            "Identifies an affinity or anti-affinity group the
-             VLs instantiated according to the VlProfile belong
-             to.";
+            "Reference(s) the affinity or anti-affinity group(s)
+             the VLs instantiated according to the VlProfile
+             belong to.";
           reference
             "GS NFV IFA014: Section 6.3.4.2 VirtualLinkProfile
              information element";
@@ -1081,6 +1095,170 @@ submodule etsi-nfv-ns {
             "GS NFV IFA014: Section 6.3.4.2 VirtualLinkProfile
              information element";
           uses link-bitrate-requirements;
+        }
+        container virtual-link-protocol-data {
+          leaf associated-layer-protocol {
+            type identityref {
+              base layer-protocol;
+            }
+            description
+              "One of the values of the attribute layerProtocol of
+               the ConnectivityType IE.
+               Values:
+                 • Ethernet
+                 • MPLS
+                 • ODU2
+                 • IPV4
+                 • IPV6
+                 • Pseudo-Wire
+                 • etc.";
+            reference
+              "GS NFV IFA014: Section 6.3.13.2,
+               VirtualLinkProtocolData information element.";
+          }
+
+          container l2-protocol-data {
+            when "(../associated-layer-protocol = 'Ethernet') or " +
+                 "(../associated-layer-protocol = 'MPLS') or " +
+                 "(../associated-layer-protocol = 'ODU2') or " +
+                 "(../associated-layer-protocol = 'Pseudo-Wire')";
+
+            leaf name {
+              type string;
+              description
+                "Network name associated with this L2 protocol.";
+              reference
+                "GS NFV IFA014: Section 6.3.14.2,
+                 L2ProtocolData information element.";
+            }
+
+            leaf network-type {
+              type enumeration {
+                enum flat;
+                enum vlan;
+                enum vxlan;
+                enum gre;
+              }
+              description
+                "Specifies the network type for this L2 protocol.
+                 Values:
+                   • FLAT
+                   • VLAN
+                   • VXLAN
+                   • GRE.";
+              reference
+                "GS NFV IFA014: Section 6.3.14.2,
+                 L2ProtocolData information element.";
+            }
+
+            leaf vlan-transparent {
+              type boolean;
+              description
+                "Specifies whether to support VLAN transparency for
+                 this L2 protocol or not.";
+              reference
+                "GS NFV IFA014: Section 6.3.14.2,
+                 L2ProtocolData information element.";
+            }
+
+            leaf mtu {
+              type uint16;
+              description
+                "Specifies the maximum transmission unit (MTU) value
+                 for this L2 protocol.";
+              reference
+                "GS NFV IFA014: Section 6.3.14.2,
+                 L2ProtocolData information element.";
+            }
+
+            leaf segmentation-id {
+              type string;
+              description
+                "If present, specifies a specific virtualised network
+                 segment, which depends on the network type. For e.g.,
+                 VLAN ID for VLAN network type and tunnel ID for
+                 GRE/VXLAN network types.";
+              reference
+                "GS NFV IFA014: Section 6.3.14.2,
+                 L2ProtocolData information element.";
+            }
+
+            description
+              "Specifies the L2 protocol data for this virtual link.
+               Shall be present when the associatedLayerProtocol
+               attribute indicates a L2 protocol and shall be absent
+               otherwise.";
+            reference
+              "GS NFV IFA014: Section 6.3.13.2,
+               VirtualLinkProtocolData information element.";
+          }
+
+          container l3-protocol-data {
+            when "(../associated-layer-protocol = 'IPv4') or " +
+                 "(../associated-layer-protocol = 'IPv6')";
+
+            leaf name {
+              type string;
+              description
+                "Network name associated with this L3 protocol.";
+              reference
+                "GS NFV IFA014: Section 6.3.15.2,
+                 L3ProtocolData information element.";
+            }
+
+            leaf ip-version {
+              type enumeration {
+                enum ipv4;
+                enum ipv6;
+              }
+              default "ipv4";
+              description
+                "Specifies IP version of this L3 protocol.
+                 Values:
+                 • IPV4.
+                 • IPV6.";
+              reference
+                "GS NFV IFA014: Section 6.3.15.2,
+                 L3ProtocolData information element.";
+            }
+
+            leaf cidr {
+              type string;
+              description
+                "Specifies the CIDR (Classless InterDomain Routing)
+                 of this L3 protocol.
+                 The network address and subnet mask in
+                 cidr format.";
+              reference
+                "GS NFV IFA014: Section 6.3.15.2,
+                 L3ProtocolData information element.";
+            }
+
+            leaf-list ip-allocation-pools {
+              type string;
+              description
+                "Specifies the allocation pools with start and end
+                 IP addresses for this L3 protocol.";
+              reference
+                "GS NFV IFA014: Section 6.3.15.2,
+                 L3ProtocolData information element.";
+            }
+            description
+              "Specifies the L3 protocol data for this virtual link.
+               Shall be present when the associatedLayerProtocol
+               attribute indicates a L3 protocol and shall be absent
+               otherwise.";
+            reference
+              "GS NFV IFA014: Section 6.3.13.2,
+               VirtualLinkProtocolData information element.";
+          }
+          description
+            "Specifies the protocol data for a VL instantiated
+             according to this profile. Cardinality 0 is used when
+             no protocol data needs to be specified.";
+          reference
+            "GS NFV IFA014: Section 6.3.4.2 VirtualLinkProfile
+             information element";
         }
       }
 
@@ -1151,19 +1329,22 @@ submodule etsi-nfv-ns {
         leaf id {
           type string;
           description
-            "Identifier of Identifier of this
-             AffinityOrAntiAffinityGroup information element.";
+            "Identifier of this AffinityOrAntiAffinityGroup
+             information element.";
           reference
             "GS NFV IFA014: Section 6.3.5.2 AffinityOrAntiAffinity
              information element";
         }
 
-        leaf type {
+        leaf affinityorAntiaffinity {
           mandatory true;
           type affinity-type;
           description
             "Specifies the type of relationship that the members of
-             the group have: 'affinity' or 'anti-affinity.'";
+             the group have.
+             Values:
+                • AFFINITY
+                • ANTI-AFFINITY";
           reference
             "GS NFV IFA014: Section 6.3.5.2 AffinityOrAntiAffinity
              information element";
@@ -1174,8 +1355,12 @@ submodule etsi-nfv-ns {
           type affinity-scope;
           description
             "Specifies the scope of the affinity or anti-affinity
-             relationship e.g. a NFVI node, an NFVI PoP,
-             network-link-and-node etc.";
+             relationship.
+             Values:
+                • NFVI_NODE
+                • NFVI_POP
+                • NETWORK_LINK_AND_NODE
+                • etc.";
           reference
             "GS NFV IFA014: Section 6.3.5.2 AffinityOrAntiAffinity
              information element";
@@ -1228,7 +1413,7 @@ submodule etsi-nfv-ns {
               path "../../../vnf-profile/id";
             }
             description
-              "Identifies the profile to be used for a VNF
+              "References the profile to be used for a VNF
                involved in an NS level.";
             reference
               "GS NFV IFA014: Section 6.7.4.2 VnfToLevelMapping
@@ -1262,7 +1447,7 @@ submodule etsi-nfv-ns {
               path "../../../virtual-link-profile/id";
             }
             description
-              "Identifies the profile to be used for a VL involved
+              "References the profile to be used for a VL involved
                in an NS level.";
             reference
               "GS NFV IFA014: Section 6.7.5.2
@@ -1288,7 +1473,7 @@ submodule etsi-nfv-ns {
               path "../../../ns-profile/id";
             }
             description
-              "Identifies the profile to be used for a nested NS
+              "References the profile to be used for a nested NS
                involved in the NS level.";
             reference
               "GS NFV IFA014: Section 6.7.6.2 NsToLevel information
@@ -1330,7 +1515,7 @@ submodule etsi-nfv-ns {
           path "../ns-instantiation-level/id";
         }
         description
-          "Identifies the NS level which represents the default NS
+          "References the NS level which represents the default NS
            instantiation level for this DF. It shall be present if
            there are multiple 'nsIinstantiationLevel' entries.";
         reference
@@ -1417,7 +1602,7 @@ submodule etsi-nfv-ns {
         key "id";
 
         description
-          "Specifies a NS Profile supported by this NS DF.";
+          "Specifies nested NS Profile to be used for this NS DF.";
         reference
           "GS NFV IFA014: Section 6.3.2.2 NsDf information element";
 
@@ -1436,7 +1621,7 @@ submodule etsi-nfv-ns {
             path "../../../../nsd/id";
           }
           description
-            "Identifies the NSD applicable to NS instantiated
+            "References the NSD applicable to NS instantiated
              according to this profile.";
           reference
             "GS NFV IFA014: Section 6.3.11.2 NsProfile information
@@ -1449,7 +1634,7 @@ submodule etsi-nfv-ns {
             path "deref(../nsd-id)/../df/id";
           }
           description
-            "Identifies the applicable network service DF within
+            "References the applicable network service DF within
              the scope of the NSD.";
           reference
             "GS NFV IFA014: Section 6.3.11.2 NsProfile information
@@ -1462,7 +1647,7 @@ submodule etsi-nfv-ns {
             path "deref(../ns-df-id)/../ns-instantiation-level/id";
           }
           description
-            "Identifies the NS level within the referenced NS DF to
+            "References the NS level within the referenced NS DF to
              be used in the context of the parent NS instantiation.
              If not present, the default NS instantiation level as
              declared in the referenced NSD shall be used.";
@@ -1500,8 +1685,8 @@ submodule etsi-nfv-ns {
             path "../../affinity-or-anti-affinity-group/id";
           }
           description
-            "Identifies an affinity or anti-affinity group the NSs
-             created according to this NsProfile belongs to.";
+            "Reference(s) the affinity or anti-affinity group(s) the
+             NSs created according to this NsProfile belongs to.";
           reference
             "GS NFV IFA014: Section 6.3.11.2 NsProfile information
              element";
@@ -1585,7 +1770,10 @@ submodule etsi-nfv-ns {
             }
           }
           description
-            "References a VnfProfile or NsProfile.";
+            "References a VnfProfile or NsProfile for
+             describing dependencies between VNF and/or
+             nested NS instances in terms of primary
+             entities.";
           reference
             "GS NFV IFA014: Section 6.3.12.2 Dependencies
              information element";
@@ -1603,7 +1791,10 @@ submodule etsi-nfv-ns {
             }
           }
           description
-            "References a VnfProfile or NsProfile.";
+            "References a VnfProfile or NsProfile for
+             describing dependencies between VNF and/or
+             nested NS instances in terms of secondary
+             entities.";
           reference
             "GS NFV IFA014: Section 6.3.12.2 Dependencies
              information element";
@@ -1623,7 +1814,7 @@ submodule etsi-nfv-ns {
               path "/nfv:nfv/nfv:vnfd/nfv:id";
             }
             description
-              "Identifies a VNFD.";
+              "References a VNFD.";
             reference
               "GS NFV IFA014: Section 6.2.7.2 VnfIndicatorData
                information element";
@@ -1635,7 +1826,7 @@ submodule etsi-nfv-ns {
               path "deref(../vnfd-id)/../nfv:indicator/nfv:id";
             }
             description
-              "Identifies a VNF indicator within the VNFD.";
+              "References a VNF indicator within the VNFD.";
             reference
               "GS NFV IFA014: Section 6.2.7.2 VnfIndicatorData
                information element";
@@ -1692,6 +1883,22 @@ submodule etsi-nfv-ns {
                information element";
           }
         }
+      }
+
+      leaf priority {
+        type uint32;
+        description
+          "Specifies the priority for the NS instance.
+
+           The allowed range will be reasonably high. The 'zero'
+           value will express the highest priority and the fact
+           that the NS instance based on this DF cannot be
+           pre-empted during resource allocation.
+
+           Examples for the usage of priority include conflict
+           resolution in case of resource shortage.";
+        reference
+          "GS NFV IFA014: Section 6.3.2.2 NsDf information element";
       }
 
       leaf service-availability-level {
