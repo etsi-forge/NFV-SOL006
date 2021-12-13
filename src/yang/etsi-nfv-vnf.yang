@@ -1496,11 +1496,34 @@ submodule etsi-nfv-vnf {
       }
 
       uses nfvi-maintenance-info {
-	description
-	  "When present, provides information on the rules to be
+        description
+          "When present, provides information on the rules to be
            observed when an instance based on this
            VnfVirtualLinkDesc is impacted during NFVI operation and
            maintenance (e.g. NFVI resource upgrades).";
+        reference
+          "GS NFV IFA011: Section 7.1.7.2, VnfVirtualLinkDesc
+           information element.";
+      }
+
+      leaf externally-managed {
+        type enumeration {
+          enum required;
+          enum allowed;
+          }
+        description
+          "Specifies the intent of the VNF designer w.r.t. the
+           internal VL instances created from this descriptor being
+           externally managed.
+           Values:
+            REQUIRED
+            ALLOWED
+           Default: ALLOWED
+
+           If the VNFD does not reference any LCM script and if the
+           'vnfmInfo' attribute in the 'Vnfd' information element
+           indicates that the VNF can be managed by any ETSI NFV
+           compliant VNFM, this attribute shall not be present.";
         reference
           "GS NFV IFA011: Section 7.1.7.2, VnfVirtualLinkDesc
            information element.";
