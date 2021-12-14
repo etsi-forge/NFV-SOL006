@@ -819,12 +819,44 @@ submodule etsi-nfv-common {
           when "../type='ip-address'";
           leaf ip-address-assignment {
             type boolean;
-            mandatory true;
             description
-              "Specify if the address assignment is the responsibility
-               of management and orchestration function or not. If it
-               is set to True, it is the management and orchestration
-               function responsibility. ";
+              "Specify which mode is used for the address assignment.
+               If set to True, IP configuration information shall be
+               provided for the VNF by a management entity using the
+               NFV MANO interfaces towards the VNFM.
+               If it is set to False, the value of the
+               'ipAddressAssignmentSubtype' attribute defines the
+               method of IP address assignment.
+               Shall be present if the 'fixedIpAddress' attribute
+               is not present and should be absent otherwise.";
+            reference
+              "GS NFV IFA011: Section 7.1.3.4, L3AddressData
+               information element.";
+          }
+
+          leaf ip-address-assignment-subtype {
+            type enumeration {
+              enum dynamic;
+              enum vnf_pkg;
+              enum external;
+            }
+            description
+              "Method of IP address assignment in case the IP
+               configuration is not provided using the NFV MANO
+               interfaces towards the VNFM.
+               Shall be present in case the 'ipAddressAssignment'
+               attribute is set to 'False' and shall be absent
+               otherwise.
+
+               Valid values:
+               DYNAMIC: the VNF gets an IP address dynamically from
+               the NFVI (e.g., using DHCP)
+               VNF_PKG: an IP address defined by the VNF provider is
+               assigned by means included as part of the VNF package
+               (e.g., LCM script)
+               EXTERNAL: an IP address is provided by an external
+               management entity (such as EM) directly towards the
+               VNF.";
             reference
               "GS NFV IFA011: Section 7.1.3.4, L3AddressData
                information element.";
@@ -869,7 +901,11 @@ submodule etsi-nfv-common {
           leaf fixed-ip-address {
             type string;
             description
-              "IP address to be assigned to the CP instance.";
+              "Fixed IP addresses to be assigned to the internal CP
+               instance.
+               This attribute enables the VNF provider to define
+               fixed IP addresses for internal CP instances to be
+               assigned by the VNFM or the NFVO.";
             reference
               "GS NFV IFA011: Section 7.1.3.4, L3AddressData
                information element.";
