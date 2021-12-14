@@ -557,6 +557,35 @@ submodule etsi-nfv-common {
              information element";
         }
       }
+
+      list min-number-of-preserved-instances {
+        key "group-size";
+        ordered-by user;
+        must "./min-number-of-preserved-instances <= ./group-size";
+
+        leaf group-size {
+          type uint32;
+          description
+            "When present, it determines the size of the group for
+             which the minNumberOfPreservedInstances is specified.
+             Otherwise the size is not limited.";
+          reference
+            "GS NFV-IFA011: Section 7.1.8.21, MinNumberOfPreserved
+             Instances information element";
+        }
+
+        leaf min-number-of-preserved-instances {
+          type uint32 {
+            range "1 .. max";
+          }
+          description
+            "The maximum number of instances that can be impacted
+             simultaneously within the group of the specified size.";
+          reference
+            "GS NFV-IFA011: Section 7.1.8.21, MinNumberOfPreserved
+             Instances information element";
+        }
+      }      
     }
   }
 
