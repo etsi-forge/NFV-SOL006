@@ -78,26 +78,9 @@ submodule etsi-nfv-vnf {
            VirtualNetworkInterfaceRequirements information element";
       }
 
-      list standardized-network-interface-requirements {
-        key "key";
-        max-elements "1";
-
-        leaf key {
-          type string;
-        }
-        leaf value {
-          type string;
-        }
-        description
-          "The requirements on standardized network interface
-		   capabilities, e.g., SR-IOV.";
-        reference
-          "GS NFV-IFA011: Section 7.1.6.6,
-           VirtualNetworkInterfaceRequirements information element";
-      }
-
       list network-interface-requirements {
         key "key";
+        min-elements "1";
         max-elements "1";
 
         leaf key {
@@ -107,11 +90,9 @@ submodule etsi-nfv-vnf {
           type string;
         }
         description
-          "The additional network interface requirements beyond
-           those specified in the standardizedNetworkInterface
-           Requirements attribute.An element from an array of
-           key-value pairs that articulate the network interface
-           deployment requirements.";
+          "The network interface requirements. An element from an
+           array of key-value pairs that articulate the network
+           interface deployment requirements.";
         reference
           "GS NFV-IFA011: Section 7.1.6.6,
            VirtualNetworkInterfaceRequirements information element";
