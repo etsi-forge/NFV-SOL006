@@ -13,6 +13,20 @@ module etsi-nfv-nsd {
   description
     "Network Services Descriptors";
 
+  revision 2022-03-08 {
+    description
+      "Version 3.6.1.
+
+       NSD according to ETSI GS NFV-IFA 014 Release 3.";
+  }
+
+  revision 2021-07-05 {
+    description
+      "Version 3.5.1.
+
+       NSD according to ETSI GS NFV-IFA 014 Release 3.";
+  }
+
   revision 2020-06-10 {
     description
       "Version 3.3.1.

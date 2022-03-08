@@ -12,7 +12,21 @@ module etsi-nfv-vnfd {
 
   description
     "Virtual Network Function Descriptor.";
-  
+
+  revision 2022-03-08 {
+    description
+      "Version 3.6.1.
+
+       VNFD according to ETSI GS NFV-IFA 011 Release 3.";
+  }
+
+  revision 2021-07-05 {
+    description
+      "Version 3.5.1.
+
+       VNFD according to ETSI GS NFV-IFA 011 Release 3.";
+  }
+
   revision 2020-06-10 {
     description
       "Version 3.3.1.
