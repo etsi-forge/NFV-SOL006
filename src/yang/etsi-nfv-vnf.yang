@@ -454,7 +454,17 @@ submodule etsi-nfv-vnf {
              • BAREMETAL
              • VIRTIO-FORWARDER
              • DIRECT-PHYSICAL
-             • SMART-NIC";
+             • SMART-NIC
+             Additional values of the attribute for VDUs realized
+             by one or set of OS containers:
+             • BRIDGE
+             • IPVLAN
+             • LOOPBACK
+             • MACVLAN
+             • PTP
+             • VLAN
+             • HOST-DEVICE
+             etc.";
           reference
             "GS NFV IFA011: Section 7.1.6.4, VduCpd information
              element.";
@@ -1318,7 +1328,6 @@ submodule etsi-nfv-vnf {
         leaf min-disk {
           type uint64;
           units "GB";
-          mandatory true;
           description
             "The minimal disk size requirement for this software
              image. The value of the 'size of storage' attribute
@@ -2144,6 +2153,62 @@ submodule etsi-nfv-vnf {
         }
       }
 
+      list mciop-profile {
+        key "id";
+        description
+          "Describes additional instantiation data for the MCIOPs
+           used in this deployment flavour.This attribute shall be
+           present if the DF references (via the vduProfile)
+           containerized workloads based on a MCIOP.";
+        reference
+          "GS NFV IFA011: Section 7.1.8.2, VnfDf information
+           element.";
+
+        leaf id {
+          type string;
+          description
+            "Identifies the MCIOP in the VNF package.";
+          reference
+            "GS NFV IFA011: Section 7.1.8.19, MciopProfile
+             information element.";
+        }
+
+        leaf deployment-order {
+          type uint32;
+          description
+            "Indicates the order in which this MCIOP shall
+             be deployed in relation to other MCIOPs. A lower
+             value specifies an earlier deployment.";
+          reference
+            "GS NFV IFA011: Section 7.1.8.19, MciopProfile
+             information element.";
+        }
+
+        leaf-list affinity-or-anti-affinity-group-id {
+	        type leafref {
+	          path "../../affinity-or-anti-affinity-group/id";
+	        }
+          description
+            "References the affinity or anti-affinity group(s)
+             the MCIOP belongs to.";
+          reference
+            "GS NFV IFA011: Section 7.1.8.19, MciopProfile
+             information element.";
+        }
+
+        leaf-list associated-vdu {
+          type leafref {
+            path "../../../vdu/id";
+          }
+          description
+            "List of VDUs which are associated to this MCIOP
+             and which are deployed using this MCIOP";
+          reference
+            "GS NFV IFA011: Section 7.1.8.19, MciopProfile
+             information element.";
+        }
+      }
+
       list instantiation-level {
         key "id";
         min-elements 1;
@@ -2790,7 +2855,8 @@ submodule etsi-nfv-vnf {
                 • Zone
                 • ZoneGroup
                 • NFVI-node
-                • network-link-and-node";
+                • network-link-and-node
+                • container-namespace";
           reference
             "GS NFV IFA011: Section 7.1.8.12
              AffinityOrAntiAffinityGroup information element";
