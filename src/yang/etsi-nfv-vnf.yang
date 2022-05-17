@@ -1563,8 +1563,7 @@ submodule etsi-nfv-vnf {
           description
             "Reference to the internal Virtual Link Descriptor (VLD)
              to which CPs instantiated from this external CP
-             Descriptor (CPD) connect. Either intVirtualLinkDesc or
-             intCpd shall be present.";
+             Descriptor (CPD) connect.";
           type leafref {
             path "/nfv:nfv/nfv:vnfd/nfv:int-virtual-link-desc/nfv:id";
           }
@@ -1591,12 +1590,22 @@ submodule etsi-nfv-vnf {
           description
             "Reference to the VIP CPD which is used to instantiate CPs
              to hold virtual IP addresses. These CPs are, in turn,
-             exposed as external CPs defined by this external CPD.
-             One and only one of the following attributes shall be
-             present: intVirtualLinkDesc or intCpd or vipCpd .";
+             exposed as external CPs defined by this external CPD.";
           reference
             "GS NFV-IFA011: Section 7.1.3.2, VnfExtCpd information
              element";
+        }
+        leaf virtual-cpd {
+          type leafref {
+            path "../../virtual-cpd/id";
+          }
+          description
+            "References the Virtual CPD which is used to describe a
+             virtual connection point allowing to access a set of
+             VNFC instances (based on their respective VDUs).";
+          reference
+            "GS NFV-IFA011: Section 7.1.3.2, VnfExtCpd information
+            element";
         }
       }
 
@@ -1690,6 +1699,105 @@ submodule etsi-nfv-vnf {
       description
         "Describes virtual IP addresses to be shared among instances
          of connection points. See clause 7.1.17.";
+      reference
+        "GS NFV IFA011: Section 7.1.2, VNFD information element.";
+    }
+
+    list virtual-cpd {
+      key "id";
+      leaf-list vdu {
+        type leafref {
+           path "../../vdu/id";
+        }
+        description
+          "References the VDU(s) which implement this service.";
+        reference
+          "GS NFV IFA011: Section 7.1.18.2, Information elements
+           related to VirtualCpd.";
+      }
+
+    container additional-service-data {
+      list port-data {
+        key "name";
+        leaf name {
+          type string;
+          description
+            "The name of the port exposed by the VirtualCp.";
+          reference
+            "GS NFV IFA011: Section 7.1.18.4, ServicePortData
+             information element.";
+        }
+
+        leaf protocol {
+          type enumeration {
+            enum tcp;
+            enum udp;
+            enum sctp;
+          }
+          description
+            "The L4 protocol for this port exposed by the VirtualCp.
+             Values:
+             • TCP
+             • UDP
+             • SCTP";
+          reference
+            "GS NFV IFA011: Section 7.1.18.4, ServicePortData
+             information element.";
+        }
+
+        leaf port {
+          type uint64;
+          description
+            "The L4 port number exposed by the VirtualCp.";
+          reference
+            "GS NFV IFA011: Section 7.1.18.4,	ServicePortData
+             information element.";
+        }
+
+        leaf port-configurable {
+          type boolean;
+          description
+            "Specifies whether the port attribute value
+             is allowed to be configurable.";
+          reference
+            "GS NFV IFA011: Section 7.1.18.4,	ServicePortData
+             information element.";
+        }
+
+        description
+          "Service port numbers exposed by the VirtualCp.";
+        reference
+          "GS NFV IFA011: Section 7.1.18.3, AdditionalServiceData
+           information element";
+      }
+
+      list service-data {
+        key "key";
+        max-elements "1";
+        leaf key {
+          type string;
+        }
+        leaf value {
+          type string;
+        }
+        description
+          "Service matching information exposed by the VirtualCp.";
+        reference
+          "GS NFV IFA011: Section 7.1.18.3, AdditionalServiceData
+           information element";
+      }
+
+      description
+        "Additional service identification data of the VirtualCp
+         exposed to NFV-MANO.";
+      reference
+        "GS NFV IFA011: Section 7.1.18.2, Information elements
+         related to VirtualCpd";
+      }
+      uses cpd;
+      description
+        "Describes a virtual connection point allowing to access a
+         set of VNFC instances (based on their respective VDUs).";
       reference
         "GS NFV IFA011: Section 7.1.2, VNFD information element.";
     }
