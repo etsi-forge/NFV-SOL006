@@ -413,6 +413,8 @@ submodule etsi-nfv-common {
       enum "zone";
       enum "nfvi-pop";
       enum "network-link-and-node";
+      enum "L2-network";
+      enum "conatiner_namespace";
     }
   }
 

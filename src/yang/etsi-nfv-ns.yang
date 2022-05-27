@@ -927,6 +927,18 @@ submodule etsi-nfv-ns {
                  element";
             }
           }
+
+          leaf-list affinity-or-anti-affinity-group-id {
+            type leafref {
+              path "../../../affinity-or-anti-affinity-group/id";
+            }
+            description
+              "Reference(s) the affinity or anti-affinity
+               group(s) the NsVirtualLinkConnectivity belong to.";
+            reference
+              "GS NFV IFA014: Section 6.3.7.2, NsVirutalLinkConnectivity
+               information element.";
+          }
         }
 
         leaf service-availability-level {
@@ -1031,6 +1043,18 @@ submodule etsi-nfv-ns {
                 "GS NFV IFA014: Section 6.4.4.2 CpdPool information
                  element";
             }
+          }
+
+          leaf-list affinity-or-anti-affinity-group-id {
+            type leafref {
+              path "../../../affinity-or-anti-affinity-group/id";
+            }
+            description
+              "Reference(s) the affinity or anti-affinity
+               group(s) the NsVirtualLinkConnectivity belong to.";
+            reference
+              "GS NFV IFA014: Section 6.3.7.2, NsVirutalLinkConnectivity
+               information element.";
           }
         }
       }
@@ -1374,6 +1398,8 @@ submodule etsi-nfv-ns {
                 • NFVI_NODE
                 • NFVI_POP
                 • NETWORK_LINK_AND_NODE
+                • L2_NETWORK
+                • CONTAINER_NAMESPACE
                 • etc.";
           reference
             "GS NFV IFA014: Section 6.3.5.2 AffinityOrAntiAffinity
@@ -1755,6 +1781,18 @@ submodule etsi-nfv-ns {
                 "GS NFV IFA014: Section 6.4.4.2 CpdPool information
                  element";
             }
+          }
+
+          leaf-list affinity-or-anti-affinity-group-id {
+            type leafref {
+              path "../../../affinity-or-anti-affinity-group/id";
+            }
+            description
+              "Reference(s) the affinity or anti-affinity
+               group(s) the NsVirtualLinkConnectivity belong to.";
+            reference
+              "GS NFV IFA014: Section 6.3.7.2, NsVirutalLinkConnectivity
+               information element.";
           }
         }
       }
