@@ -1771,15 +1771,8 @@ submodule etsi-nfv-vnf {
            information element";
       }
 
-      list service-data {
-        key "key";
-        max-elements "1";
-        leaf key {
-          type string;
-        }
-        leaf value {
-          type string;
-        }
+      leaf service-data {
+        type string;
         description
           "Service matching information exposed by the VirtualCp.";
         reference
