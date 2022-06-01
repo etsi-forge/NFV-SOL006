@@ -1217,13 +1217,17 @@ submodule etsi-nfv-vnf {
       }
 
       list extended-resource-requests {
-        key "key";
+        key "extended-resource amount";
 
-        leaf key {
+        leaf extended-resource{
           type string;
+          description
+            "The hardware platform specific extended resource.";
         }
-        leaf value {
-          type string;
+        leaf amount {
+          type uint32;
+          description
+            "Requested amount of the indicated extended resource.";
         }
         description
           "An array of key-value pairs of extended resources
@@ -1265,14 +1269,26 @@ submodule etsi-nfv-vnf {
       }
 
       list huge-page-resources {
-        key "key";
+        key "hugepage-size";
         max-elements "1";
-        leaf key {
-          type string;
+
+        leaf hugepage-size{
+          type uint32;
+          description
+            "Specifies the size of the hugepage.";
         }
-        leaf value {
-          type string;
+        leaf requested-size {
+          type uint32;
+          description
+            "Specifies the total size required for all the
+             hugepages of the size indicated by hugepage-size.";
         }
+        leaf size-unit {
+          type scaler-units-size;
+          description
+            "Specifies the unit used for both hugepage-size
+             and requested-size";
+		    }
         description
           "An array of key-value pairs of HugePages resources
            requested for the container, which the container
@@ -1293,15 +1309,8 @@ submodule etsi-nfv-vnf {
            information element.";
       }
 
-      list boot-data {
-        key "key";
-        max-elements "1";
-        leaf key {
-          type string;
-        }
-        leaf value {
-          type string;
-        }
+      leaf boot-data {
+        type string;
         description
           "Contains a string or a URL to a file contained in the VNF
            package used to customize a container resource at boot time.
