@@ -145,7 +145,20 @@ submodule etsi-nfv-ns {
       description
         "Identifies an NSD in a version independent manner. This
          attribute is invariant across versions of the network
-         service descriptor.";
+         service descriptor with no constraint on the changes
+         across versions.";
+      reference
+        "GS NFV IFA014: Section 6.2.2.2 Network Service Descriptor
+         information element";
+    }
+
+    leaf ext-invariant-id {
+      type string;
+      description
+        "Identifies an NSD in a version independent manner.
+         This attribute is invariant across versions of the
+         NSD that fulfil certain conditions related to the
+         external connectivity and management of the NS.";
       reference
         "GS NFV IFA014: Section 6.2.2.2 Network Service Descriptor
          information element";
@@ -805,6 +818,21 @@ submodule etsi-nfv-ns {
              element";
         }
 
+        leaf vnfd-ext-invariant-id {
+          type string;
+          description
+            "Identifies a VNFD in a version independent manner.
+             If present it shall have the same value as the
+             vnfdExtInvariantId in the VNFD referenced by the
+             vnfdId attribute. It allows for VNF instances
+             during NS LCM the use of a VNFD different from the
+             one referenced by the vnfdId attribute, provided
+             they have the same vnfdExtInvariantId.";
+          reference
+            "GS NFV IFA014: Section 6.3.3.2 VnfProfile information
+             element";
+        }
+
         leaf flavour-id {
           mandatory true;
           type leafref {
@@ -969,6 +997,21 @@ submodule etsi-nfv-ns {
           }
           description
             "References a PNFD.";
+          reference
+            "GS NFV IFA014: Section 6.3.6.2 PnfProfile information
+             element";
+        }
+
+        leaf pnfd-ext-invariant-id {
+          type string;
+          description
+            "Identifies a PNFD in a version independent manner.
+             If present it shall have the same value as the
+             pnfdExtInvariantId in the PNFD referenced by the
+             pnfdId attribute. It allows for PNF instances during
+             NS LCM the use of a PNFD different from the one
+             referenced by the pnfdId attribute, provided they
+             have the same pnfdExtInvariantId ";
           reference
             "GS NFV IFA014: Section 6.3.6.2 PnfProfile information
              element";
@@ -1637,6 +1680,21 @@ submodule etsi-nfv-ns {
           description
             "References the NSD applicable to NS instantiated
              according to this profile.";
+          reference
+            "GS NFV IFA014: Section 6.3.11.2 NsProfile information
+             element";
+        }
+
+        leaf nsd-ext-invariant-id {
+          type string;
+          description
+            "Identifies an NSD in a version independent manner.
+             If present it shall have the same value as the
+             nsdExtInvariantId in the NSD referenced by the nsdId
+             attribute. It allows for nested NS instances during
+             NS LCM the use of an NSD different from the one
+             referenced by the nsdId attribute, provided they
+             have the same nsdExtInvariantId.";
           reference
             "GS NFV IFA014: Section 6.3.11.2 NsProfile information
              element";
