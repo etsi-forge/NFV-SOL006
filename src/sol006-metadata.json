@@ -13,7 +13,7 @@
                 "revision": "2019-04-25", 
                 "source-file": {
                     "owner": "YangModels", 
-                    "path": "standard/etsi/SOL006/src/yang/etsi-nfv-descriptors.yang", 
+                    "path": "standard/etsi/NFV-SOL006/src/yang/etsi-nfv-descriptors.yang", 
                     "repository": "yang"
                 }
             },
@@ -29,7 +29,7 @@
                 "revision": "2019-04-25", 
                 "source-file": {
                     "owner": "YangModels", 
-                    "path": "standard/etsi/SOL006/src/yang/etsi-nfv-common.yang", 
+                    "path": "standard/etsi/NFV-SOL006/src/yang/etsi-nfv-common.yang", 
                     "repository": "yang"
 		}
 	    },
@@ -45,7 +45,7 @@
                 "revision": "2019-04-25", 
                 "source-file": {
                     "owner": "YangModels", 
-                    "path": "standard/etsi/SOL006/src/yang/etsi-nfv-ns.yang", 
+                    "path": "standard/etsi/NFV-SOL006/src/yang/etsi-nfv-ns.yang", 
                     "repository": "yang"
                 }
 	    },
@@ -61,7 +61,7 @@
                 "revision": "2019-04-25", 
                 "source-file": {
                     "owner": "YangModels", 
-                    "path": "standard/etsi/SOL006/src/yang/etsi-nfv-nsd.yang", 
+                    "path": "standard/etsi/NFV-SOL006/src/yang/etsi-nfv-nsd.yang", 
                     "repository": "yang"
                 }
 	    },
@@ -77,7 +77,7 @@
                 "revision": "2019-04-25", 
                 "source-file": {
                     "owner": "YangModels", 
-                    "path": "standard/etsi/SOL006/src/yang/etsi-nfv-pnf.yang", 
+                    "path": "standard/etsi/NFV-SOL006/src/yang/etsi-nfv-pnf.yang", 
                     "repository": "yang"
                 }
 	    },
@@ -93,7 +93,7 @@
                 "revision": "2019-04-25", 
                 "source-file": {
                     "owner": "YangModels", 
-                    "path": "standard/etsi/SOL006/src/yang/etsi-nfv-pnfd.yang", 
+                    "path": "standard/etsi/NFV-SOL006/src/yang/etsi-nfv-pnfd.yang", 
                     "repository": "yang"
                 }
 	    },
@@ -109,7 +109,7 @@
                 "revision": "2019-03-18", 
                 "source-file": {
                     "owner": "YangModels", 
-                    "path": "standard/etsi/SOL006/src/yang/etsi-nfv-vnf.yang", 
+                    "path": "standard/etsi/NFV-SOL006/src/yang/etsi-nfv-vnf.yang", 
                     "repository": "yang"
                 }
 	    },
@@ -125,7 +125,7 @@
                 "revision": "2019-03-18",
                 "source-file": {
                     "owner": "YangModels", 
-                    "path": "standard/etsi/SOL006/src/yang/etsi-nfv-vnfd.yang", 
+                    "path": "standard/etsi/NFV-SOL006/src/yang/etsi-nfv-vnfd.yang", 
                     "repository": "yang"
                 }
 	    }
