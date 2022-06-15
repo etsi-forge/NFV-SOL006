@@ -825,9 +825,43 @@ submodule etsi-nfv-ns {
           }
           description
             "Identifier of the instantiation level of the VNF DF
-             to be used for instantiation. If not present, the
-             default instantiation level as declared in the VNFD
-             shall be used.";
+             to be used for instantiation.";
+          reference
+            "GS NFV IFA014: Section 6.3.3.2 VnfProfile information
+             element";
+        }
+
+        list target-vnf-scale-level-info {
+          key "aspect-id";
+          leaf aspect-id {
+            mandatory true;
+            type leafref {
+              path "deref(../../flavour-id)/../nfv:scaling-aspect/" +
+                   "nfv:id";
+            }
+            description
+              "References the scaling aspect of the VNF.";
+            reference
+              "GS NFV IFA014: Section 6.3.16, VnfScaleInfo
+               information element.";
+          }
+
+          leaf scale-level {
+            mandatory true;
+            type uint16;
+            description
+              "The scale level, greater than or equal to 0.";
+            reference
+              "GS NFV IFA014: Section 6.3.16, VnfScaleInfo
+               information element.";
+          }
+
+          description
+            "This attribute is applicable if VNF supports target
+            scale level instantiation.
+            For each scaling aspect of the current VNF deployment
+            flavour, the attribute specifies the scale level of
+            VNF constituents (e.g., VDU level) to be instantiated.";
           reference
             "GS NFV IFA014: Section 6.3.3.2 VnfProfile information
              element";
