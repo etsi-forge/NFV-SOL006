@@ -102,6 +102,46 @@ submodule etsi-nfv-ns {
     }
   }
 
+  grouping version-dependency {
+    list version-dependency{
+      key "dependent-constituent-id";
+
+      leaf dependent-constituent-id{
+        type string;
+        description
+          "Identifier of the NSD constituent which has version
+           dependencies on other NSD constituents.";
+        reference
+          "GS NFV IFA014: Section 6.3.17,
+           VersionDependency information element.";
+      }
+
+      container version-dependency-statement {
+        leaf-list descriptor-id {
+          type string;
+        }
+        description
+          "Identifies a VNFD, NSD or PNFD upon which the entity
+           using this information element depends.
+           When more than one descriptor is indicated, they shall
+           correspond to versions of the same VNF, NS or PNF and
+           they represent. alternatives, i.e. the presence of one
+           of them fulfills the dependency.";
+        reference
+          "GS NFV IFA014: Section 6.3.18,
+           VersionDependencyStatement information element";
+      }
+      description
+        "Identifies one or multiple versions of an NSD
+         constituent upon which the dependent constituent
+         identified by dependentConstituentId has a dependency.";
+      reference
+        "GS NFV IFA014: Section 6.3.17,
+        VersionDependency information element.";
+
+    }
+  }
+
   grouping nsd {
     leaf id {
       type string;
@@ -943,6 +983,8 @@ submodule etsi-nfv-ns {
             "GS NFV IFA014: Section 6.3.3.2 VnfProfile information
                element";
         }
+
+        uses version-dependency;
       }
 
       list pnf-profile {
@@ -1033,6 +1075,7 @@ submodule etsi-nfv-ns {
             }
           }
         }
+        uses version-dependency;
       }
 
       list virtual-link-profile {
@@ -1757,6 +1800,7 @@ submodule etsi-nfv-ns {
             }
           }
         }
+        uses version-dependency;
       }
 
       list dependencies {
@@ -1934,5 +1978,19 @@ submodule etsi-nfv-ns {
       }
     }
     uses security-parameters;
+
+    leaf strict-nsd-constituent-onboarding {
+      type boolean;
+
+      description
+        "Indicates if all NSD constituents referenced by this NSD
+         shall be onboarded before onboarding the NSD identified by
+         this information element.
+         Default (when the attribute is not present) is True
+         (all referenced constituents shall be onboarded).";
+      reference
+        "GS NFV IFA014: Section 6.2.2.2 Network Service Descriptor
+         information element";
+    }
   }
 }
