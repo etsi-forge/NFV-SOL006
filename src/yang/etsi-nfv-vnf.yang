@@ -235,6 +235,114 @@ submodule etsi-nfv-vnf {
     }
   }
 
+  grouping logical-node {
+    list logical-node {
+      key "id";
+
+      leaf id {
+        type string;
+        description
+          "Identifies this set of logical node requirements.";
+        reference
+          "GS NFV IFA011: Section 7.1.9.6, LogicalNodeRequirements
+           Information elements.";
+      }
+
+      list requirement-detail {
+        key "key";
+        min-elements 1;
+
+        leaf key {
+          type string;
+        }
+
+        leaf value {
+          type string;
+        }
+        description
+          "The logical node-level compute, memory and I/O
+           requirements. An array of key-value pairs that
+           articulate the deployment requirements.
+
+           This could include the number of CPU cores on this
+           logical node, a memory configuration specific to a
+           logical node (e.g. such as available in the Linux
+           kernel via the libnuma library) or a requirement
+           related to the association of an I/O device with the
+           logical node.";
+        reference
+          "GS NFV IFA011: Section 7.1.9.6, LogicalNodeRequirements
+           information element.";
+      }
+    }
+  }
+
+  grouping request-additional-capability {
+    list request-additional-capability {
+      key "name";
+
+      leaf name {
+        type string;
+        description
+          "Identifies a requested additional capability for the
+           VDU. ETSI GS NFV-IFA 002 [i.1] describes acceleration
+           capabilities.";
+        reference
+          "GS NFV IFA011: Section 7.1.9.5,
+           RequestedAdditionalCapabilityData Information element.";
+      }
+
+      leaf support-mandatory {
+        type boolean;
+        description
+          "Indicates whether the requested additional capability
+           is mandatory for successful operation.";
+        reference
+          "GS NFV IFA011: Section 7.1.9.5,
+           RequestedAdditionalCapabilityData Information
+           element.";
+      }
+
+      leaf min-version {
+        type string;
+        description
+          "Identifies the minimum version of the requested
+           additional capability.";
+        reference
+          "GS NFV IFA011: Section 7.1.9.5,
+           RequestedAdditionalCapabilityData Information element.";
+      }
+
+      leaf preferred-version {
+        type string;
+        description
+          "Identifies the preferred version of the requested
+           additional capability.";
+        reference
+          "GS NFV IFA011: Section 7.1.9.5,
+           RequestedAdditionalCapabilityData Information element.";
+      }
+
+      list target-performance-parameters {
+        key "key";
+
+        leaf key {
+          type string;
+        }
+
+        leaf value {
+          type string;
+        }
+        description
+          "Identifies specific attributes, dependent on the
+           requested additional capability type.";
+        reference
+          "GS NFV IFA011: Section 7.1.9.5,
+           RequestedAdditionalCapabilityData Information element.";
+      }
+    }
+  }
+
   grouping vnfd {
     leaf id {
       type string;
@@ -678,108 +786,9 @@ submodule etsi-nfv-vnf {
         }
       }
 
-      list logical-node {
-        key "id";
+      uses logical-node;
 
-        leaf id {
-          type string;
-          description
-            "Identifies this set of logical node requirements.";
-          reference
-            "GS NFV IFA011: Section 7.1.9.6, LogicalNodeRequirements
-             Information elements.";
-        }
-
-        list requirement-detail {
-          key "key";
-          min-elements 1;
-
-          leaf key {
-            type string;
-          }
-
-          leaf value {
-            type string;
-          }
-          description
-            "The logical node-level compute, memory and I/O
-             requirements. An array of key-value pairs that
-             articulate the deployment requirements.
-
-             This could include the number of CPU cores on this
-             logical node, a memory configuration specific to a
-             logical node (e.g. such as available in the Linux
-             kernel via the libnuma library) or a requirement
-             related to the association of an I/O device with the
-             logical node.";
-          reference
-            "GS NFV IFA011: Section 7.1.9.6, LogicalNodeRequirements
-             information element.";
-        }
-	    }
-      list request-additional-capability {
-        key "name";
-
-        leaf name {
-          type string;
-          description
-            "Identifies a requested additional capability for the
-             VDU. ETSI GS NFV-IFA 002 [i.1] describes acceleration
-             capabilities.";
-          reference
-            "GS NFV IFA011: Section 7.1.9.5,
-             RequestedAdditionalCapabilityData Information element.";
-        }
-
-        leaf support-mandatory {
-          type boolean;
-          description
-            "Indicates whether the requested additional capability
-             is mandatory for successful operation.";
-          reference
-            "GS NFV IFA011: Section 7.1.9.5,
-             RequestedAdditionalCapabilityData Information
-             element.";
-        }
-
-        leaf min-version {
-          type string;
-          description
-            "Identifies the minimum version of the requested
-             additional capability.";
-          reference
-            "GS NFV IFA011: Section 7.1.9.5,
-             RequestedAdditionalCapabilityData Information element.";
-        }
-
-        leaf preferred-version {
-          type string;
-          description
-            "Identifies the preferred version of the requested
-             additional capability.";
-          reference
-            "GS NFV IFA011: Section 7.1.9.5,
-             RequestedAdditionalCapabilityData Information element.";
-        }
-
-        list target-performance-parameters {
-          key "key";
-
-          leaf key {
-            type string;
-          }
-
-          leaf value {
-            type string;
-          }
-          description
-            "Identifies specific attributes, dependent on the
-             requested additional capability type.";
-          reference
-            "GS NFV IFA011: Section 7.1.9.5,
-             RequestedAdditionalCapabilityData Information element.";
-        }
-      }
+      uses request-additional-capability;
 
       leaf-list mcio-constraint-params {
         type enumeration {
@@ -870,114 +879,9 @@ submodule etsi-nfv-vnf {
            related to Virtual CPU.";
       }
 
-      list logical-node {
-        key "id";
+      uses logical-node;
 
-        leaf id {
-          type string;
-          description
-            "Identifies this set of logical node requirements.";
-          reference
-            "GS NFV IFA011: Section 7.1.9.6, LogicalNodeRequirements
-             Information elements.";
-        }
-
-        list requirement-detail {
-          key "key";
-          min-elements 1;
-
-          leaf key {
-            type string;
-          }
-
-          leaf value {
-            type string;
-          }
-          description
-            "The logical node-level compute, memory and I/O
-             requirements. An array of key-value pairs that
-             articulate the deployment requirements.
-
-             This could include the number of CPU cores on this
-             logical node, a memory configuration specific to a
-             logical node (e.g. such as available in the Linux
-             kernel via the libnuma library) or a requirement
-             related to the association of an I/O device with the
-             logical node.";
-          reference
-            "GS NFV IFA011: Section 7.1.9.6, LogicalNodeRequirements
-             information element.";
-        }
-        description
-          "The logical node requirements.";
-        reference
-          "GS NFV IFA011: Section 7.1.9.2, VirtualComputeDesc
-           information element.";
-      }
-
-      list request-additional-capability {
-        key "name";
-
-        leaf name {
-          type string;
-          description
-            "Identifies a requested additional capability for the
-             VDU. ETSI GS NFV-IFA 002 [i.1] describes acceleration
-             capabilities.";
-          reference
-            "GS NFV IFA011: Section 7.1.9.5,
-             RequestedAdditionalCapabilityData Information element.";
-        }
-
-        leaf support-mandatory {
-          type boolean;
-          description
-            "Indicates whether the requested additional capability
-             is mandatory for successful operation.";
-          reference
-            "GS NFV IFA011: Section 7.1.9.5,
-             RequestedAdditionalCapabilityData Information
-             element.";
-        }
-
-        leaf min-version {
-          type string;
-          description
-            "Identifies the minimum version of the requested
-             additional capability.";
-          reference
-            "GS NFV IFA011: Section 7.1.9.5,
-             RequestedAdditionalCapabilityData Information element.";
-        }
-
-        leaf preferred-version {
-          type string;
-          description
-            "Identifies the preferred version of the requested
-             additional capability.";
-          reference
-            "GS NFV IFA011: Section 7.1.9.5,
-             RequestedAdditionalCapabilityData Information element.";
-        }
-
-        list target-performance-parameters {
-          key "key";
-
-          leaf key {
-            type string;
-          }
-
-          leaf value {
-            type string;
-          }
-          description
-            "Identifies specific attributes, dependent on the
-             requested additional capability type.";
-          reference
-            "GS NFV IFA011: Section 7.1.9.5,
-             RequestedAdditionalCapabilityData Information element.";
-        }
-      }
+      uses request-additional-capability;
 
       leaf compute-requirements {
         type string;
