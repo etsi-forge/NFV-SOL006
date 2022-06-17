@@ -2363,7 +2363,7 @@ submodule etsi-nfv-vnf {
             description
               "Signals whether target scale levels are supported
                by this VNF during instantiation.
-               Default is FALSE, i.e. \"not supported\".";
+               Default is FALSE, i.e. 'not supported'.";
             reference
               "GS NFV IFA011: Section 7.1.5.3
                InstantiateVnfOpConfig information element";
