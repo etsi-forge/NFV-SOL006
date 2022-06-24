@@ -1319,6 +1319,23 @@ submodule etsi-nfv-ns {
                    information element";
               }
 
+              leaf direction {
+                type enumeration {
+                  enum "in";
+                  enum "out";
+                  enum "both";
+                }
+                description
+                  "The direction of the data flow that are requested to be
+                   mirrored.The direction is specified against the associated
+                   CP. I.e., 'in' means the data flow that enters the target
+                   connection point needs to be mirrored.
+                   'out' means the data flow that sends out the target
+                   connection point needs to be mirrored.
+                   'both' means the data flows that both enters and sends out
+                    the target connection point all need to be mirrored.";
+              }
+
               container flow-constituent-cpd-id {
                 choice constituent-base-element-id {
                   leaf vnfd-id {
