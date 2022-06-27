@@ -719,6 +719,34 @@ submodule etsi-nfv-vnf {
           }
         }
       }
+
+      container mcio-identification-data {
+        leaf name {
+          mandatory true;
+          type string;
+          description
+            "The name of the mcio.";
+        }
+
+        leaf type {
+          mandatory true;
+          type enumeration {
+            enum "Deployment";
+            enum "StatefulSet";
+          }
+          description
+            "The type of the mcio.";
+        }
+
+        description
+          "Name and type of the MCIO that realizes this VDU.It allows
+           the VNFM to identify the MCIO e.g. when querying the CISM.
+           It shall be present when the VDU is realized by one or a
+           set of OS containers and shall be absent otherwise.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.2, VDU Information
+           element.";
+      }
     }
 
     list virtual-compute-desc {
