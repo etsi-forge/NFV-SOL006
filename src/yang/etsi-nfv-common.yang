@@ -413,6 +413,8 @@ submodule etsi-nfv-common {
       enum "zone";
       enum "nfvi-pop";
       enum "network-link-and-node";
+      enum "L2-network";
+      enum "conatiner_namespace";
     }
   }
 
@@ -456,6 +458,20 @@ submodule etsi-nfv-common {
       enum "vnf-snapshot-creation";
       enum "vnf-snapshot-reverting-to";
       enum "change-current-vnf-package";
+    }
+  }
+
+  typedef scaler-units-size {
+    type enumeration {
+      enum "B";
+      enum "kB";
+      enum "KiB";
+      enum "MB";
+      enum "MiB";
+      enum "GB";
+      enum "GiB";
+      enum "TB";
+      enum "TiB";
     }
   }
 

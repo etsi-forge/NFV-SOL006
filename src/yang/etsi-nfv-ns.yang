@@ -102,6 +102,46 @@ submodule etsi-nfv-ns {
     }
   }
 
+  grouping version-dependency {
+    list version-dependency{
+      key "dependent-constituent-id";
+
+      leaf dependent-constituent-id{
+        type string;
+        description
+          "Identifier of the NSD constituent which has version
+           dependencies on other NSD constituents.";
+        reference
+          "GS NFV IFA014: Section 6.3.17,
+           VersionDependency information element.";
+      }
+
+      container version-dependency-statement {
+        leaf-list descriptor-id {
+          type string;
+        }
+        description
+          "Identifies a VNFD, NSD or PNFD upon which the entity
+           using this information element depends.
+           When more than one descriptor is indicated, they shall
+           correspond to versions of the same VNF, NS or PNF and
+           they represent. alternatives, i.e. the presence of one
+           of them fulfills the dependency.";
+        reference
+          "GS NFV IFA014: Section 6.3.18,
+           VersionDependencyStatement information element";
+      }
+      description
+        "Identifies one or multiple versions of an NSD
+         constituent upon which the dependent constituent
+         identified by dependentConstituentId has a dependency.";
+      reference
+        "GS NFV IFA014: Section 6.3.17,
+        VersionDependency information element.";
+
+    }
+  }
+
   grouping nsd {
     leaf id {
       type string;
@@ -145,7 +185,20 @@ submodule etsi-nfv-ns {
       description
         "Identifies an NSD in a version independent manner. This
          attribute is invariant across versions of the network
-         service descriptor.";
+         service descriptor with no constraint on the changes
+         across versions.";
+      reference
+        "GS NFV IFA014: Section 6.2.2.2 Network Service Descriptor
+         information element";
+    }
+
+    leaf ext-invariant-id {
+      type string;
+      description
+        "Identifies an NSD in a version independent manner.
+         This attribute is invariant across versions of the
+         NSD that fulfil certain conditions related to the
+         external connectivity and management of the NS.";
       reference
         "GS NFV IFA014: Section 6.2.2.2 Network Service Descriptor
          information element";
@@ -805,6 +858,21 @@ submodule etsi-nfv-ns {
              element";
         }
 
+        leaf vnfd-ext-invariant-id {
+          type string;
+          description
+            "Identifies a VNFD in a version independent manner.
+             If present it shall have the same value as the
+             vnfdExtInvariantId in the VNFD referenced by the
+             vnfdId attribute. It allows for VNF instances
+             during NS LCM the use of a VNFD different from the
+             one referenced by the vnfdId attribute, provided
+             they have the same vnfdExtInvariantId.";
+          reference
+            "GS NFV IFA014: Section 6.3.3.2 VnfProfile information
+             element";
+        }
+
         leaf flavour-id {
           mandatory true;
           type leafref {
@@ -825,9 +893,43 @@ submodule etsi-nfv-ns {
           }
           description
             "Identifier of the instantiation level of the VNF DF
-             to be used for instantiation. If not present, the
-             default instantiation level as declared in the VNFD
-             shall be used.";
+             to be used for instantiation.";
+          reference
+            "GS NFV IFA014: Section 6.3.3.2 VnfProfile information
+             element";
+        }
+
+        list target-vnf-scale-level-info {
+          key "aspect-id";
+          leaf aspect-id {
+            mandatory true;
+            type leafref {
+              path "deref(../../flavour-id)/../nfv:scaling-aspect/" +
+                   "nfv:id";
+            }
+            description
+              "References the scaling aspect of the VNF.";
+            reference
+              "GS NFV IFA014: Section 6.3.16, VnfScaleInfo
+               information element.";
+          }
+
+          leaf scale-level {
+            mandatory true;
+            type uint16;
+            description
+              "The scale level, greater than or equal to 0.";
+            reference
+              "GS NFV IFA014: Section 6.3.16, VnfScaleInfo
+               information element.";
+          }
+
+          description
+            "This attribute is applicable if VNF supports target
+            scale level instantiation.
+            For each scaling aspect of the current VNF deployment
+            flavour, the attribute specifies the scale level of
+            VNF constituents (e.g., VDU level) to be instantiated.";
           reference
             "GS NFV IFA014: Section 6.3.3.2 VnfProfile information
              element";
@@ -927,6 +1029,18 @@ submodule etsi-nfv-ns {
                  element";
             }
           }
+
+          leaf-list affinity-or-anti-affinity-group-id {
+            type leafref {
+              path "../../../affinity-or-anti-affinity-group/id";
+            }
+            description
+              "Reference(s) the affinity or anti-affinity
+               group(s) the NsVirtualLinkConnectivity belong to.";
+            reference
+              "GS NFV IFA014: Section 6.3.7.2, NsVirutalLinkConnectivity
+               information element.";
+          }
         }
 
         leaf service-availability-level {
@@ -943,6 +1057,8 @@ submodule etsi-nfv-ns {
             "GS NFV IFA014: Section 6.3.3.2 VnfProfile information
                element";
         }
+
+        uses version-dependency;
       }
 
       list pnf-profile {
@@ -969,6 +1085,21 @@ submodule etsi-nfv-ns {
           }
           description
             "References a PNFD.";
+          reference
+            "GS NFV IFA014: Section 6.3.6.2 PnfProfile information
+             element";
+        }
+
+        leaf pnfd-ext-invariant-id {
+          type string;
+          description
+            "Identifies a PNFD in a version independent manner.
+             If present it shall have the same value as the
+             pnfdExtInvariantId in the PNFD referenced by the
+             pnfdId attribute. It allows for PNF instances during
+             NS LCM the use of a PNFD different from the one
+             referenced by the pnfdId attribute, provided they
+             have the same pnfdExtInvariantId ";
           reference
             "GS NFV IFA014: Section 6.3.6.2 PnfProfile information
              element";
@@ -1032,7 +1163,20 @@ submodule etsi-nfv-ns {
                  element";
             }
           }
+
+          leaf-list affinity-or-anti-affinity-group-id {
+            type leafref {
+              path "../../../affinity-or-anti-affinity-group/id";
+            }
+            description
+              "Reference(s) the affinity or anti-affinity
+               group(s) the NsVirtualLinkConnectivity belong to.";
+            reference
+              "GS NFV IFA014: Section 6.3.7.2, NsVirutalLinkConnectivity
+               information element.";
+          }
         }
+        uses version-dependency;
       }
 
       list virtual-link-profile {
@@ -1374,6 +1518,8 @@ submodule etsi-nfv-ns {
                 • NFVI_NODE
                 • NFVI_POP
                 • NETWORK_LINK_AND_NODE
+                • L2_NETWORK
+                • CONTAINER_NAMESPACE
                 • etc.";
           reference
             "GS NFV IFA014: Section 6.3.5.2 AffinityOrAntiAffinity
@@ -1642,6 +1788,21 @@ submodule etsi-nfv-ns {
              element";
         }
 
+        leaf nsd-ext-invariant-id {
+          type string;
+          description
+            "Identifies an NSD in a version independent manner.
+             If present it shall have the same value as the
+             nsdExtInvariantId in the NSD referenced by the nsdId
+             attribute. It allows for nested NS instances during
+             NS LCM the use of an NSD different from the one
+             referenced by the nsdId attribute, provided they
+             have the same nsdExtInvariantId.";
+          reference
+            "GS NFV IFA014: Section 6.3.11.2 NsProfile information
+             element";
+        }
+
         leaf ns-df-id {
           mandatory true;
           type leafref {
@@ -1693,6 +1854,8 @@ submodule etsi-nfv-ns {
             "GS NFV IFA014: Section 6.3.11.2 NsProfile information
              element";
         }
+
+        uses ns-local-affinity-or-anti-affinity-rule;
 
         leaf-list affinity-or-anti-affinity-group-id {
           type leafref {
@@ -1756,7 +1919,20 @@ submodule etsi-nfv-ns {
                  element";
             }
           }
+
+          leaf-list affinity-or-anti-affinity-group-id {
+            type leafref {
+              path "../../../affinity-or-anti-affinity-group/id";
+            }
+            description
+              "Reference(s) the affinity or anti-affinity
+               group(s) the NsVirtualLinkConnectivity belong to.";
+            reference
+              "GS NFV IFA014: Section 6.3.7.2, NsVirutalLinkConnectivity
+               information element.";
+          }
         }
+        uses version-dependency;
       }
 
       list dependencies {
@@ -1934,5 +2110,19 @@ submodule etsi-nfv-ns {
       }
     }
     uses security-parameters;
+
+    leaf strict-nsd-constituent-onboarding {
+      type boolean;
+
+      description
+        "Indicates if all NSD constituents referenced by this NSD
+         shall be onboarded before onboarding the NSD identified by
+         this information element.
+         Default (when the attribute is not present) is True
+         (all referenced constituents shall be onboarded).";
+      reference
+        "GS NFV IFA014: Section 6.2.2.2 Network Service Descriptor
+         information element";
+    }
   }
 }

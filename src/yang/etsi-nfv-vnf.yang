@@ -94,9 +94,8 @@ submodule etsi-nfv-vnf {
            VirtualNetworkInterfaceRequirements information element";
       }
 
-      list network-interface-requirements {
+      list standardized-network-interface-requirements {
         key "key";
-        min-elements "1";
         max-elements "1";
 
         leaf key {
@@ -106,9 +105,29 @@ submodule etsi-nfv-vnf {
           type string;
         }
         description
-          "The network interface requirements. An element from an
-           array of key-value pairs that articulate the network
-           interface deployment requirements.";
+          "The requirements on standardized network interface
+           capabilities, e.g., SR-IOV or secondary container
+           cluster network interface deployment requirements.";
+        reference
+          "GS NFV-IFA011: Section 7.1.6.6,
+           VirtualNetworkInterfaceRequirements information element";
+      }
+
+      list network-interface-requirements {
+        key "key";
+        max-elements "1";
+
+        leaf key {
+          type string;
+        }
+        leaf value {
+          type string;
+        }
+        description
+          "The additional network interface requirements beyond those
+           specified in the standardizedNetworkInterfaceRequirementsattribute.
+           An element from an array of key-value pairs that articulate the
+           network interface deployment requirements.";
         reference
           "GS NFV-IFA011: Section 7.1.6.6,
            VirtualNetworkInterfaceRequirements information element";
@@ -479,7 +498,6 @@ submodule etsi-nfv-vnf {
 
       list int-cpd {
         key "id";
-        min-elements 1;
         description
           "A internal-connection-point element is a type of
            connection point and describes network connectivity
@@ -563,7 +581,17 @@ submodule etsi-nfv-vnf {
              • BAREMETAL
              • VIRTIO-FORWARDER
              • DIRECT-PHYSICAL
-             • SMART-NIC";
+             • SMART-NIC
+             Additional values of the attribute for VDUs realized
+             by one or set of OS containers:
+             • BRIDGE
+             • IPVLAN
+             • LOOPBACK
+             • MACVLAN
+             • PTP
+             • VLAN
+             • HOST-DEVICE
+             etc.";
           reference
             "GS NFV IFA011: Section 7.1.6.4, VduCpd information
              element.";
@@ -600,14 +628,29 @@ submodule etsi-nfv-vnf {
            information element.";
       }
 
+      leaf-list os-container-desc {
+        type leafref {
+          path "../../os-container-desc/id";
+        }
+        description
+          "Describes CPU, memory requirements and limits, and
+           software images of the OS Containers realizing this
+           Vdu corresponding to OS Containers sharing the same
+           host and same network namespace. Each unique identifier
+           is referenced only once within one VDU.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.2, VDU information
+           element. ";
+      }
       leaf-list virtual-storage-desc {
         type leafref {
           path "../../virtual-storage-desc/id";
         }
         description
           "Describes storage requirements for a VirtualStorage
-           instance attached to the virtualisation container
-           created from virtualComputeDesc defined for this VDU.";
+           instance attached to the virtualisation container(s)
+           created from virtualComputeDesc or osContainerDesc
+           defined for this VDU.";
         reference
           "GS NFV IFA011: Section 7.1.6.2, VDU information
            element, and Section 7.1.9.4, Information elements
@@ -862,13 +905,42 @@ submodule etsi-nfv-vnf {
         reference
             "GS NFV IFA011: Section 7.1.6.2, Vdu Information elements.";
 	    }
+
+      container mcio-identification-data {
+        leaf name {
+          mandatory true;
+          type string;
+          description
+            "The name of the mcio.";
+        }
+
+        leaf type {
+          mandatory true;
+          type enumeration {
+            enum "Deployment";
+            enum "StatefulSet";
+          }
+          description
+            "The type of the mcio.";
+        }
+
+        description
+          "Name and type of the MCIO that realizes this VDU.It allows
+           the VNFM to identify the MCIO e.g. when querying the CISM.
+           It shall be present when the VDU is realized by one or a
+           set of OS containers and shall be absent otherwise.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.2, VDU Information
+           element.";
+      }
     }
 
     list virtual-compute-desc {
       key "id";
       description
         "Defines descriptors of virtual compute resources to be
-         used by the VNF.";
+         used by the VNF when each of the VNFC instances of the
+         VNF is intended to be deployed in a single VM.";
       leaf id {
         type string;
         description
@@ -1246,6 +1318,199 @@ submodule etsi-nfv-vnf {
       }
     }
 
+    list os-container-desc {
+      key "id";
+      description
+        "Defines descriptors of container compute resources to be used
+         by the VNF when the VDUs of the VNF are realized by a set of
+         OS Containers sharing the same host and same networking namespace.";
+      reference
+        "GS NFV IFA011: Section 7.1.2, VNFD Information element.";
+
+      leaf id {
+        type string;
+        description
+          "Unique identifier of this OsContainerDesc in the VNFD.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.13, OsContainerDesc
+          information element.";
+      }
+
+      leaf name {
+        type string;
+        description
+          "Human readable name of this OS container.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.13, OsContainerDesc
+          information element.";
+      }
+
+      leaf description {
+        type string;
+        description
+          "Human readable description of this OS container.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.13, OsContainerDesc
+           information element.";
+      }
+
+      leaf requested-cpu-resources {
+        type uint32;
+        description
+          "Number of CPU resources requested for the container
+           (e.g. in milli-CPU-s).";
+        reference
+          "GS NFV IFA011: Section 7.1.6.13, OsContainerDesc
+           information element.";
+      }
+
+      leaf requested-memory-resources {
+        type uint64;
+        description
+          "Amount of memory resources requested for the container
+           (e.g. in MB).";
+        reference
+          "GS NFV IFA011: Section 7.1.6.13, OsContainerDesc
+           information element.";
+      }
+
+      leaf requested-ephemeral-storage-resources {
+        type uint64;
+        units "GB";
+        description
+          "Size of ephemeral storage resources requested for the container
+           (e.g. in GB).";
+        reference
+          "GS NFV IFA011: Section 7.1.6.13, OsContainerDesc
+           information element.";
+      }
+
+      list extended-resource-requests {
+        key "extended-resource amount";
+
+        leaf extended-resource{
+          type string;
+          description
+            "The hardware platform specific extended resource.";
+        }
+        leaf amount {
+          type uint32;
+          description
+            "Requested amount of the indicated extended resource.";
+        }
+        description
+          "An array of key-value pairs of extended resources
+           required by the container.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.13, OsContainerDesc
+           information element.";
+      }
+
+      leaf cpu-resource-limit {
+        type uint32;
+        description
+          "Number of CPU resources the container can maximally use
+           (e.g. in milli-CPU).";
+        reference
+          "GS NFV IFA011: Section 7.1.6.13, OsContainerDesc
+           information element.";
+      }
+
+      leaf memory-resource-limit {
+        type uint64;
+        description
+          "Amount of memory resources the container can maximally
+           use(e.g. in MB).";
+        reference
+          "GS NFV IFA011: Section 7.1.6.13, OsContainerDesc
+          information element.";
+      }
+
+      leaf ephemeral-storage-resource-limit {
+        type uint64;
+        units "GB";
+        description
+          "Size of ephemeral storage resources the container can
+           maximally use(e.g. in GB).";
+        reference
+          "GS NFV IFA011: Section 7.1.6.13, OsContainerDesc
+           information element.";
+      }
+
+      list huge-page-resources {
+        key "hugepage-size";
+        max-elements "1";
+
+        leaf hugepage-size{
+          type uint32;
+          description
+            "Specifies the size of the hugepage.";
+        }
+        leaf requested-size {
+          type uint32;
+          description
+            "Specifies the total size required for all the
+             hugepages of the size indicated by hugepage-size.";
+        }
+        leaf size-unit {
+          type scaler-units-size;
+          description
+            "Specifies the unit used for both hugepage-size
+             and requested-size";
+		    }
+        description
+          "An array of key-value pairs of HugePages resources
+           requested for the container, which the container
+           can maximally use (e.g., \"hugepages-2Mi: 100Mi\").";
+        reference
+          "GS NFV IFA011: Section 7.1.6.13, OsContainerDesc
+           information element.";
+      }
+
+      leaf sw-image-desc {
+        type leafref {
+          path "../../sw-image-desc/id";
+        }
+        description
+          "Describes the software image realizing this OS container.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.13, OsContainerDesc
+           information element.";
+      }
+
+      leaf boot-data {
+        type string;
+        description
+          "Contains a string or a URL to a file contained in the VNF
+           package used to customize a container resource at boot time.
+           The bootData may contain variable parts that are replaced
+           by deployment specific values before being sent.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.13, OsContainerDesc
+           information element.";
+      }
+
+      list monitoring-parameter {
+        key "id";
+        leaf id {
+          type string;
+          description
+            "Unique identifier of the monitoring parameter.";
+          reference
+            "GS NFV IFA011: Section 7.1.11.3, MonitoringParameter
+             information element.";
+        }
+        uses monitoring-parameter;
+        description
+          "Specifies the virtualised resource related performance
+           metrics on the OsContainerDesc level to be tracked by
+           the VNFM.";
+        reference
+          "GS NFV IFA011: Section 7.1.6.13, OsContainerDesc
+           information element.";
+      }
+    }
+
     list sw-image-desc {
       key "id";
       description
@@ -1430,7 +1695,6 @@ submodule etsi-nfv-vnf {
         leaf min-disk {
           type uint64;
           units "GB";
-          mandatory true;
           description
             "The minimal disk size requirement for this software
              image. The value of the 'size of storage' attribute
@@ -1461,7 +1725,6 @@ submodule etsi-nfv-vnf {
       }
 
       leaf size {
-        mandatory true;
         type uint64;
         units "GB";
         description
@@ -1675,8 +1938,7 @@ submodule etsi-nfv-vnf {
           description
             "Reference to the internal Virtual Link Descriptor (VLD)
              to which CPs instantiated from this external CP
-             Descriptor (CPD) connect. Either intVirtualLinkDesc or
-             intCpd shall be present.";
+             Descriptor (CPD) connect.";
           type leafref {
             path "/nfv:nfv/nfv:vnfd/nfv:int-virtual-link-desc/nfv:id";
           }
@@ -1703,12 +1965,22 @@ submodule etsi-nfv-vnf {
           description
             "Reference to the VIP CPD which is used to instantiate CPs
              to hold virtual IP addresses. These CPs are, in turn,
-             exposed as external CPs defined by this external CPD.
-             One and only one of the following attributes shall be
-             present: intVirtualLinkDesc or intCpd or vipCpd .";
+             exposed as external CPs defined by this external CPD.";
           reference
             "GS NFV-IFA011: Section 7.1.3.2, VnfExtCpd information
              element";
+        }
+        leaf virtual-cpd {
+          type leafref {
+            path "../../virtual-cpd/id";
+          }
+          description
+            "References the Virtual CPD which is used to describe a
+             virtual connection point allowing to access a set of
+             VNFC instances (based on their respective VDUs).";
+          reference
+            "GS NFV-IFA011: Section 7.1.3.2, VnfExtCpd information
+            element";
         }
       }
 
@@ -1802,6 +2074,98 @@ submodule etsi-nfv-vnf {
       description
         "Describes virtual IP addresses to be shared among instances
          of connection points. See clause 7.1.17.";
+      reference
+        "GS NFV IFA011: Section 7.1.2, VNFD information element.";
+    }
+
+    list virtual-cpd {
+      key "id";
+      leaf-list vdu {
+        type leafref {
+           path "../../vdu/id";
+        }
+        description
+          "References the VDU(s) which implement this service.";
+        reference
+          "GS NFV IFA011: Section 7.1.18.2, Information elements
+           related to VirtualCpd.";
+      }
+
+    container additional-service-data {
+      list port-data {
+        key "name";
+        leaf name {
+          type string;
+          description
+            "The name of the port exposed by the VirtualCp.";
+          reference
+            "GS NFV IFA011: Section 7.1.18.4, ServicePortData
+             information element.";
+        }
+
+        leaf protocol {
+          type enumeration {
+            enum tcp;
+            enum udp;
+            enum sctp;
+          }
+          description
+            "The L4 protocol for this port exposed by the VirtualCp.
+             Values:
+             • TCP
+             • UDP
+             • SCTP";
+          reference
+            "GS NFV IFA011: Section 7.1.18.4, ServicePortData
+             information element.";
+        }
+
+        leaf port {
+          type uint64;
+          description
+            "The L4 port number exposed by the VirtualCp.";
+          reference
+            "GS NFV IFA011: Section 7.1.18.4,	ServicePortData
+             information element.";
+        }
+
+        leaf port-configurable {
+          type boolean;
+          description
+            "Specifies whether the port attribute value
+             is allowed to be configurable.";
+          reference
+            "GS NFV IFA011: Section 7.1.18.4,	ServicePortData
+             information element.";
+        }
+
+        description
+          "Service port numbers exposed by the VirtualCp.";
+        reference
+          "GS NFV IFA011: Section 7.1.18.3, AdditionalServiceData
+           information element";
+      }
+
+      leaf service-data {
+        type string;
+        description
+          "Service matching information exposed by the VirtualCp.";
+        reference
+          "GS NFV IFA011: Section 7.1.18.3, AdditionalServiceData
+           information element";
+      }
+
+      description
+        "Additional service identification data of the VirtualCp
+         exposed to NFV-MANO.";
+      reference
+        "GS NFV IFA011: Section 7.1.18.2, Information elements
+         related to VirtualCpd";
+      }
+      uses cpd;
+      description
+        "Describes a virtual connection point allowing to access a
+         set of VNFC instances (based on their respective VDUs).";
       reference
         "GS NFV IFA011: Section 7.1.2, VNFD information element.";
     }
@@ -2256,6 +2620,62 @@ submodule etsi-nfv-vnf {
         }
       }
 
+      list mciop-profile {
+        key "id";
+        description
+          "Describes additional instantiation data for the MCIOPs
+           used in this deployment flavour.This attribute shall be
+           present if the DF references (via the vduProfile)
+           containerized workloads based on a MCIOP.";
+        reference
+          "GS NFV IFA011: Section 7.1.8.2, VnfDf information
+           element.";
+
+        leaf id {
+          type string;
+          description
+            "Identifies the MCIOP in the VNF package.";
+          reference
+            "GS NFV IFA011: Section 7.1.8.19, MciopProfile
+             information element.";
+        }
+
+        leaf deployment-order {
+          type uint32;
+          description
+            "Indicates the order in which this MCIOP shall
+             be deployed in relation to other MCIOPs. A lower
+             value specifies an earlier deployment.";
+          reference
+            "GS NFV IFA011: Section 7.1.8.19, MciopProfile
+             information element.";
+        }
+
+        leaf-list affinity-or-anti-affinity-group-id {
+	        type leafref {
+	          path "../../affinity-or-anti-affinity-group/id";
+	        }
+          description
+            "References the affinity or anti-affinity group(s)
+             the MCIOP belongs to.";
+          reference
+            "GS NFV IFA011: Section 7.1.8.19, MciopProfile
+             information element.";
+        }
+
+        leaf-list associated-vdu {
+          type leafref {
+            path "../../../vdu/id";
+          }
+          description
+            "List of VDUs which are associated to this MCIOP
+             and which are deployed using this MCIOP";
+          reference
+            "GS NFV IFA011: Section 7.1.8.19, MciopProfile
+             information element.";
+        }
+      }
+
       list instantiation-level {
         key "id";
         min-elements 1;
@@ -2464,6 +2884,18 @@ submodule etsi-nfv-vnf {
               "Array of KVP requirements for VNF-specific parameters
                to be passed when invoking the InstantiateVnf
                operation.";
+            reference
+              "GS NFV IFA011: Section 7.1.5.3
+               InstantiateVnfOpConfig information element";
+          }
+
+          leaf target-scale-levels-supported {
+            type boolean;
+            default false;
+            description
+              "Signals whether target scale levels are supported
+               by this VNF during instantiation.
+               Default is FALSE, i.e. 'not supported'.";
             reference
               "GS NFV IFA011: Section 7.1.5.3
                InstantiateVnfOpConfig information element";
@@ -2903,7 +3335,8 @@ submodule etsi-nfv-vnf {
                 • ZoneGroup
                 • NFVI-node
                 • CIS-node
-                • network-link-and-node";
+                • network-link-and-node
+                • container-namespace";
           reference
             "GS NFV IFA011: Section 7.1.8.12
              AffinityOrAntiAffinityGroup information element";
@@ -4148,6 +4581,16 @@ submodule etsi-nfv-vnf {
          operations.";
       reference
         "GS NFV IFA011: Section 7.1.2 VNFD information element";
+    }
+
+    leaf-list mciop-id {
+      type string;
+      description
+        "Identifies the MCIOP(s) in the VNF package, used in
+         containerized workload management, when the VNF is
+         realized by a set of OS containers.";
+      reference
+        "GS NFV IFA011: Section 7.1.2, VNFD Information element.";
     }
   }
 }
