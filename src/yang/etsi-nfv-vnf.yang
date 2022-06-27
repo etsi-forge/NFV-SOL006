@@ -231,6 +231,7 @@ submodule etsi-nfv-vnf {
           "Specifies the scope of the rule.
            Values:
              • NFVI-PoP
+             • CIS-node
              • Zone
              • ZoneGroup
              • NFVI-node
@@ -249,6 +250,114 @@ submodule etsi-nfv-vnf {
         reference
           "GS NFV IFA011: Section 7.1.8.11,
            LocalAffinityOrAntiAffinityRule information element.";
+      }
+    }
+  }
+
+  grouping logical-node {
+    list logical-node {
+      key "id";
+
+      leaf id {
+        type string;
+        description
+          "Identifies this set of logical node requirements.";
+        reference
+          "GS NFV IFA011: Section 7.1.9.6, LogicalNodeRequirements
+           Information elements.";
+      }
+
+      list requirement-detail {
+        key "key";
+        min-elements 1;
+
+        leaf key {
+          type string;
+        }
+
+        leaf value {
+          type string;
+        }
+        description
+          "The logical node-level compute, memory and I/O
+           requirements. An array of key-value pairs that
+           articulate the deployment requirements.
+
+           This could include the number of CPU cores on this
+           logical node, a memory configuration specific to a
+           logical node (e.g. such as available in the Linux
+           kernel via the libnuma library) or a requirement
+           related to the association of an I/O device with the
+           logical node.";
+        reference
+          "GS NFV IFA011: Section 7.1.9.6, LogicalNodeRequirements
+           information element.";
+      }
+    }
+  }
+
+  grouping request-additional-capability {
+    list request-additional-capability {
+      key "name";
+
+      leaf name {
+        type string;
+        description
+          "Identifies a requested additional capability for the
+           VDU. ETSI GS NFV-IFA 002 [i.1] describes acceleration
+           capabilities.";
+        reference
+          "GS NFV IFA011: Section 7.1.9.5,
+           RequestedAdditionalCapabilityData Information element.";
+      }
+
+      leaf support-mandatory {
+        type boolean;
+        description
+          "Indicates whether the requested additional capability
+           is mandatory for successful operation.";
+        reference
+          "GS NFV IFA011: Section 7.1.9.5,
+           RequestedAdditionalCapabilityData Information
+           element.";
+      }
+
+      leaf min-version {
+        type string;
+        description
+          "Identifies the minimum version of the requested
+           additional capability.";
+        reference
+          "GS NFV IFA011: Section 7.1.9.5,
+           RequestedAdditionalCapabilityData Information element.";
+      }
+
+      leaf preferred-version {
+        type string;
+        description
+          "Identifies the preferred version of the requested
+           additional capability.";
+        reference
+          "GS NFV IFA011: Section 7.1.9.5,
+           RequestedAdditionalCapabilityData Information element.";
+      }
+
+      list target-performance-parameters {
+        key "key";
+
+        leaf key {
+          type string;
+        }
+
+        leaf value {
+          type string;
+        }
+        description
+          "Identifies specific attributes, dependent on the
+           requested additional capability type.";
+        reference
+          "GS NFV IFA011: Section 7.1.9.5,
+           RequestedAdditionalCapabilityData Information element.";
       }
     }
   }
@@ -720,6 +829,83 @@ submodule etsi-nfv-vnf {
         }
       }
 
+      uses logical-node;
+
+      uses request-additional-capability;
+
+      leaf-list mcio-constraint-params {
+        type enumeration {
+          enum "affinityNfviPop";
+          enum "affinityZone";
+          enum "affinityZoneGroup";
+          enum "affinityNfviNode";
+          enum "affinityCisNode";
+          enum "antiAffinityNfviPop";
+          enum "antiAffinityZone";
+          enum "antiAffinityZoneGroup";
+          enum "antiAffinityNfviNode";
+          enum "antiAffinityCisNode";
+          enum "localAffinityNfviPop";
+          enum "localAffinityZone";
+          enum "localAffinityZoneGroup";
+          enum "localAffinityNfviNode";
+          enum "localAffinityCisNode";
+          enum "localAntiAffinityNfviPop";
+          enum "localAntiAffinityZone";
+          enum "localAntiAffinityZoneGroup";
+          enum "localAntiAffinityNfviNode";
+          enum "localAntiAffinityCisNode";
+          enum "nodeAdditionalCapabilitySsd";
+          enum "nodeAdditionalCapabilityDpdk";
+          enum "nodeAdditionalCapabilitySriov";
+          enum "nodeAdditionalCapabilityGpu";
+          enum "nodeAdditionalCapabilityFpga";
+          enum "nodeAdditionalCapabilityCpuPin";
+          enum "nodeCapabilityLogicalNuma";
+          enum "nodePool";
+        }
+        description
+          "The parameter names for constraints expected to be
+           assigned to MCIOs realizing this Vdu.The value specifies
+           the standardized semantical context of the MCIO
+           constraints and the parameter names for the MCIO
+           constraints in the MCIO declarative descriptor.
+           The mcioConstraintParams attribute shall have one of the
+           following values, expressing the associated semantical
+           context.
+           VALUES:
+           • affinityNfviPop
+           • affinityZone
+           • affinityZoneGroup
+           • affinityNfviNode
+           • affinityCisNode
+           • antiAffinityNfviPop
+           • antiAffinityZone
+           • antiAffinityZoneGroup
+           • antiAffinityNfviNode
+           • antiAffinityCisNode
+           • localAffinityNfviPop
+           • localAffinityZone
+           • localAffinityZoneGroup
+           • localAffinityNfviNode
+           • localAffinityCisNode
+           • localAntiAffinityNfviPop
+           • localAntiAffinityZone
+           • localAntiAffinityZoneGroup
+           • localAntiAffinityNfviNode
+           • localAntiAffinityCisNode
+           • nodeAdditionalCapabilitySsd
+           • nodeAdditionalCapabilityDpdk
+           • nodeAdditionalCapabilitySriov
+           • nodeAdditionalCapabilityGpu
+           • nodeAdditionalCapabilityFpga
+           • nodeAdditionalCapabilityCpuPin
+           • nodeCapabilityLogicalNuma
+           •  nodePool.";
+        reference
+            "GS NFV IFA011: Section 7.1.6.2, Vdu Information elements.";
+	    }
+
       container mcio-identification-data {
         leaf name {
           mandatory true;
@@ -765,114 +951,9 @@ submodule etsi-nfv-vnf {
            related to Virtual CPU.";
       }
 
-      list logical-node {
-        key "id";
+      uses logical-node;
 
-        leaf id {
-          type string;
-          description
-            "Identifies this set of logical node requirements.";
-          reference
-            "GS NFV IFA011: Section 7.1.9.6, LogicalNodeRequirements
-             Information elements.";
-        }
-
-        list requirement-detail {
-          key "key";
-          min-elements 1;
-
-          leaf key {
-            type string;
-          }
-
-          leaf value {
-            type string;
-          }
-          description
-            "The logical node-level compute, memory and I/O
-             requirements. An array of key-value pairs that
-             articulate the deployment requirements.
-
-             This could include the number of CPU cores on this
-             logical node, a memory configuration specific to a
-             logical node (e.g. such as available in the Linux
-             kernel via the libnuma library) or a requirement
-             related to the association of an I/O device with the
-             logical node.";
-          reference
-            "GS NFV IFA011: Section 7.1.9.6, LogicalNodeRequirements
-             information element.";
-        }
-        description
-          "The logical node requirements.";
-        reference
-          "GS NFV IFA011: Section 7.1.9.2, VirtualComputeDesc
-           information element.";
-      }
-
-      list request-additional-capability {
-        key "name";
-
-        leaf name {
-          type string;
-          description
-            "Identifies a requested additional capability for the
-             VDU. ETSI GS NFV-IFA 002 [i.1] describes acceleration
-             capabilities.";
-          reference
-            "GS NFV IFA011: Section 7.1.9.5,
-             RequestedAdditionalCapabilityData Information element.";
-        }
-
-        leaf support-mandatory {
-          type boolean;
-          description
-            "Indicates whether the requested additional capability
-             is mandatory for successful operation.";
-          reference
-            "GS NFV IFA011: Section 7.1.9.5,
-             RequestedAdditionalCapabilityData Information
-             element.";
-        }
-
-        leaf min-version {
-          type string;
-          description
-            "Identifies the minimum version of the requested
-             additional capability.";
-          reference
-            "GS NFV IFA011: Section 7.1.9.5,
-             RequestedAdditionalCapabilityData Information element.";
-        }
-
-        leaf preferred-version {
-          type string;
-          description
-            "Identifies the preferred version of the requested
-             additional capability.";
-          reference
-            "GS NFV IFA011: Section 7.1.9.5,
-             RequestedAdditionalCapabilityData Information element.";
-        }
-
-        list target-performance-parameters {
-          key "key";
-
-          leaf key {
-            type string;
-          }
-
-          leaf value {
-            type string;
-          }
-          description
-            "Identifies specific attributes, dependent on the
-             requested additional capability type.";
-          reference
-            "GS NFV IFA011: Section 7.1.9.5,
-             RequestedAdditionalCapabilityData Information element.";
-        }
-      }
+      uses request-additional-capability;
 
       leaf compute-requirements {
         type string;
@@ -1203,6 +1284,37 @@ submodule etsi-nfv-vnf {
                Information element.";
 	  }
 	}
+      }
+
+      uses nfvi-maintenance-info {
+        description
+          "When present, provides information on the rules to be
+           observed when an instance based on this
+           VirtualStorageDesc is impacted during NFVI operation
+           and maintenance (e.g. NFVI resource upgrades).";
+        reference
+          "GS NFV IFA011: Section 7.1.9.4, Information elements
+          related to Virtual Storage.";
+      }
+
+      leaf per-vnfc-instance {
+        type boolean;
+        default "true";
+        description
+          "Indicates whether the virtual storage resource shall be
+          instantiated per VNFC instance.
+          If the value is true (default), a virtual storage
+          resource shall be instantiated for each VNFC instance
+          that is based on a VDU referring to this virtual storage
+          descriptor and have the same lifetime as the VNFC instance.
+          If the value is false, a single virtual storage resource
+          shall be instantiated with a lifetime independent of the
+          lifetime of individual VNFC instances based on a VDU
+          referring to this virtual storage descriptor.The storage
+          resource shall have the same lifetime as the VNF instance";
+        reference
+          "GS NFV IFA011: Section 7.1.9.4, Information elements
+          related to Virtual Storage.";
       }
     }
 
@@ -3222,6 +3334,7 @@ submodule etsi-nfv-vnf {
                 • Zone
                 • ZoneGroup
                 • NFVI-node
+                • CIS-node
                 • network-link-and-node
                 • container-namespace";
           reference
