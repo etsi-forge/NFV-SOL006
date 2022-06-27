@@ -461,6 +461,20 @@ submodule etsi-nfv-common {
     }
   }
 
+  typedef scaler-units-size {
+    type enumeration {
+      enum "B";
+      enum "kB";
+      enum "KiB";
+      enum "MB";
+      enum "MiB";
+      enum "GB";
+      enum "GiB";
+      enum "TB";
+      enum "TiB";
+    }
+  }
+
   grouping nfvi-maintenance-info {
     container nfvi-maintenance-info {
 
