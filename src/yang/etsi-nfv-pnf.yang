@@ -106,11 +106,23 @@ submodule etsi-nfv-pnf {
       type string;
       description
         "Identifies a PNFD in a version independent manner. This
-         attribute is invariant across versions of PNFD.";
+         attribute is invariant across versions of PNFD with no
+         constraint on the changes across versions.";
       reference
         "GS NFV-IFA014: Section 6.6.2, Pnfd information element";
     }
 
+    leaf ext-invariant-id {
+      type string;
+      description
+        "Identifies a PNFD in a version independent manner.
+         This attribute is invariant across versions of the
+         PNFD that expose the same external connectivity,
+         i.e. same number of pnfExtCpds and same identifiers.";
+      reference
+        "GS NFV-IFA014: Section 6.6.2, Pnfd information element";
+    }
+ 
     leaf name {
       type string;
       description
