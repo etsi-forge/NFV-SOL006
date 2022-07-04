@@ -1418,6 +1418,133 @@ submodule etsi-nfv-ns {
             "GS NFV IFA014: Section 6.3.4.2 VirtualLinkProfile
              information element";
         }
+
+        container data-flow-mirroring {
+          description
+            "If present, it describes the data flow mirroring to be
+             associated to the NS instance containing the NS VL
+             created from this VL profile.";
+          reference
+            "GS NFV IFA014: Section 6.3.4.2 VirtualLinkProfile
+             information element";
+
+            leaf mirroring-job-name {
+              type string;
+              description
+                "Name of Data Flow Mirroring Job.";
+              reference
+                "GS NFV IFA014: Section 6.5.7 NsDataFlowMirroring
+                 information element";
+            }
+
+            leaf description {
+              type string;
+              description
+                "Information description of Data Flow Mirroring Job.";
+              reference
+                "GS NFV IFA014: Section 6.5.7 NsDataFlowMirroring
+                 information element";
+            }
+
+            list data-flow-info {
+              key "id";
+              description
+                "Information about the data flows to be mirrored.";
+              reference
+                "GS NFV IFA014: Section 6.5.7 NsDataFlowMirroring
+                 information element";
+
+              leaf id {
+                type string;
+                description
+                  "Identifier of the Data flow information.";
+                reference
+                  "GS NFV IFA014: Section 6.5.8 DataFlowInfo
+                   information element";
+              }
+
+              leaf direction {
+                type enumeration {
+                  enum "in";
+                  enum "out";
+                  enum "both";
+                }
+                description
+                  "The direction of the data flow that are requested to be
+                   mirrored.The direction is specified against the associated
+                   CP. I.e., 'in' means the data flow that enters the target
+                   connection point needs to be mirrored.
+                   'out' means the data flow that sends out the target
+                   connection point needs to be mirrored.
+                   'both' means the data flows that both enters and sends out
+                    the target connection point all need to be mirrored.";
+              }
+
+              container flow-constituent-cpd-id {
+                choice constituent-base-element-id {
+                  leaf vnfd-id {
+                    mandatory true;
+                    type leafref {
+                      path "/nfv:nfv/nfv:vnfd/nfv:id";
+                    }
+                  }
+                  leaf pnfd-id {
+                    mandatory true;
+                    type leafref {
+                      path "/nfv:nfv/nfv:pnfd/nfv:id";
+                    }
+                  }
+                  leaf nsd-id {
+                    mandatory true;
+                    type leafref {
+                      path "../../../../../../../nsd/id";
+                    }
+                  }
+                  description
+                    "References the profile of an NS constituent.";
+                  reference
+                    "GS NFV IFA014: Section 6.4.8 CpdInConstituentElement
+                     information element";
+                }
+                choice constituent-cpd-id {
+                  leaf vnf-ext-cpd  {
+                    mandatory true;
+                    type leafref {
+                      path "deref(../vnfd-id)/../nfv:ext-cpd/nfv:id";
+                    }
+                  }
+                  leaf pnf-ext-cpd  {
+                    mandatory true;
+                    type leafref {
+                      path "deref(../pnfd-id)/../nfv:ext-cpd/nfv:id";
+                    }
+                  }
+                  leaf sapd {
+                    mandatory true;
+                    type leafref {
+                      path "deref(../nsd-id)/../sapd/id";
+                    }
+                  }
+                  description
+                    "References the VNF external CPD for a given
+                     VnfProfile, or the PNF external CPD for a given
+                     PnfProfile, or an NS SAPD for a given NsProfile
+                     identified by the constituentBaseElementId.";
+                  reference
+                    "GS NFV IFA014: Section 6.4.8 CpdInConstituentElement
+                    information element";
+                }
+
+                description
+                  "Identifies the descriptor of a connection point on
+                   a VNF/PNF or a SAP which acts as the mirroring
+                   point of the data flow to be mirrored. ";
+                reference
+                  "GS NFV IFA014: Section 6.5.8 DataFlowInfo
+                   information element";
+              }
+            }
+        }
       }
 
       list scaling-aspect {
