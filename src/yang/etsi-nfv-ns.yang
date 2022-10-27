@@ -1694,6 +1694,8 @@ submodule etsi-nfv-ns {
              element";
         }
 
+        uses ns-local-affinity-or-anti-affinity-rule;
+
         leaf-list affinity-or-anti-affinity-group-id {
           type leafref {
             path "../../affinity-or-anti-affinity-group/id";
