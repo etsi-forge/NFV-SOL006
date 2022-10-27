@@ -841,12 +841,23 @@ submodule etsi-nfv-common {
             type boolean;
             mandatory true;
             description
-              "Specify if the MAC address assignment is the
-               responsibility of management and orchestration function
-               or not. If it is set to True, it is the management and
-               orchestration function responsibility. If it is set to
-               False, it will be provided by an external entity,
-               e.g. OSS/BSS.";
+              "Specify which mode is used for the MAC address
+               assignment.
+
+               If it is set to True, a MAC address is expected to
+               be provided by a management entity via the NFV-MANO
+               interfaces towards the VNFM using attributes
+               standardized for this purpose in the NFV-MANO
+               information model and is further transferred from the
+               VNFM to the VIM. A MAC address will be automatically
+               assigned by the VIM/NFVI as fallback if not provided.
+
+               If it is set to False, a MAC address is expected to be
+               assigned by means specific to the VNF itself (e.g., by
+               an LCM script, by the EM) and is further transferred
+               from the VNFM to the VIM. A MAC address will be
+               automatically assigned by the VIM/NFVI as fallback if
+               not provided to the VIM.";
             reference
               "GS NFV IFA011: Section 7.1.3.5 L2AddressData
                information element";
