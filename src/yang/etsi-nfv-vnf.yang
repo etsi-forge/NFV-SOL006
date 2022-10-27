@@ -867,6 +867,31 @@ submodule etsi-nfv-vnf {
             "GS NFV IFA011: Section 7.1.9.3, Information elements
              related to Virtual Memory.";
         }
+
+        list huge-page-requirements {
+          key "hugepage-size";
+          max-elements "1";
+
+          leaf hugepage-size{
+            type uint32;
+            description
+              "Specifies the size of the hugepage.";
+          }
+          leaf requested-size {
+            type uint32;
+            description
+              "Specifies the total size required for all the
+               hugepages of the size indicated by hugepage-size.";
+          }
+
+          description
+            "Specifies requirements on the huge pages resources
+             for the virtual memory.";
+          reference
+            "GS NFV IFA011: Section 7.1.9.3, Information elements
+             related to Virtual Memory.";
+        }
+
         description
           "The virtual memory of the virtualised compute.";
         reference
